@@ -9,7 +9,12 @@ Vue.use(VueRouter)
 const routes = [
   movie,
   cinema,
-  mine
+  mine,
+  //当url地址不对已经后面没有拼接地址时，直接访问/movie
+  {
+    path:'/*',
+    redirect:'/movie'
+  }
 ]
 
 const router = new VueRouter({

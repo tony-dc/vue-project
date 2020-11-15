@@ -1,6 +1,10 @@
 <template>
   <div>
-      个人页面
+      <Header title='登录酷喵' />
+      <div id="content">
+         <router-view></router-view>
+      </div>
+      <TabBar />
   </div>
 </template>
 

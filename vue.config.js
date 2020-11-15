@@ -1,0 +1,14 @@
+//通过proxy处理跨域请求
+module.exports={
+    devServer:{
+        proxy:{
+            '/api':{
+                target:'http://m.maoyan.com',
+                changOrigin:true,
+                pathRewrite:{
+                    '^/api':''
+                }
+            }
+        }
+    }
+}
