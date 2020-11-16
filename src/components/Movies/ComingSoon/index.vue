@@ -1,14 +1,17 @@
 <template>
     <div class="movie_body">
 			<ul>
-				<li>
-					<div class="pic_show"><img src="/images/movie_1.jpg">
+				<li v-for='(item,index) in MovieData' :key='index'>
+					<div class="pic_show"><img :src="item.img|setWH('128.168')">
                     </div>
 					<div class="info_list">
-                         <h2>无名之辈</h2>
-                         <p><span class="person">17746</span> 人想看</p>
-                         <p>主演: 陈建斌,任素汐,潘斌龙</p>
-                         <p>2018-11-30上映</p>
+                        <h2>
+                           {{item.nm}}
+                           <img src="@/assets/maxs.png" v-if='item.version'>
+                        </h2>
+                         <p><span class="person">{{item.wish}}</span> 人想看</p>
+                         <p>主演: {{item.star}}</p>
+                         <p>{{item.rt}}上映</p>
 					</div>
 					<div class="btn_pre">
 						预售
@@ -19,7 +22,19 @@
 </template>
 <script>
     export default {
-        name:'comingsoon'
+        name:'comingsoon',
+        data(){
+          return {
+            MovieData:[]
+          }
+        },
+        mounted(){
+          this.$api.getComingSoonList(10).then(res=>{
+             if(res){
+               this.MovieData=res.coming
+             }
+          })
+        }
     }
 </script>
 <style lang="scss" scoped>
@@ -85,12 +100,12 @@
   .btn_pre {
     width: 47px;
     height: 27px;
-    line-height: 28px;
+    line-height: 27px;
     text-align: center;
-    background-color: #f03d37;
+    background-color: #0f9b26;
     color: #fff;
     border-radius: 4px;
-    font-size: 12px;
+    font-size: 13px;
     cursor: pointer;
   }
  }

@@ -38,15 +38,15 @@ export default {
 <style lang="scss" scoped>
   #content ul{
        width:100%;
-       height: 50px;
+       height: 40px;
        display:flex;
        justify-content: space-evenly;
        border:1px solid #e6e6e6;
       li{
          flex:1;
-         height:50px;
-         padding:5px;
+         height:40px;
          box-sizing: border-box;
+         background-color: #fff;
          line-height: 40px;
          text-align: center;
          font-size:16px;

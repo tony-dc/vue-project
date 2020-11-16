@@ -8,6 +8,11 @@ import api from '@/api'
 //将api请求挂载到vue原型上，方便全局使用
 Vue.prototype.$api = api
     //公共组件挂载到全局中
+//定义一个全局的过滤器用来处理图片
+Vue.filter('setWH',(url,data)=>{
+    // 用字符串替换方法，正则匹配替换数据
+    return url.replace(/w\.h/,data)
+})
 Vue.component('Header', Header)
 Vue.component('TabBar', TabBar)
 Vue.config.productionTip = false
