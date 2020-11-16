@@ -18,7 +18,12 @@
 </template>
 <script>
     export default {
-        name:'nowplaying'
+        name:'nowplaying',
+        mounted(){
+          this.$api.getMovieOnInfoList(10).then(res=>{
+            console.log(res)
+          })
+        }
     }
 </script>
 <style lang="scss" scoped>
