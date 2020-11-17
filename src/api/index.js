@@ -18,6 +18,10 @@ class API extends BaseData {
     getCityList() {
         return this.get('/dianying/cities.json')
     }
+    //获取影院接口数据
+    getCinameData(params){
+        return this.get('/ajax/cinemaList?ci='+params)
+     }
 }
 //导出这个类的实例
 export default new API()

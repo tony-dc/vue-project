@@ -1,43 +1,69 @@
 <template>
   <div class="movie_body">
-    <BScroll>
-				<ul>
-					<li v-for='(item,index) in movieList' :key='index'>
-						<div class="pic_show"><img :src="item.img|setWH('128.180')"></div>
-						<div class="info_list">
-							<h2>
-                {{item.nm}}
-                <img src="@/assets/maxs.png" v-if='item.version'> 
-              </h2>
-							<p>观众评 <span class="grade">{{item.sc}}</span></p>
-							<p>主演: {{item.star}}</p>
-							<p>{{item.showInfo}}</p>
-						</div>
-						<div class="btn_mall">
-							购票
-						</div>
-					</li>
-				</ul>
-      </BScroll>
-    </div>
+    <BScroll :handledownload="handledownload" :handleToend="handleToend">
+      <ul>
+        <li v-if="preMsg">{{preMsg}}</li>
+        <li v-for="(item,index) in movieList" :key="index">
+          <div class="pic_show">
+            <img :src="item.img|setWH('128.180')" />
+          </div>
+          <div class="info_list">
+            <h2>
+              {{item.nm}}
+              <img src="@/assets/maxs.png" v-if="item.version" />
+            </h2>
+            <p>
+              观众评
+              <span class="grade">{{item.sc}}</span>
+            </p>
+            <p>主演: {{item.star}}</p>
+            <p>{{item.showInfo}}</p>
+          </div>
+          <div class="btn_mall">购票</div>
+        </li>
+      </ul>
+    </BScroll>
+  </div>
 </template>
 <script>
-  export default {
-        name:'nowplaying',
-        data(){
-          return {
-            movieList:[]
-          }           
-        },
-        created(){
-          this.$api.getMovieOnInfoList(10).then(res=>{
-              if(res){
-                this.movieList=res.movieList
-              }
-          })
-          
-       }
+export default {
+  name: "nowplaying",
+  data() {
+    return {
+      movieList: [],
+      preMsg: ""
+    };
+  },
+  created() {
+    this.$api.getMovieOnInfoList(10).then(res => {
+      if (res) {
+        this.movieList = res.movieList;
+      }
+    });
+  },
+  methods: {
+    //下拉加载
+    handledownload(y) {
+      if (y > 30) {
+        this.preMsg = "正在刷新中……";
+      }
+    },
+    //下拉到一定距离触发
+    handleToend(y) {
+      if (y > 20) {
+        this.$api.getMovieOnInfoList(10).then(res => {
+          if (res) {
+            this.preMsg = "更新已完成";
+            setTimeout(() => {
+              this.movieList = res.movieList;
+              this.preMsg = "";
+            }, 1000);
+          }
+        });
+      }
     }
+  }
+};
 </script>
 <style lang="scss" scoped>
 #content .movie_body {
@@ -115,5 +141,5 @@
     font-size: 12px;
     cursor: pointer;
   }
-}  
+}
 </style>

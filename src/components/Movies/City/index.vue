@@ -1,17 +1,17 @@
 <template>
   <div class="city_body">
-    <div class="city_list">
+    <div class="city_list" ref="city_list">
       <BScroll>
         <div>
           <div class="city_hot">
             <h2>热门城市</h2>
             <ul class="clearfix">
-              <li v-for="(item, index) in hotList" :key="index">
+              <li v-for="(item, index) in hotList" :key="index" >
                 {{ item.nm }}
               </li>
             </ul>
           </div>
-          <div class="city_sort">
+          <div class="city_sort" ref="city_sort">
             <div v-for="item in cityList" :key="item.index">
               <h2>{{ item.index }}</h2>
               <ul>
@@ -26,7 +26,7 @@
     </div>
     <div class="city_index">
       <ul>
-        <li v-for="(item, index) in letterData" :key="index">
+        <li v-for="(item, index) in letterData" :key="index" @touchstart="handleToLetter(index)">
           {{ item.index }}
         </li>
       </ul>
@@ -90,7 +90,14 @@ export default {
       citydata.forEach((item) => this.letterData.push({ index: item.index }));
     });
   },
-  methods: {},
+  methods: {
+    //点击对应字母跳到指定位置
+    handleToLetter(index){
+      //根据对应字母的offsetTop值，让整个父元素滚动到对应高度
+      const h=this.$refs.city_sort.getElementsByTagName('h2')
+      this.$refs.city_list.scrollTop=h[index].offsetTop
+    }
+  },
 };
 </script>
 <style lang="scss" scoped>

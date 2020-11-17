@@ -8,18 +8,42 @@
 import BScroll from "better-scroll";
 export default {
   name: "BSrcoll",
+  data() {
+    return {
+      timer: null
+    };
+  },
+  //接受父元素传过来的函数
+  props: {
+    handledownload: {
+      type: Function,
+      default: function() {}
+    },
+    handleToend: {
+      type: Function,
+      default: function() {}
+    }
+  },
   mounted() {
     //因为axios是异步请求，所以需要让数据先请求加载完，在执行better-scroll代码，根据同步和异步的先后顺序，
-    setTimeout(() => {
-    //在nextTick里面执行，确保数据加载渲染已经完成
+    this.timer = setTimeout(() => {
       this.$nextTick(() => {
-        new BScroll(this.$refs.swrpper, {
+        //在nextTick里面执行，确保数据加载渲染已经完成
+        let scroll = new BScroll(this.$refs.swrpper, {
           tap: true,
-          probeType: 1,
+          probeType: 1
+        });
+        //监听位置并将参数传递给父组件
+        scroll.on("scroll", position => {
+          this.handledownload(position.y);
+        });
+        //监听点击结束时的位置,传递y轴参数
+        scroll.on("touchEnd", position => {
+          this.handleToend(position.y);
         });
       });
-    },1000);
-  },
+    }, 500);
+  }
 };
 </script>
 <style lang="scss" scoped>
