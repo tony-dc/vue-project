@@ -1,6 +1,7 @@
 import request from './request'
 //创建一个类
 export class BaseData {
+    //在constructor添加私有属性handle
     constructor() {
         this.handle = request
     }

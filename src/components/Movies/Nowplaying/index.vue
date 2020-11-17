@@ -1,5 +1,6 @@
 <template>
   <div class="movie_body">
+    <BScroll>
 				<ul>
 					<li v-for='(item,index) in movieList' :key='index'>
 						<div class="pic_show"><img :src="item.img|setWH('128.180')"></div>
@@ -17,23 +18,25 @@
 						</div>
 					</li>
 				</ul>
-			</div>
+      </BScroll>
+    </div>
 </template>
 <script>
-    export default {
+  export default {
         name:'nowplaying',
         data(){
           return {
             movieList:[]
           }           
         },
-        mounted(){
+        created(){
           this.$api.getMovieOnInfoList(10).then(res=>{
               if(res){
                 this.movieList=res.movieList
               }
           })
-        }
+          
+       }
     }
 </script>
 <style lang="scss" scoped>

@@ -1,83 +1,34 @@
 <template>
   <div class="city_body">
     <div class="city_list">
-      <div class="city_hot">
-        <h2>热门城市</h2>
-        <ul class="clearfix">
-          <li>上海</li>
-          <li>北京</li>
-          <li>上海</li>
-          <li>北京</li>
-          <li>上海</li>
-          <li>北京</li>
-          <li>上海</li>
-          <li>北京</li>
-        </ul>
-      </div>
-      <div class="city_sort">
+      <BScroll>
         <div>
-          <h2>A</h2>
-          <ul>
-            <li>阿拉善盟</li>
-            <li>鞍山</li>
-            <li>安庆</li>
-            <li>安阳</li>
-          </ul>
+          <div class="city_hot">
+            <h2>热门城市</h2>
+            <ul class="clearfix">
+              <li v-for="(item, index) in hotList" :key="index">
+                {{ item.nm }}
+              </li>
+            </ul>
+          </div>
+          <div class="city_sort">
+            <div v-for="item in cityList" :key="item.index">
+              <h2>{{ item.index }}</h2>
+              <ul>
+                <li v-for="itemlist in item.list" :key="itemlist.id">
+                  {{ itemlist.nm }}
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
-        <div>
-          <h2>B</h2>
-          <ul>
-            <li>北京</li>
-            <li>保定</li>
-            <li>蚌埠</li>
-            <li>包头</li>
-          </ul>
-        </div>
-        <div>
-          <h2>A</h2>
-          <ul>
-            <li>阿拉善盟</li>
-            <li>鞍山</li>
-            <li>安庆</li>
-            <li>安阳</li>
-          </ul>
-        </div>
-        <div>
-          <h2>B</h2>
-          <ul>
-            <li>北京</li>
-            <li>保定</li>
-            <li>蚌埠</li>
-            <li>包头</li>
-          </ul>
-        </div>
-        <div>
-          <h2>A</h2>
-          <ul>
-            <li>阿拉善盟</li>
-            <li>鞍山</li>
-            <li>安庆</li>
-            <li>安阳</li>
-          </ul>
-        </div>
-        <div>
-          <h2>B</h2>
-          <ul>
-            <li>北京</li>
-            <li>保定</li>
-            <li>蚌埠</li>
-            <li>包头</li>
-          </ul>
-        </div>
-      </div>
+      </BScroll>
     </div>
     <div class="city_index">
       <ul>
-        <li>A</li>
-        <li>B</li>
-        <li>C</li>
-        <li>D</li>
-        <li>E</li>
+        <li v-for="(item, index) in letterData" :key="index">
+          {{ item.index }}
+        </li>
       </ul>
     </div>
   </div>
@@ -89,21 +40,25 @@ export default {
     return {
       cityList: [],
       hotList: [],
-      letterData: []
+      letterData: [],
     };
   },
   mounted() {
-    this.$api.getCityList().then(res => {
+    this.$api.getCityList().then((res) => {
       const result = res.cts;
-      //   let hotdata = []
       let citydata = [];
+      //循环得到的数组数据，根据对用的格式处理数据
       for (let i = 0; i < result.length; i++) {
+        //根据id值判断是否为热门城市
+        if (result[i].id < 66) {
+          this.hotList.push({ id: result[i].id, nm: result[i].nm });
+        }
         let fristLetter = result[i].py.substring(0, 1).toUpperCase();
         if (toCom(fristLetter)) {
           //当字母不存在时，创建并添加对用的字母集合到城市数据中
           citydata.push({
             index: fristLetter,
-            list: [{ nm: result[i].nm, id: result[i].id }]
+            list: [{ nm: result[i].nm, id: result[i].id }],
           });
         } else {
           //当字母存在时，进行push操作，添加到对应字母的数组中
@@ -121,32 +76,21 @@ export default {
         }
         return true;
       }
-       this.cityList=citydata.sort((a, b) => {
-          if (a.index > b.index) {
-            return 1;
-          } else if (a.index === b.index) {
-            return 0;
-          } else {
-            return -1;
-          }
-        });
-      //排序方法
-    //   function changeSort(citydata) {
-    //     let data = citydata.sort((a, b) => {
-    //       if (a.index > b.index) {
-    //         return 1;
-    //       } else if (a.index === b.index) {
-    //         return 0;
-    //       } else {
-    //         return -1;
-    //       }
-    //     });
-    //     return data;
-    //   }
-    //    this.cityList=changeSort(citydata);
+      //对获得的数据进行排序操作
+      this.cityList = citydata.sort((a, b) => {
+        if (a.index > b.index) {
+          return 1;
+        } else if (a.index === b.index) {
+          return 0;
+        } else {
+          return -1;
+        }
+      });
+      //获取城市字母集合
+      citydata.forEach((item) => this.letterData.push({ index: item.index }));
     });
   },
-  methods: {}
+  methods: {},
 };
 </script>
 <style lang="scss" scoped>

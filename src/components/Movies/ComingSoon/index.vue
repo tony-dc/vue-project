@@ -1,5 +1,6 @@
 <template>
     <div class="movie_body">
+    <BScroll>
 			<ul>
 				<li v-for='(item,index) in MovieData' :key='index'>
 					<div class="pic_show"><img :src="item.img|setWH('128.168')">
@@ -18,6 +19,7 @@
 					</div>
 				</li>
 			</ul>
+    </BScroll>
     </div>
 </template>
 <script>
