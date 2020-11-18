@@ -39,7 +39,7 @@ export default {
 <style lang="scss" scoped>
 #content .cinema_body {
   position: absolute;
-  top: 95px;
+  top: 135px;
   bottom: 50px;
   left: 0;
   right: 0;

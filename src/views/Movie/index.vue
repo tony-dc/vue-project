@@ -1,26 +1,29 @@
 <template>
   <div class="main">
-       <Header />
-      <div id="content">
-        <ul>
-          <router-link tag='li' to='/movie/city' @touchstart.native='handleToCitylist'>
-          北京
-          <i :class="['iconfont',active?'icon-sanjiaodown':'icon-shangjiantou']"></i>
-          </router-link>
-          <router-link tag='li' to='/movie/nowplaying' class="hot_item">正在热映</router-link>
-          <router-link tag='li' to='/movie/comingsoon' class="hot_item">即将上映</router-link>
-          <router-link tag='li' to='/movie/search'>
-              <i class="iconfont icon-sousuo search"></i>
-          </router-link>
-        </ul>
-        <!-- 视图出口 -->
-        <router-view />
-      </div>
+      <Header />
+      <Topbar>
+          <div id="content">
+            <ul>
+              <router-link tag='li' to='/movie/city' @touchstart.native='handleToCitylist'>
+              北京
+              <i :class="['iconfont',active?'icon-sanjiaodown':'icon-shangjiantou']"></i>
+              </router-link>
+              <router-link tag='li' to='/movie/nowplaying' class="hot_item">正在热映</router-link>
+              <router-link tag='li' to='/movie/comingsoon' class="hot_item">即将上映</router-link>
+              <router-link tag='li' to='/movie/search'>
+                  <i class="iconfont icon-sousuo search"></i>
+              </router-link>
+            </ul>
+            <!-- 视图出口 -->
+            <router-view />
+          </div>
+      </Topbar>
       <TabBar />
   </div>
 </template>
 
 <script>
+import Topbar from '@/components/topbar'
 export default {
   name: 'movie',
   data(){
@@ -32,11 +35,17 @@ export default {
     handleToCitylist(){
       this.active=!this.active
     }
+  },
+  components:{
+      Topbar
   }
 }
 </script>
 <style lang="scss" scoped>
-  #content ul{
+#content{
+    width:100%;
+    height:100%;
+    ul{
        width:100%;
        height: 40px;
        display:flex;
@@ -67,4 +76,6 @@ export default {
 
        
   }
+}
+  
 </style>

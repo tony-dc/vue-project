@@ -12,3 +12,9 @@ http://m.maoyan.com/ajax/comingList?`ci=${cityId}&token=&limit=10`
 
 电影详情页api接口:movieId为电影对应的id值参数
 "http://m.maoyan.com/ajax/detailmovie?movieId="+movieId
+
+获取影院接口
+http://m.maoyan.com/ajax/cinemaList?day=2020-11-18&offset=0&limit=20&districtId=-1&lineId=-1&hallType=-1&brandId=-1&serviceId=-1&areaId=-1&stationId=-1&item=&updateShowDay=true
+
+筛选电影院条件接口,请求参数 (movieId:电影ID),day(默认当前日期，示例：2019-03-03)
+http://m.maoyan.com/ajax/filterCinemas
