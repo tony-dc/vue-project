@@ -101,7 +101,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-#content .city_body {
+ .city_body {
   position: absolute;
   top: 95px;
   bottom: 50px;

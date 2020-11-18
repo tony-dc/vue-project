@@ -40,7 +40,7 @@
     }
 </script>
 <style lang="scss" scoped>
- #content .movie_body {
+ .movie_body {
   position: absolute;
   top: 95px;
   left: 0;

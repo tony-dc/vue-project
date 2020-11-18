@@ -3,22 +3,13 @@
     <Header :title="logo" />
     <topBar>
       <router-link
-        tag="div"
-        to="/movie/city"
-        @touchstart.native="handleToCitylist"
-        class="citychoose"
-      >
-        北京
-        <i
-          :class="[
-            'iconfont',
-            active ? 'icon-sanjiaodown' : 'icon-shangjiantou',
-          ]"
-        ></i>
-      </router-link>
-      <router-link tag="div" to='' class="conetentSearch">
-        <i class="iconfont icon-sousuo"></i>
-        <input type="text" v-model='msg' />
+       tag="div" 
+       :to="{name:'cinemaSearch',params:{searchtype:'cinema',type:2}}"
+       class="headerSearch"
+       slot='search'
+       >
+         <i class="iconfont icon-sousuo search"></i>
+        搜索影院
       </router-link>
     </topBar>
     <div id="content">
@@ -59,14 +50,24 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.citychoose{
+.headerSearch{
   flex:1;
-  width:80px;
-  height:40px;
-  line-height: 40px;
-}
-.contentsearch{
-  flex:1
+  position: relative;
+  margin:0 15px;
+  height:28px;
+  line-height: 28px;
+  text-align:center;
+  font-size:13px;
+  font-weight:400;
+  border:0.5px solid rgba(222,222,222,.4);
+  border-radius:4px;
+  background-color: #fff;
+  color:#888;
+  .search{
+    position: absolute;
+    top:1px;
+    left:98px
+  }
 }
 #content .cinema_menu {
   width: 100%;
