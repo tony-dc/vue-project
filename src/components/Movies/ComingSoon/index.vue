@@ -31,7 +31,8 @@
           }
         },
         mounted(){
-          this.$api.getComingSoonList(10).then(res=>{
+           const cityId=this.$store.state.city.id
+          this.$api.getComingSoonList(cityId).then(res=>{
              if(res){
                this.MovieData=res.coming
              }

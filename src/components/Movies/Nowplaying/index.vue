@@ -35,7 +35,8 @@ export default {
     };
   },
   created() {
-    this.$api.getMovieOnInfoList(10).then(res => {
+    const cityId=this.$store.state.city.id
+    this.$api.getMovieOnInfoList(cityId).then(res => {
       if (res) {
         this.movieList = res.movieList;
       }

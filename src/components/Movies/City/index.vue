@@ -10,18 +10,14 @@
                 v-for="(item, index) in hotList"
                 :key="index"
                 @touchstart="handlegetCityId(item.nm, item.id)"
-              >
-                {{ item.nm }}
-              </li>
+              >{{ item.nm }}</li>
             </ul>
           </div>
           <div class="city_sort" ref="city_sort">
             <div v-for="item in cityList" :key="item.index">
               <h2>{{ item.index }}</h2>
               <ul>
-                <li v-for="itemlist in item.list" :key="itemlist.id">
-                  {{ itemlist.nm }}
-                </li>
+                <li v-for="itemlist in item.list" :key="itemlist.id">{{ itemlist.nm }}</li>
               </ul>
             </div>
           </div>
@@ -34,9 +30,7 @@
           v-for="(item, index) in letterData"
           :key="index"
           @touchstart="handleToLetter(index)"
-        >
-          {{ item.index }}
-        </li>
+        >{{ item.index }}</li>
       </ul>
     </div>
   </div>
@@ -48,55 +42,12 @@ export default {
     return {
       cityList: [],
       hotList: [],
-      letterData: [],
+      letterData: []
     };
   },
   mounted() {
-    this.$api.getCityList().then((res) => {
-      const result = res.cts;
-      let citydata = [];
-      //循环得到的数组数据，根据对用的格式处理数据
-      for (let i = 0; i < result.length; i++) {
-        //根据id值判断是否为热门城市
-        if (result[i].id < 66) {
-          this.hotList.push({ id: result[i].id, nm: result[i].nm });
-        }
-        let fristLetter = result[i].py.substring(0, 1).toUpperCase();
-        if (toCom(fristLetter)) {
-          //当字母不存在时，创建并添加对用的字母集合到城市数据中
-          citydata.push({
-            index: fristLetter,
-            list: [{ nm: result[i].nm, id: result[i].id }],
-          });
-        } else {
-          //当字母存在时，进行push操作，添加到对应字母的数组中
-          for (let k = 0; k < citydata.length; k++) {
-            if (citydata[k].index == fristLetter) {
-              citydata[k].list.push({ nm: result[i].nm, id: result[i].id });
-            }
-          }
-        }
-      }
-      //定义一个判断首字母是否是数组里面的方法
-      function toCom(Letter) {
-        for (let j = 0; j < citydata.length; j++) {
-          if (citydata[j].index === Letter) return false;
-        }
-        return true;
-      }
-      //对获得的数据进行排序操作
-      this.cityList = citydata.sort((a, b) => {
-        if (a.index > b.index) {
-          return 1;
-        } else if (a.index === b.index) {
-          return 0;
-        } else {
-          return -1;
-        }
-      });
-      //获取城市字母集合
-      citydata.forEach((item) => this.letterData.push({ index: item.index }));
-    });
+    //页面初次渲染时执行该函数
+    this.getCityInfo();
   },
   methods: {
     //点击对应字母跳到指定位置
@@ -116,67 +67,80 @@ export default {
       window.localStorage.setItem("id", id);
       this.$router.push("/movie/nowplaying");
     },
+    //封装获取渲染所需后台数据的方法
+    handleGetCityList(result) {
+      let citydata = [],
+        hotdata = [],
+        letterdata = [];
+      //循环得到的数组数据，根据对用的格式处理数据
+      for (let i = 0; i < result.length; i++) {
+        //根据id值判断是否为热门城市
+        if (result[i].id < 66) {
+          hotdata.push({ id: result[i].id, nm: result[i].nm });
+        }
+        let fristLetter = result[i].py.substring(0, 1).toUpperCase();
+        if (toCom(fristLetter)) {
+          //当字母不存在时，创建并添加对用的字母集合到城市数据中
+          citydata.push({
+            index: fristLetter,
+            list: [{ nm: result[i].nm, id: result[i].id }]
+          });
+        } else {
+          //当字母存在时，进行push操作，添加到对应字母的数组中
+          for (let k = 0; k < citydata.length; k++) {
+            if (citydata[k].index == fristLetter) {
+              citydata[k].list.push({ nm: result[i].nm, id: result[i].id });
+            }
+          }
+        }
+      }
+      //定义一个判断首字母是否是数组里面的方法
+      function toCom(Letter) {
+        for (let j = 0; j < citydata.length; j++) {
+          if (citydata[j].index === Letter) return false;
+        }
+        return true;
+      }
+      //对获得的数据进行排序操作
+      citydata.sort((a, b) => {
+        if (a.index > b.index) {
+          return 1;
+        } else if (a.index === b.index) {
+          return 0;
+        } else {
+          return -1;
+        }
+      });
+      citydata.forEach(item => letterdata.push({ index: item.index }));
+      return { citydata, hotdata, letterdata };
+    },
     //性能优化,做一下缓存,避免每次都需要去后台请求数据
     async getCityInfo() {
+      //获取本地储存的数据，判断是否为空，提升代码性能
       let citylist = window.localStorage.getItem("cityList"),
-        hotlist = window.localStorage.getItem("hotList"),
-        letterdata = window.localStorage.getItem("letterData");
-      if (cityList && hotList && letterData) {
-        this.cityList = citylist;
-        this.hotList = hotlist;
-        this.letterData = letterdata;
+          hotlist = window.localStorage.getItem("hotList"),
+          letterlist =window.localStorage.getItem("letterData");
+      if (citylist && hotlist && letterlist) {
+          this.cityList =JSON.parse(citylist) ;
+          this.hotList =JSON.parse( hotlist);
+          this.letterData =JSON.parse(letterlist);
       } else {
-        this.$api.getCityList().then((res) => {
-          const result = res.cts;
-          let citydata = [];
-          //循环得到的数组数据，根据对用的格式处理数据
-          for (let i = 0; i < result.length; i++) {
-            //根据id值判断是否为热门城市
-            if (result[i].id < 66) {
-              this.hotList.push({ id: result[i].id, nm: result[i].nm });
-            }
-            let fristLetter = result[i].py.substring(0, 1).toUpperCase();
-            if (toCom(fristLetter)) {
-              //当字母不存在时，创建并添加对用的字母集合到城市数据中
-              citydata.push({
-                index: fristLetter,
-                list: [{ nm: result[i].nm, id: result[i].id }],
-              });
-            } else {
-              //当字母存在时，进行push操作，添加到对应字母的数组中
-              for (let k = 0; k < citydata.length; k++) {
-                if (citydata[k].index == fristLetter) {
-                  citydata[k].list.push({ nm: result[i].nm, id: result[i].id });
-                }
-              }
-            }
-          }
-          //定义一个判断首字母是否是数组里面的方法
-          function toCom(Letter) {
-            for (let j = 0; j < citydata.length; j++) {
-              if (citydata[j].index === Letter) return false;
-            }
-            return true;
-          }
-          //对获得的数据进行排序操作
-          this.cityList = citydata.sort((a, b) => {
-            if (a.index > b.index) {
-              return 1;
-            } else if (a.index === b.index) {
-              return 0;
-            } else {
-              return -1;
-            }
-          });
-          //获取城市字母集合
-          citydata.forEach((item) =>
-            this.letterData.push({ index: item.index })
+        //如果为假,则发送axios请求后台数据
+        let citylist = await this.$api.getCityList(),
+          //解构返回的数据
+          { citydata, hotdata, letterdata } = this.handleGetCityList(
+            citylist.cts
           );
-        });
-        window.localStorage.setItem("cityList",)
+          this.cityList = citydata;
+          this.hotList = hotdata;
+          this.letterData = letterdata;
+          //本地存储列表数据信息
+          window.localStorage.setItem("cityList", JSON.stringify(citydata));
+          window.localStorage.setItem("hotList", JSON.stringify(hotdata));
+          window.localStorage.setItem("letterData", JSON.stringify(letterdata));
       }
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
