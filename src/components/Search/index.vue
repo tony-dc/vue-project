@@ -25,7 +25,7 @@
   </div>
 </template>
 <script>
-import {mapState} from 'vuex'
+import {mapState,mapMutations} from 'vuex'
 export default {
   name: "SearchPage",
   data() {
@@ -63,16 +63,23 @@ export default {
       cityId(){
           return this.city.id
       },
-      panel(){
-          const {searchtype,$route:{params}}=this
-            return  (searchtype,{$route:{params}})
-      
+      queryval(){
+            //获取动态路由值
+            const routetype=this.$route.params.searchtype
+            //对拿到的值做下完善处理
+             const params=routetype||this.searchtype.movie
+            //返回对应的用户是从哪个搜索页面进行访问
+           return this.searchtype[params]
+      },
+      historydata(){
+        return this.searchHistory[this.queryval.title]
       }
   },
   mounted(){
-   console.log(this.panel)
+   console.log(this.queryval)
   },
   methods: {
+    ...mapMutations['UpdateHistory'],
     handleSearchInfo() {},
     Text_empty() {}
   }

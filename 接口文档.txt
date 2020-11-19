@@ -18,3 +18,6 @@ http://m.maoyan.com/ajax/cinemaList?day=2020-11-18&offset=0&limit=20&districtId=
 
 筛选电影院条件接口,请求参数 (movieId:电影ID),day(默认当前日期，示例：2019-03-03)
 http://m.maoyan.com/ajax/filterCinemas
+
+搜索获取电影、影院信息API接口,请求参数 kw（搜索关键字），cityId（要搜索的城市id），stype（根据进入搜索页面的来源， 从首页进入 stype= -1，从影院页面进入 stype= 2）
+http://m.maoyan.com/ajax/search?kw=%E6%B5%81%E6%B5%AA&cityId=30&stype=-1

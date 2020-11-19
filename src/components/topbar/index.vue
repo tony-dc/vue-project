@@ -1,7 +1,7 @@
 <template>
     <header class="hearderBar">
          <router-link to="/movie/city"  tag="div" class="citySearch">
-            北京
+            {{$store.state.city.nm}}
          </router-link>
         <!-- 匿名插槽 -->
         <slot></slot>
