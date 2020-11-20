@@ -4,7 +4,7 @@ class API extends BaseData {
     //正在热映接口
     getMovieOnInfoList(params) {
             //直接调用父类的get方法
-            return this.get('/ajax/movieOnInfoList?cityId=' + params)
+            return this.get('/ajax/movieOnInfoList', params)
         }
         //获取即将上映接口数据
     getComingSoonList(cityId) {
@@ -16,12 +16,12 @@ class API extends BaseData {
         }
         //获取城市接口数据,
     getCityList() {
-        return this.get('/dianying/cities.json')
+            return this.get('/dianying/cities.json')
+        }
+        //获取影院接口数据
+    getCinameData(params) {
+        return this.get('/ajax/cinemaList?ci=' + params)
     }
-    //获取影院接口数据
-    getCinameData(params){
-        return this.get('/ajax/cinemaList?ci='+params)
-     }
 }
 //导出这个类的实例
 export default new API()

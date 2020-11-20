@@ -59,7 +59,8 @@ export default {
     //获得用户选择的城市信息，并储存到状态管理中，实时更新
     handlegetCityId(nm, id) {
       const oldId = this.$store.state.city.id;
-      if (id === oldId) return;
+      console.log(id,oldId)
+      if (id == oldId) return;
       //提交到状态管理中，实时更新
       this.$store.commit("city/CITYINFO", { nm, id });
       //存储到本地
