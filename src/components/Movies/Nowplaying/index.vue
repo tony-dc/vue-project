@@ -2,7 +2,9 @@
   <div class="movie_body">
     <movelist :List="movieList" />
     <!-- 无限加载功能 -->
-    <infinite-loading @infinite="infiniteHandler"></infinite-loading>
+    <infinite-loading @infinite="infiniteHandler">
+       <div slot="no-more">已经到底啦</div>
+    </infinite-loading>
   </div>
 </template>
 <script>
@@ -12,41 +14,65 @@ export default {
   data() {
     return {
       movieList: [],
-      movieIds:[],
-      params:{
-          token:''
+      movieIds: [],
+      params: {
+        token: ""
       },
-      pageNo:0,
-      limit:12,
-      total:0
+      pageNo: 0,
+      limit: 12,
+      total: 0
     };
   },
-  created() {
-      this.infiniteHandler()
-    // const cityId = this.$store.state.city.id;
-    // this.$api.getMovieOnInfoList(cityId).then((res) => {
-    //   if (res) {
-    //     this.movieList = res.movieList;
-    //   }
-    // });
-  },
-  methods:{
-    infiniteHandler(){
-        const {pageNo,limit,total}=this
-        const cityId = this.$store.state.city.id;
-        //当大于总数时，终止执行下面代码
-        if(pageNo&&pageNo>total) return 
-         const movieIds=this.movieIds.slice(pageNo,pageNo+limit).join()
-          const params ={params:{cityId,...this.params, movieIds }}  
-          console.log(params)
-           this.$api.getMovieOnInfoList(params).then(res=>{
-               console.log(res)
-           })
+  methods: {
+    // 无限滚动加载
+    infiniteHandler($state) {
+      //解构
+      const { pageNo, limit, total } = this;
+      //拿到储存的城市id值
+      const cityId = this.$store.state.city.id;
+      let indexfrist = pageNo;
+      //当大于总数时，终止执行下面代码
+      if (pageNo > total) return;
+      //根据pageNo不断变化，不断截取新获取到的数据
+      const movieIds = this.movieIds.slice(pageNo, pageNo + limit).join()
+       //定义请求后台数据接口参数
+      const params = { params: { cityId, ...this.params, movieIds } };
+      //判断用户进去页面时是初始进入还是往下下拉状态，调用不用的数据api接口拿到数据
+      const result = indexfrist
+        ? this.$api.getMoreMovieList(params)
+        : this.$api.getMovieOnInfoList(params);
+      result
+        .then(res => {
+        //  解构
+          let { movieList, movieIds, coming, total } = res;
+          if (movieIds) {
+             // 根据movieIds判断当首次加载时，获取到对应的数据并赋值
+            this.movieIds = movieIds;
+            this.total = total;
+            return movieList;
+          }
+          //如果movieIds为空，这是下拉加载更多，返回对用的数据
+          return coming;
+        })
+        .then(data => {
+          //判断返回数据是否有length,
+          if (data.length) {
+            //通过每次的数据长度来改变pageNo的值来
+            this.pageNo += data.length;
+            //新拿到的数据添加到电影列表中
+            this.movieList.push(...data);
+            //页面渲染执行
+            $state.loaded();
+          } else {
+            //页面渲染完成
+            $state.complete();
+          }
+        });
     }
   },
   components: {
-    movelist,
-  },
+    movelist
+  }
 };
 </script>
 <style>

@@ -1,11 +1,14 @@
 <template>
   <div class="movie_body">
-    <BScroll>
+    <Expected />
+    <Movielist />
+        <!-- <BScroll>
       <movielist :List="MovieData" />
-    </BScroll>
+    </BScroll> -->
   </div>
 </template>
 <script>
+import Expected from './expect'
 import movielist from "../common";
 export default {
   name: "comingsoon",
@@ -14,16 +17,17 @@ export default {
       MovieData: [],
     };
   },
-  mounted() {
-    const cityId = this.$store.state.city.id;
-    this.$api.getComingSoonList(cityId).then((res) => {
-      if (res) {
-        this.MovieData = res.coming;
-      }
-    });
-  },
+  // mounted() {
+  //   const cityId = this.$store.state.city.id;
+  //   this.$api.getComingSoonList(cityId).then((res) => {
+  //     if (res) {
+  //       this.MovieData = res.coming;
+  //     }
+  //   });
+  // },
   components: {
-    movielist,
+    Movielist,
+    Expected
   },
 };
 </script>

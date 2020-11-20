@@ -49,39 +49,15 @@ export default {
   },
   computed: {
     img() {
-      return this.movie.img.replace("w.h", "128.168");
+      return this.movie.img.replace("w.h", "128.168")
+
     },
     showdata() {
       const { show, movie } = this;
       return show[movie.showst];
     },
   },
-  created() {
-    console.log(this.movie);
-  },
-  // },
-  // props: ["sell", "resultData"],
   methods: {
-    //下拉加载
-    // handledownload(y) {
-    //   if (y > 30) {
-    //     this.preMsg = "正在刷新中……";
-    //   }
-    // },
-    // //下拉到一定距离触发
-    // handleToend(y) {
-    //   if (y > 20) {
-    //     this.$api.getMovieOnInfoList(10).then(res => {
-    //       if (res) {
-    //         this.preMsg = "更新已完成";
-    //         setTimeout(() => {
-    //           this.movieList = res.movieList;
-    //           this.preMsg = "";
-    //         }, 1000);
-    //       }
-    //     });
-    //   }
-    // }
   },
 };
 </script>
@@ -96,13 +72,13 @@ export default {
     background-color: #eee;
     width: 64px;
     height: 90px;
-    margin-right: 10px;
+    margin:0 10px;
   }
   .movieInfo {
     flex: 1;
     overflow: hidden;
     .movieName {
-      margin-top: 2px;
+      // margin-top: 2px;
       display: inline-block;
       max-height: 24px;
       color: #222;

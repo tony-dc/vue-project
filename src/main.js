@@ -7,6 +7,7 @@ import TabBar from "@/components/TabBar"
 import VueLazyload from 'vue-lazyload'
 //引入无限加载插件
 import InfiniteLoading from 'vue-infinite-loading'
+import infiniteScroll from 'vue-infinite-scroll'
 import api from '@/api'
 //将api请求挂载到vue原型上，方便全局使用
 Vue.prototype.$api = api
@@ -16,12 +17,14 @@ Vue.filter('setWH', (url, data) => {
     // 用字符串替换方法，正则匹配替换数据
     return url.replace(/w\.h/, data)
 })
-Vue.use(InfiniteLoading, {
-    slots: {
-        noMore: '我也是有底线的'
-    }
-})
+Vue.use(InfiniteLoading
+    // {
+    // slots: {
+    //     noMore: '我也是有底线的'
+    // }
+)
 Vue.use(VueLazyload)
+Vue.use(infiniteScroll)
     //让better-scroll成为全局组件，方便调用
 import BScroll from '@/components/scroll/BScroll'
 Vue.component('BScroll', BScroll)
@@ -31,5 +34,6 @@ Vue.config.productionTip = false
 new Vue({
     router,
     store,
+    directives: {infiniteScroll},
     render: h => h(App)
 }).$mount('#app')

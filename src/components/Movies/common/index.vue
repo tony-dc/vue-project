@@ -10,7 +10,7 @@
           <div v-else class="movie-same person_wantSee">
             <span class="person">{{ item.wish }}人想看</span>
           </div>
-          <div class="movie-same movie-star">主演：{{ item.star }}</div>
+          <div class="movie-same movie-star ellipsis">主演：{{ item.star }}</div>
           <div class="movie-same movie-showtime">
             {{ item.showInfo || `${item.rt} 上映` }}
           </div>
@@ -26,25 +26,27 @@ export default {
   props: ["List"],
   components: {
     common: movies_common,
-  },
+  }
 };
 </script>
 <style lang="scss" scoped>
 .movie-item-info {
   overflow: hidden;
   .movie-same {
-    margin-top: 4px;
+    margin-top: 3px;
     font-size: 13px;
     color: #666;
-  }
-  .movie-vote {
-    margin-top: 6px;
   }
   .grade,
   .person {
     font-weight: 700;
     color: #faaf00;
     font-size: 15px;
+  }
+  .ellipsis{
+    white-space: nowrap;
+    overflow:hidden;
+    text-overflow: ellipsis;
   }
 }
 </style>
