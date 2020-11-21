@@ -10,14 +10,18 @@
                 v-for="(item, index) in hotList"
                 :key="index"
                 @touchstart="handlegetCityId(item.nm, item.id)"
-              >{{ item.nm }}</li>
+              >
+                {{ item.nm }}
+              </li>
             </ul>
           </div>
           <div class="city_sort" ref="city_sort">
             <div v-for="item in cityList" :key="item.index">
               <h2>{{ item.index }}</h2>
               <ul>
-                <li v-for="itemlist in item.list" :key="itemlist.id">{{ itemlist.nm }}</li>
+                <li v-for="itemlist in item.list" :key="itemlist.id">
+                  {{ itemlist.nm }}
+                </li>
               </ul>
             </div>
           </div>
@@ -30,7 +34,9 @@
           v-for="(item, index) in letterData"
           :key="index"
           @touchstart="handleToLetter(index)"
-        >{{ item.index }}</li>
+        >
+          {{ item.index }}
+        </li>
       </ul>
     </div>
   </div>
@@ -42,7 +48,7 @@ export default {
     return {
       cityList: [],
       hotList: [],
-      letterData: []
+      letterData: [],
     };
   },
   mounted() {
@@ -59,7 +65,7 @@ export default {
     //获得用户选择的城市信息，并储存到状态管理中，实时更新
     handlegetCityId(nm, id) {
       const oldId = this.$store.state.city.id;
-      console.log(id,oldId)
+      console.log(id, oldId);
       if (id == oldId) return;
       //提交到状态管理中，实时更新
       this.$store.commit("city/CITYINFO", { nm, id });
@@ -84,7 +90,7 @@ export default {
           //当字母不存在时，创建并添加对用的字母集合到城市数据中
           citydata.push({
             index: fristLetter,
-            list: [{ nm: result[i].nm, id: result[i].id }]
+            list: [{ nm: result[i].nm, id: result[i].id }],
           });
         } else {
           //当字母存在时，进行push操作，添加到对应字母的数组中
@@ -112,19 +118,19 @@ export default {
           return -1;
         }
       });
-      citydata.forEach(item => letterdata.push({ index: item.index }));
+      citydata.forEach((item) => letterdata.push({ index: item.index }));
       return { citydata, hotdata, letterdata };
     },
     //性能优化,做一下缓存,避免每次都需要去后台请求数据
     async getCityInfo() {
       //获取本地储存的数据，判断是否为空，提升代码性能
       let citylist = window.localStorage.getItem("cityList"),
-          hotlist = window.localStorage.getItem("hotList"),
-          letterlist =window.localStorage.getItem("letterData");
+        hotlist = window.localStorage.getItem("hotList"),
+        letterlist = window.localStorage.getItem("letterData");
       if (citylist && hotlist && letterlist) {
-          this.cityList =JSON.parse(citylist) ;
-          this.hotList =JSON.parse( hotlist);
-          this.letterData =JSON.parse(letterlist);
+        this.cityList = JSON.parse(citylist);
+        this.hotList = JSON.parse(hotlist);
+        this.letterData = JSON.parse(letterlist);
       } else {
         //如果为假,则发送axios请求后台数据
         let citylist = await this.$api.getCityList(),
@@ -132,16 +138,16 @@ export default {
           { citydata, hotdata, letterdata } = this.handleGetCityList(
             citylist.cts
           );
-          this.cityList = citydata;
-          this.hotList = hotdata;
-          this.letterData = letterdata;
-          //本地存储列表数据信息
-          window.localStorage.setItem("cityList", JSON.stringify(citydata));
-          window.localStorage.setItem("hotList", JSON.stringify(hotdata));
-          window.localStorage.setItem("letterData", JSON.stringify(letterdata));
+        this.cityList = citydata;
+        this.hotList = hotdata;
+        this.letterData = letterdata;
+        //本地存储列表数据信息
+        window.localStorage.setItem("cityList", JSON.stringify(citydata));
+        window.localStorage.setItem("hotList", JSON.stringify(hotdata));
+        window.localStorage.setItem("letterData", JSON.stringify(letterdata));
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -158,6 +164,9 @@ export default {
     flex: 1;
     overflow: auto;
     background-color: #fff5f0;
+    &::-webkit-scrollbar {
+      display: none;
+    }
     .city_hot {
       margin-top: 20px;
       h2 {

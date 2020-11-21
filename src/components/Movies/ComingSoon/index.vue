@@ -9,7 +9,7 @@
 </template>
 <script>
 import Expected from './expect'
-import movielist from "../common";
+import Movielist from "../common";
 export default {
   name: "comingsoon",
   data() {

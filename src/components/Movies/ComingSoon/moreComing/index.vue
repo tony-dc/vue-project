@@ -23,16 +23,24 @@ export default {
         limit: 10,
         offset: 0,
         total: 0,
-        movieIds: []
-      }
+        movieIds: [],
+      },
     };
   },
-  methods:{
-      infiniteHandler($state){
-          const {total,limit,offset,movieIds,...params}=this.Comingparams
-          if(offset>total) return 
-        //   const result=this.$api.
-      }
-  }
+  created(){
+      const {total,movieIds,...params}=this.Comingparams
+      const params={params}
+      this.$api.getComingSoonList(params).then(res=>{
+          console.log(res)
+      })
+      
+  },
+  methods: {
+    infiniteHandler() {
+      // const { total, limit, offset, movieIds, ...params } = this.Comingparams;
+      // if (offset > total) return;
+      //   const result=this.$api.
+    },
+  },
 };
 </script>

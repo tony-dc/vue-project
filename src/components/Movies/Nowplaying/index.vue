@@ -75,7 +75,7 @@ export default {
   }
 };
 </script>
-<style>
+<style lang="scss">
 .movie_body {
   position: absolute;
   top: 95px;
@@ -83,5 +83,8 @@ export default {
   right: 0;
   bottom: 45px;
   overflow: scroll;
+   &::-webkit-scrollbar{     
+         display:none  
+           }
 }
 </style>
