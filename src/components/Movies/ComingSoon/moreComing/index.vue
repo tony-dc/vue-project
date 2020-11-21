@@ -29,8 +29,8 @@ export default {
   },
   methods:{
       infiniteHandler($state){
-          const {total,limit,offset,movieIds,...params}=this.Comingparams
-          if(offset>total) return 
+          // const {total,limit,offset,movieIds,...params}=this.Comingparams
+          // if(offset>total) return 
         //   const result=this.$api.
       }
   }
