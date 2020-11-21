@@ -6,17 +6,22 @@ class API extends BaseData {
             //直接调用父类的get方法
             return this.get('/ajax/movieOnInfoList', params)
         }
-    //获取更多电影列表接口
-    getMoreMovieList(params){
-        return this.get('/ajax//moreComingList',params)
-    }
+        //获取正在热映更多电影列表接口
+    getMoreMovieList(params) {
+            return this.get('/ajax//moreComingList', params)
+        }
         //获取即将上映接口数据
     getComingSoonList(params) {
-            return this.get('/ajax/comingList?' + `ci=${params}&token=&limit=10`)
+            return this.get('/ajax/comingList', params)
         }
-    getMostExpected(params){
-        return this.get('/ajax/mostExpected',params)
-    }
+        //获取更多即将上映接口数据
+    getMoreComingList(params) {
+            return this.get('/ajax/moreComingList', params)
+        }
+        //获取最期待电影接口数据
+    getMostExpected(params) {
+            return this.get('/ajax/mostExpected', params)
+        }
         //获取搜索接口数据,newVal表示实时更新的input值
     getSearchList(newVal, cityId) {
             return this.get(`/ajax/search?kw=${newVal}&cityId=${cityId}`)

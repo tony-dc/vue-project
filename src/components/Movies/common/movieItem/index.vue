@@ -16,9 +16,7 @@
     <div class="movie_sell">
       <slot name="movie_item" />
       <div class="btns" v-if="showdata">
-        <span class="btn" :class="showdata.cls">
-          {{ showdata.name }}
-        </span>
+        <span class="btn" :class="showdata.cls">{{ showdata.name }}</span>
       </div>
     </div>
   </div>
@@ -31,34 +29,32 @@ export default {
       show: {
         1: {
           name: "想看",
-          cls: "want",
+          cls: "want"
         },
         3: {
           name: "购票",
-          cls: "buy",
+          cls: "buy"
         },
         4: {
           name: "预售",
-          cls: "pre",
-        },
-      },
+          cls: "pre"
+        }
+      }
     };
   },
   props: {
-    movie: Object,
+    movie: Object
   },
   computed: {
     img() {
-      return this.movie.img.replace("w.h", "128.168")
-
+      return this.movie.img.replace("w.h", "128.168");
     },
     showdata() {
       const { show, movie } = this;
       return show[movie.showst];
-    },
+    }
   },
-  methods: {
-  },
+  methods: {}
 };
 </script>
 <style lang="scss" scoped>
@@ -72,7 +68,7 @@ export default {
     background-color: #eee;
     width: 64px;
     height: 90px;
-    margin:0 10px;
+    margin: 0 4px;
   }
   .movieInfo {
     flex: 1;
@@ -87,8 +83,8 @@ export default {
     }
   }
   .movie_sell {
-    margin-top:25px;
-    margin-right:5px;
+    margin-top: 25px;
+    margin-right: 5px;
     .score {
       color: #fa0;
       font-size: 10px;
