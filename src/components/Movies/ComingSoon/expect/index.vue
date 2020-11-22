@@ -31,7 +31,7 @@ export default {
   data() {
     return {
       expectMovies: [],
-      expectLoading: false,
+      expectLoading: true,
       total: 0,
       //配置请求访问更多需要的参数
       expectparams: {
@@ -45,9 +45,8 @@ export default {
   },
   methods: {
     async loadMoreMostExpected() {
-      //执行函数以后滚轮禁止再次调用函数执行
-      this.expectLoading = true;
-      console.log(this.expectparams.offset)
+      //执行函数以后滚轮禁止
+      // this.expectLoading = true;
       const { hasMore, ...data } = this.expectparams;
       const params = { params: data };
       if (!hasMore) {
@@ -55,6 +54,7 @@ export default {
         return;
       }
       const res = await this.$api.getMostExpected(params);
+      console.log(res)
       const { coming, paging } = res;
           this.total = paging.total;
           this.expectparams.hasMore = paging.hasMore;
