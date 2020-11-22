@@ -9,11 +9,7 @@
         infinite-scroll-distance="20"
         infinite-scroll-throttle-delay
       >
-        <li
-          v-for="(item, index) in expectMovies"
-          :key="index"
-          class="expectItem"
-        >
+        <li v-for="(item, index) in expectMovies" :key="index" class="expectItem">
           <div class="poster">
             <img :src="item.img | setWH('128.168')" alt />
             <span class="wish">{{ item.wish }}人想看</span>
@@ -31,7 +27,7 @@ export default {
   data() {
     return {
       expectMovies: [],
-      expectLoading: true,
+      expectLoading: false,
       total: 0,
       //配置请求访问更多需要的参数
       expectparams: {
@@ -39,30 +35,37 @@ export default {
         limit: 10,
         offset: 0,
         token: "",
-        hasMore: true,
-      },
+        hasMore: true
+      }
     };
   },
   methods: {
-    async loadMoreMostExpected() {
+    loadMoreMostExpected() {
       //执行函数以后滚轮禁止
-      // this.expectLoading = true;
+      this.expectLoading = true;
       const { hasMore, ...data } = this.expectparams;
       const params = { params: data };
-      if (!hasMore) {
+      console.log(params);
+      if (!hasMore || this.expectparams.offset >= 35) {
         this.expectLoading = true;
         return;
       }
-      const res = await this.$api.getMostExpected(params);
-      console.log(res)
-      const { coming, paging } = res;
-          this.total = paging.total;
-          this.expectparams.hasMore = paging.hasMore;
-          this.expectparams.offset += coming.length;
-          this.expectMovies.push(...coming);
-          this.expectLoading = false;
+      // setTimeout(() => {
+        this.$api.getMostExpected(params).then(res => {
+          console.log(res);
+          const { coming, paging } = res;
+          if (coming) {
+            this.total = paging.total;
+            this.expectparams.hasMore = paging.hasMore;
+            this.expectparams.offset += coming.length;
+            this.expectMovies.push(...coming);
+            this.expectLoading = false;
+            console.log(this.expectMovies)
+          }
+        });
+      // },1000);
     }
-  },
+  }
 };
 </script>
 <style lang="scss" scoped>

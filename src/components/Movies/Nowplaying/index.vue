@@ -3,7 +3,7 @@
     <movelist :List="movieList" />
     <!-- 无限加载功能 -->
     <infinite-loading @infinite="infiniteHandler">
-       <div slot="no-more">已经到底啦</div>
+      <div slot="no-more" class="notice">已经到底啦</div>
     </infinite-loading>
   </div>
 </template>
@@ -34,8 +34,8 @@ export default {
       //当大于总数时，终止执行下面代码
       if (pageNo > total) return;
       //根据pageNo不断变化，不断截取新获取到的数据
-      const movieIds = this.movieIds.slice(pageNo, pageNo + limit).join()
-       //定义请求后台数据接口参数
+      const movieIds = this.movieIds.slice(pageNo, pageNo + limit).join();
+      //定义请求后台数据接口参数
       const params = { params: { cityId, ...this.params, movieIds } };
       //判断用户进去页面时是初始进入还是往下下拉状态，调用不用的数据api接口拿到数据
       const result = indexfrist
@@ -43,10 +43,11 @@ export default {
         : this.$api.getMovieOnInfoList(params);
       result
         .then(res => {
-        //  解构
+          console.log(res)
+          //  解构
           let { movieList, movieIds, coming, total } = res;
           if (movieIds) {
-             // 根据movieIds判断当首次加载时，获取到对应的数据并赋值
+            // 根据movieIds判断当首次加载时，获取到对应的数据并赋值
             this.movieIds = movieIds;
             this.total = total;
             return movieList;
@@ -83,8 +84,14 @@ export default {
   right: 0;
   bottom: 45px;
   overflow: scroll;
-   &::-webkit-scrollbar{     
-         display:none  
-           }
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  .notice {
+    height: 40px;
+    line-height: 40px;
+    color: #888;
+    font-size: 13px;
+  }
 }
 </style>

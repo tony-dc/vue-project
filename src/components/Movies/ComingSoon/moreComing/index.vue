@@ -1,13 +1,13 @@
 <template>
   <div class="MostComing-movie">
-    <div class="movies_items" v-for="(item,index) in ComingData" :key="index">
+    <div class="movies_items" v-for="(item,index) in  ComingMoviesData" :key="index">
       <p class="playing-data">{{item.comingTitle}}</p>
       <div>
         <common :List="item.data" />
       </div>
     </div>
     <infinite-loading @infinite="infiniteHandler">
-      <!-- <div slot="no-more" class="notice">我也是有底线的</div> -->
+      <div slot="no-more" class="notice">哦！没有更多电影了...</div>
     </infinite-loading>
   </div>
 </template>
@@ -17,15 +17,17 @@ export default {
   name: "moreComing",
   data() {
     return {
-      ComingData: [],
+      ComingMoviesData: [],
+      //解决频繁调用数据集合，解决replace元素为undefined报错
+      Comingdata: [],
       Comingparams: {
         ci: this.$store.state.city.id,
         token: "",
         limit: 10,
         offset: 0,
         total: 0,
-        movieIds: [],
-      },
+        movieIds: []
+      }
     };
   },
   components: {
@@ -53,9 +55,8 @@ export default {
         .then(data => {
           if (data.length) {
             this.Comingparams.offset += data.length;
-            this.ComingData.push(...data);
-            this.ComingData = this.handleData(this.ComingData);
-            console.log(this.ComingData);
+            this.Comingdata.push(...data);
+            this.ComingMoviesData = this.handleData(this.Comingdata);
             $state.loaded();
           } else {
             $state.complete();
@@ -75,22 +76,24 @@ export default {
 };
 </script>
 <style lang="scss">
-  .MostComing-movie{
-    height:100%;
-    .movies_items{
-      width:100%;
-      .playing-data{
-        width:100%;
-        box-sizing: border-box;
-        padding:5px 4px;
-        height:25px;
-        line-height: 25px;
-        color:#666;
-      }
-    }
-    .notice{
-      height:26px;
-      line-height: 26px;
+.MostComing-movie {
+  height: 100%;
+  .movies_items {
+    width: 100%;
+    .playing-data {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 5px 4px;
+      height: 25px;
+      line-height: 25px;
+      color: #666;
     }
   }
+  .notice {
+    height: 30px;
+    line-height: 30px;
+    color: #888;
+    font-size: 13px;
+  }
+}
 </style>

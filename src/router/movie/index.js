@@ -28,6 +28,11 @@ const movie = {
             component: () =>
                 import ('@/components/Movies/Search')
         },
+        {
+            path:'detail',
+            name:"detail",
+            compoent:()=>import("@/components/Movies/detail")
+        },
         //首页加载时,重定向到指定页面
         {
             path: '/movie',

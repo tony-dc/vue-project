@@ -47,14 +47,13 @@ export default {
   },
   computed: {
     img() {
-      return this.movie.img.replace("w.h", "128.168");
+          return this.movie.img.replace("w.h", "128.168");
     },
     showdata() {
       const { show, movie } = this;
       return show[movie.showst];
     }
-  },
-  methods: {}
+  }
 };
 </script>
 <style lang="scss" scoped>

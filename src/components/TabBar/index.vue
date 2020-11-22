@@ -31,18 +31,21 @@ export default {
   justify-content: space-evenly;
   align-items: center;
   text-align: center;
+  border-top:1px solid rgba(0,0,0,0.1);
   div.router-link-active{
      color:#f03d37
   }
   div{
     flex:1;
     height: 50px;
+    background-color: #fff;
     display: flex;
     flex-direction: column;
     align-items: center;
     i{
       margin-top:10px;
       width: 20px;
+
     }
     p{
       font-size:12px;
