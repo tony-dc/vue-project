@@ -1,6 +1,7 @@
 <template>
   <div id="Header">
       <h2 title='title'>{{title}}</h2>
+      <slot />
   </div>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
   <ul>
-    <router-link to='/movie/detail' v-for="(item, index) in List" :key="index">
+    <router-link :to="'/movie/detail/'+item.id" v-for="(item, index) in List" :key="index">
       <common :movie="item">
         <div class="movie-item-info" slot="movie_content">
           <div class="movie-same movie-vote" v-if="item.globalReleased">

@@ -29,9 +29,15 @@ const movie = {
                 import ('@/components/Movies/Search')
         },
         {
-            path:'detail',
-            name:"detail",
-            compoent:()=>import("@/components/Movies/detail")
+            path:'detail/:movieid',
+            components:{
+                // default:()=> import("@/components/Movies/Nowplaying"),
+                detail:()=>import("@/components/Movies/MovieItemDetail")
+
+            },
+            // props:{
+            //     detail:true
+            // }
         },
         //首页加载时,重定向到指定页面
         {

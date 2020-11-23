@@ -34,6 +34,10 @@ class API extends BaseData {
     getCinameData(params) {
         return this.get('/ajax/cinemaList?ci=' + params)
     }
+    //获取影片详情api接口数据
+    getMovieDetail(params){
+        return this.get('/ajax/detailmovie',params)
+    }
 }
 //导出这个类的实例
 export default new API()
