@@ -2,26 +2,34 @@
   <div class="expect-container">
     <h2 class="title">近期最受期待电影</h2>
     <div class="expect-content">
-      <ul
-        class="expect-wrapper"
-        v-infinite-scroll="loadMoreMostExpected"
-        infinite-scroll-disable="expectLoading"
-        infinite-scroll-distance="20"
-        infinite-scroll-throttle-delay
+      <BScroll
+        :scrolltype="scrolltype"
+        :Passthrough="Passthrough"
+        :handledownload="handleToscroll"
       >
-        <li v-for="(item, index) in expectMovies" :key="index" class="expectItem">
-          <div class="poster">
-            <img :src="item.img | setWH('128.168')" alt />
-            <span class="wish">{{ item.wish }}人想看</span>
-          </div>
-          <h4 class="name">{{ item.nm }}</h4>
-          <p class="date">{{ item.comingTitle }}</p>
-        </li>
-      </ul>
+        <ul class="expect-wrapper" ref="expectWrapper">
+          <li
+            v-for="(item, index) in expectMovies"
+            :key="index"
+            class="expectItem"
+          >
+            <div class="poster">
+              <img :src="item.img | setWH('128.168')" alt />
+              <span class="wish">{{ item.wish }}人想看</span>
+            </div>
+            <h4 class="name">{{ item.nm }}</h4>
+            <p class="date">{{ item.comingTitle }}</p>
+          </li>
+        </ul>
+      </BScroll>
     </div>
   </div>
 </template>
 <script>
+//  v-infinite-scroll="loadMoreMostExpected"
+//         infinite-scroll-disable="expectLoading"
+//         infinite-scroll-distance="20"
+// infinite-scroll-throttle-delay
 export default {
   name: "expect",
   data() {
@@ -29,46 +37,91 @@ export default {
       expectMovies: [],
       expectLoading: false,
       total: 0,
+      scrolltype:true,
+      Passthrough:"vertical",
+      hasMore: true,
       //配置请求访问更多需要的参数
       expectparams: {
         ci: this.$store.state.city.id,
         limit: 10,
         offset: 0,
         token: "",
-        hasMore: true
-      }
+      },
     };
   },
+  mounted(){
+     this.getList()
+  },
   methods: {
-    loadMoreMostExpected() {
-      //执行函数以后滚轮禁止
-      this.expectLoading = true;
-      const { hasMore, ...data } = this.expectparams;
-      const params = { params: data };
-      console.log(params);
-      if (!hasMore || this.expectparams.offset >= 35) {
-        this.expectLoading = true;
-        return;
-      }
-      // setTimeout(() => {
-        this.$api.getMostExpected(params).then(res => {
-          console.log(res);
-          const { coming, paging } = res;
-          if (coming) {
-            this.total = paging.total;
-            this.expectparams.hasMore = paging.hasMore;
-            this.expectparams.offset += coming.length;
-            this.expectMovies.push(...coming);
-            this.expectLoading = false;
+   async  handleToscroll(pos){
+       const width= this.$refs.expectWrapper.offsetWidth
+         console.log( this.$refs.expectWrapper.style.width)
+         if(pos.x<-(width/2)){
+            this.getList()
             console.log(this.expectMovies)
-          }
-        });
-      // },1000);
-    }
-  }
+          
+       }
+         
+    },
+    async getList() {
+      console.log(1)
+      const {...data } = this.expectparams;
+      const params = { params: data };
+      const result=await this.$api.getMostExpected(params)
+       const { coming, paging } = result
+       if(coming){
+         this.total = paging.total
+         this.hasMore = paging.hasMore;
+         this.expectparams.offset+= coming.length
+          this.expectMovies.push(...coming)
+         this.$refs.expectWrapper.style.width= this.expectMovies.length*85+'px'
+       }
+      // .then((res) => {
+      //         console.log(res);
+      //   const { coming, paging } = res;
+      //   if (coming) {
+      //     this.total = paging.total;
+      //     this.expectparams.hasMore = paging.hasMore;
+      //     this.expectparams.offset += coming.length;
+      //     this.expectMovies.push(...coming);
+      //     this.expectLoading = false;
+      //     console.log(this.expectMovies);
+      //   }
+      // });
+    },
+
+    // loadMoreMostExpected() {
+    //   //执行函数以后滚轮禁止
+    //   this.expectLoading = true;
+    //   const { hasMore, ...data } = this.expectparams;
+    //   const params = { params: data };
+    //   console.log(params);
+    //   if (!hasMore || this.expectparams.offset >= 35) {
+    //     this.expectLoading = true;
+    //     return;
+    //   }
+    //   // setTimeout(() => {
+    //     this.$api.getMostExpected(params).then(res => {
+    //       console.log(res);
+    //       const { coming, paging } = res;
+    //       if (coming) {
+    //         this.total = paging.total;
+    //         this.expectparams.hasMore = paging.hasMore;
+    //         this.expectparams.offset += coming.length;
+    //         this.expectMovies.push(...coming);
+    //         this.expectLoading = false;
+    //         console.log(this.expectMovies)
+    //       }
+    //     });
+    //   // },1000);
+    // }
+  },
 };
 </script>
 <style lang="scss" scoped>
+* {
+  touch-action: none;
+}
 .expect-container {
   padding: 10px 0 10px 4px;
   margin-bottom: 10px;
@@ -93,6 +146,8 @@ export default {
       .expectItem {
         display: inline-block;
         width: 85px;
+        // flex:1;
+        // flex-shrink: 0;
         overflow: hidden;
         margin-right: 10px;
         .poster {
