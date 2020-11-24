@@ -15,6 +15,10 @@ export default {
   },
   //接受父元素传过来的函数
   props: {
+    data:{
+       type:Array,
+       default:null
+    },
     handledownload: {
       type: Function,
       default: function() {}
@@ -34,12 +38,11 @@ export default {
   },
   mounted() {
     //因为axios是异步请求，所以需要让数据先请求加载完，在执行better-scroll代码，根据同步和异步的先后顺序，
-    this.timer = setTimeout(() => {
+    // this.timer = setTimeout(() => {
     this.$nextTick(() => {
         //在nextTick里面执行，确保数据加载渲染已经完成
         this.scroll = new BScroll(this.$refs.swrpper, {
           tap: true,
-          startX: 0,
           scrollX: this.scrolltype,
           eventPassthrough: this.Passthrough,
           probeType: 1,
@@ -53,7 +56,20 @@ export default {
           this.handleToend(position.y);
         });
       })
-    }, 500);
+    // }, 500);
+  },
+  methods:{
+    //当dom结构发生改变时，重新计算dom元素值进行渲染
+    refresh(){
+       this.scroll && this.scroll.refresh()
+    }
+  },
+  watch:{
+    data(){
+            setTimeout(() => {
+                this.refresh();
+            },500);
+        }
   }
 };
 </script>

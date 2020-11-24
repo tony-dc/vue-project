@@ -1,6 +1,8 @@
 <template>
   <div class="movie_body">
-    <Expected />
+     <keep-alive>
+         <Expected />
+     </keep-alive>
     <Movielist />
   </div>
 </template>

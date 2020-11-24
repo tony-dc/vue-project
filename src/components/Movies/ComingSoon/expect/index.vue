@@ -2,7 +2,10 @@
   <div class="expect-container">
     <h2 class="title">近期最受期待电影</h2>
     <div class="expect-content">
-      <BScroll :scrolltype="scrolltype" :Passthrough="Passthrough" :handledownload="handleToscroll">
+      <BScroll :scrolltype="scrolltype" :Passthrough="Passthrough" :handledownload="handleToscroll"
+      :data='expectMovies'
+      ref="scroll"
+      >
         <ul class="expect-wrapper" ref="expectWrapper">
           <li v-for="(item, index) in expectMovies" :key="index" class="expectItem">
             <div class="poster">
@@ -44,6 +47,7 @@ export default {
     async handleToscroll(pos) {
       const width = this.$refs.expectWrapper.offsetWidth;
       if (pos.x < -(width / 2)) {
+        if(this.expectparams.offset==34) return
         this.getList();
       }
     },
@@ -58,35 +62,9 @@ export default {
         this.expectparams.offset += coming.length;
         this.expectMovies.push(...coming);
         this.$refs.expectWrapper.style.width =
-        this.expectMovies.length * 85 + "px";
+        this.expectMovies.length * 95 + "px";
       }
     }
-
-    // loadMoreMostExpected() {
-    //   //执行函数以后滚轮禁止
-    //   this.expectLoading = true;
-    //   const { hasMore, ...data } = this.expectparams;
-    //   const params = { params: data };
-    //   console.log(params);
-    //   if (!hasMore || this.expectparams.offset >= 35) {
-    //     this.expectLoading = true;
-    //     return;
-    //   }
-    //   // setTimeout(() => {
-    //     this.$api.getMostExpected(params).then(res => {
-    //       console.log(res);
-    //       const { coming, paging } = res;
-    //       if (coming) {
-    //         this.total = paging.total;
-    //         this.expectparams.hasMore = paging.hasMore;
-    //         this.expectparams.offset += coming.length;
-    //         this.expectMovies.push(...coming);
-    //         this.expectLoading = false;
-    //         console.log(this.expectMovies)
-    //       }
-    //     });
-    //   // },1000);
-    // }
   }
 };
 </script>
@@ -118,8 +96,6 @@ export default {
       .expectItem {
         display: inline-block;
         width: 85px;
-        // flex:1;
-        // flex-shrink: 0;
         overflow: hidden;
         margin-right: 10px;
         .poster {
