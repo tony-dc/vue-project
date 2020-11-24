@@ -17,7 +17,9 @@
       </div>
     </Topbar>
     <!-- 视图出口 -->
-      <router-view />
+    <!-- <keep-alive> -->
+       <router-view />
+    <!-- </keep-alive> -->
     <TabBar />
     <router-view name="detail" />
   </div>

@@ -2,12 +2,12 @@
   <!-- 详情页影片内容 -->
   <div class="detailList">
     <!-- 遮盖层 -->
-    <div class="cover"></div>
+    <div class="cover" :style="{'background-image':`url(${detail.img.replace(/w\.h/,127.168)})`}"></div>
     <div class="detail_content">
       <!-- 图片及影片短视频 -->
       <div class="logo">
-        <img :src="detail.img|setWH('128.168')" alt />
-        <slot name="vedio" />
+        <img :src="img|setWH('128.168')" alt />
+        <!-- <slot name="vedio" /> -->
       </div>
       <!-- 影片主要信息 -->
       <div class="content">
@@ -15,14 +15,15 @@
         <p class="E_title">{{detail.enm}}</p>
         <div class="score_see">
           <slot name="score" />
-          <span v-if="detail.globalReleased">(万人评)</span>
-          <span v-else>{{detail.snum}}人想看</span>
+          <span v-if="detail.globalReleased">({{num}}万人评)</span>
+          <span v-else>({{detail.snum}}人想看)</span>
         </div>
         <div class="p_content">
           <p class="ptext">{{detail.cat}}</p>
           <p class="ptext">{{detail.src}}</p>
           <p class="ptext">{{detail.pubDesc}}</p>
         </div>
+        <slot name="link" />
         <!-- <router-link v-if="link" :to="'/movie/'+detail.id" class="arrow-right">
         <i class="iconfont icon-iconfontjiantou3 right"></i>
         </router-link>-->
@@ -36,8 +37,16 @@ export default {
   props: {
     detail: Object
   },
-  created() {
-    console.log(this.detail);
+  computed:{
+     img(){
+       return this.detail.img
+     },
+     num(){
+         return parseInt(this.detail.snum / 10000)
+     }
+  },
+  mounted(){
+    console.log(this.detail)
   }
 };
 </script>
@@ -53,7 +62,7 @@ export default {
     top: 0;
     width: 100%;
     height: 100%;
-    filter: blur(1.1rem);
+    filter: blur(10px);
     background-size: cover;
     background-repeat: no-repeat;
     z-index: -10;
@@ -101,18 +110,31 @@ export default {
               color:#fff;
           }
           .score_see{
-              font-size:18px;
-              font-weight: 700;
-              color:#fc0;
               margin-top:11px;
+              height:20px;
+              line-height: 20px;
+              span{
+                font-size:12px;
+                color:rgba(255,255,255,.8);
+              }
+              .num{
+                float: left;
+                 color:#fc0;
+                 font-size:18px;
+                 margin-right:10px;
+                  font-weight: 700;
+              }
           }
           .p_content{
-             margin-top:7px;
+             clear: both;
+             margin-top:10px;
              .ptext{
-                 margin-top:5px;
+                 margin-top:7px;
+                 height:16px;
+                 line-height: 16px;
                  color:#fff;
-                 font-size:14px;
-                 font-weight:500;
+                 font-size:13px;
+                //  font-weight:500;
              }
           }
         //   align-items: center;

@@ -3,9 +3,13 @@
         <Header title='影片详情' >
             <i class="iconfont icon-zuojiantou back" @touchstart='handleToBack'></i>
         </Header>
-        <movieDetail :detail="detail">
-         
+         <!-- 父子组件之前传值，如果传的值是需要异步请求得到的数据，需要在父组件通过v-if判断是否有值，在传递 -->
+        <movieDetail :detail="detail" v-if ="isRead">
+          <div slot="score">
+            <span v-if="detail.globalReleased" class="num">{{detail.sc}}</span>
+          </div>
         </movieDetail>
+
 
     </div>
 </template>
@@ -15,7 +19,8 @@ import movieDetail from './moviedetail'
         name:'detail',
         data(){
          return {
-             detail:{}
+             detail:{},
+             isRead:false
          }
         },
         methods:{
@@ -28,7 +33,8 @@ import movieDetail from './moviedetail'
            const movieId=this.$route.params.movieid
            this.$api.getMovieDetail({params:{movieId}}).then(res=>{
                this.detail=res.detailMovie
-           })
+               this.isRead=true    
+                      })
         },
         components:{
             movieDetail
@@ -42,6 +48,7 @@ import movieDetail from './moviedetail'
         top:0;
         width:100%;
         height:100%;
+        background-color: #fff;
         .back{
             position: absolute;
             top:15px;
