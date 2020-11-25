@@ -7,14 +7,14 @@
       ref="scroll"
       >
         <ul class="expect-wrapper" ref="expectWrapper">
-          <li v-for="(item, index) in expectMovies" :key="index" class="expectItem">
+          <router-link :to="path+item.id" v-for="(item, index) in expectMovies" :key="index" class="expectItem">
             <div class="poster">
               <img :src="item.img | setWH('128.168')" alt />
               <span class="wish">{{ item.wish }}人想看</span>
             </div>
             <h4 class="name">{{ item.nm }}</h4>
             <p class="date">{{ item.comingTitle }}</p>
-          </li>
+          </router-link>
         </ul>
       </BScroll>
     </div>
@@ -25,6 +25,7 @@ export default {
   name: "expect",
   data() {
     return {
+      path:'/movie/detail/',
       expectMovies: [],
       expectLoading: false,
       total: 0,
