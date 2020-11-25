@@ -9,12 +9,14 @@
             <span v-if="detail.globalReleased" class="num">{{detail.sc}}</span>
           </div>
         </movieDetail>
+        <moreoffers :detail='detail'></moreoffers>
 
 
     </div>
 </template>
 <script>
 import movieDetail from './moviedetail'
+import moreoffers from './More offers'
     export default {
         name:'detail',
         data(){
@@ -37,7 +39,8 @@ import movieDetail from './moviedetail'
                       })
         },
         components:{
-            movieDetail
+            movieDetail,
+            moreoffers
         }
     }
 </script>

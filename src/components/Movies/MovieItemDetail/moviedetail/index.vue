@@ -16,7 +16,7 @@
         <div class="score_see">
           <slot name="score" />
           <span v-if="detail.globalReleased">({{num}}万人评)</span>
-          <span v-else>({{detail.snum}}人想看)</span>
+          <span v-else>( <i class="people">{{detail.snum}}</i>人想看)</span>
         </div>
         <div class="p_content">
           <p class="ptext">{{detail.cat}}</p>
@@ -116,6 +116,13 @@ export default {
               span{
                 font-size:12px;
                 color:rgba(255,255,255,.8);
+                .people{
+                  margin:0 1px;
+                  font-style: normal;
+                  color:#fc0;
+                 font-size:18px;
+                 font-weight: 700;
+                }
               }
               .num{
                 float: left;
