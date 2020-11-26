@@ -80,9 +80,13 @@ export default {
   },
   methods: {
     ...mapMutations['UpdateHistory'],
-    handleSearchInfo() {},
-    Text_empty() {}
+    handleSearchInfo() {
+      console.log(this.SearchMsg)
+    },
+    Text_empty() {},
+    handleCancelTouch(){}
   }
+
 };
 </script>
 <style lang="scss">

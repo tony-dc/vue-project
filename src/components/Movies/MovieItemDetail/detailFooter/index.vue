@@ -14,7 +14,7 @@
 </template>
 <script>
     export default {
-        name:'footer'
+        name:'Footer'
     }
 </script>
 <style lang="scss">
