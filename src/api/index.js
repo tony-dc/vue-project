@@ -38,6 +38,9 @@ class API extends BaseData {
     getMovieDetail(params){
         return this.get('/ajax/detailmovie',params)
     }
+    getSearch(params){
+       return this.get('/ajax/search',params)
+    }
 }
 //导出这个类的实例
 export default new API()

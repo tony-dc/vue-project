@@ -11,12 +11,13 @@
           class="S_input"
           placeholder="搜索影院"
         />
-        <span v-if="SearchMsg" @touchstart="Text_empty" class="iconfont icon-sousuo"></span>
+        <span v-if="SearchMsg" @touchstart="Text_empty" class="iconfont icon-sousuo msg"></span>
       </div>
       <div @touchstart='handleCancelTouch' class="cancel">
        取消
       </div>
     </div>
+    <History :history="history" @Tosearch='handleTosearch' />
     <infinite-loading v-if='Searching'>
         <div class="loading" slot='load'>
              Loading...
@@ -25,7 +26,8 @@
   </div>
 </template>
 <script>
-import {mapState,mapMutations} from 'vuex'
+// import {mapMutations} from 'vuex'
+import History from './history'
 export default {
   name: "SearchPage",
   data() {
@@ -46,7 +48,8 @@ export default {
       Movies_List:{},
       Cinema_List:{},
       max:3,
-      Searching:false
+      Searching:false,
+      timer:null
     };
   },
   watch:{
@@ -59,9 +62,11 @@ export default {
   },
   computed:{
       //拿到vuex中存储的数据
-      ...mapState(['city','searchHistory']),
+      // ...mapState([
+      //   {'searchHistory':state=>state.user.searchHistory}
+      //   ]),
       cityId(){
-          return this.city.id
+          return this.$store.state.city.id
       },
       queryval(){
             //获取动态路由值
@@ -71,20 +76,83 @@ export default {
             //返回对应的用户是从哪个搜索页面进行访问
            return this.searchtype[params]
       },
-      historydata(){
-        return this.searchHistory[this.queryval.title]
+      history(){
+        //根据返回的值，确定需要显示的是状态管理中电影还是影院的历史记录
+        return this.$store.state.user.searchHistory[this.queryval.title]
       }
   },
   mounted(){
-   console.log(this.queryval)
+  //  console.log(this.queryval,this.history,this.cityId)
   },
   methods: {
-    ...mapMutations['UpdateHistory'],
+    // ...mapMutations[{'updateSearchHistory'}],
+
     handleSearchInfo() {
-      console.log(this.SearchMsg)
+      //进来判断如果定时器编号有值则return
+      // if(this.timer) return 
+      //通过定时器做下防抖
+      // 进来清除下之前的定时器
+       clearTimeout(this.timer)
+      console.log(this.timer)
+       this.timer=setTimeout(()=>{
+            //初始值都清空
+            this.Movies_List={}
+            this.Cinema_List={}
+            if(this.SearchMsg){
+              // 数组向前插入方法
+              this.history.data.unshift(this.SearchMsg)
+              console.log(this.history.data)
+              // 进行数组去重操作
+              this.history.data= [...new Set(this.history.data)]
+              //进行历史数据更新
+              this.$store.commit('user/updateSearchHistory',this.history)
+              this.Searching=true
+              let params={
+                  kw:this.SearchMsg,
+                  cityId:this.cityId,
+                  stype:this.queryval.type
+                }
+                console.log(params)
+              this.$api.getSearch(
+                {params}
+              ).then(res=>{
+                console.log(res)
+                const {movies,cinemas}=res
+                // 判断用户搜索的类型是否为电影或者影院
+                if(this.queryval.type===-1) this.handleData(movies,"resultMovie")
+                this.handleData(cinemas,"resultCinema")
+                //关闭加载图标
+                this.Searching=false
+              })
+            }
+       },1000)
     },
-    Text_empty() {},
-    handleCancelTouch(){}
+    //清空功能
+    Text_empty() {
+      this.SearchMsg=''
+    },
+    //退出搜索页，返回上一层
+    handleCancelTouch(){
+      this.$router.back()
+    },
+    //接受子传父发射的事件
+    handleTosearch(result){
+       this.SearchMsg=result
+       this.handleSearchInfo()
+    },
+    //封装方法处理后台拿到的数据
+    handleData(data,title){
+        if(!data) return
+        const {list ,total}=data
+        this[title]={
+          list:total.max?list.slice(0,this.max):list,
+          total
+        }
+        console.log(this[title])
+    }
+  },
+  components:{
+     History
   }
 
 };
@@ -124,6 +192,14 @@ export default {
              color:#b3b0b0;
              padding:0 6px;
              line-height:32px;
+         }
+         .msg{
+           position: absolute;
+           display: block;
+           height:32px;
+           line-height: 32px;
+           right:0;
+           top:0;
          }
        }
        .cancel{

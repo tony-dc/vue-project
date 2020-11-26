@@ -91,10 +91,12 @@ export default {
   top: 0;
   width: 100%;
   height: 100%;
-  overflow: scroll;
+  -webkit-overflow-scrolling:touch;
+  // overflow-y: auto;
    &::-webkit-scrollbar {
         display: none;
       }
+  overflow-y: auto;
   background-color: #fff;
   .back {
     position: absolute;
