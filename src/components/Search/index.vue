@@ -26,7 +26,10 @@
   </div>
 </template>
 <script>
-// import {mapMutations} from 'vuex'
+//通过命名空间帮助器简化代码
+// import {createNamespacedHelpers} from 'vuex'
+// const { mapState,mapMutations} = createNamespacedHelpers('user')
+import {mapState,mapMutations} from 'vuex'
 import History from './history'
 export default {
   name: "SearchPage",
@@ -53,6 +56,7 @@ export default {
     };
   },
   watch:{
+    //监测输入值是否为空，为空则让请求数据为空
      SearchMsg(newVal){
          if(!newVal){
              this.Movies_List={}
@@ -62,11 +66,14 @@ export default {
   },
   computed:{
       //拿到vuex中存储的数据
-      // ...mapState([
-      //   {'searchHistory':state=>state.user.searchHistory}
-      //   ]),
+      ...mapState('user',
+        {searchHistory:state=>state.searchHistory},
+        ),
+      ...mapState('city',{
+        cityid:state=>state.id
+      }),
       cityId(){
-          return this.$store.state.city.id
+          return this.cityid
       },
       queryval(){
             //获取动态路由值
@@ -78,49 +85,58 @@ export default {
       },
       history(){
         //根据返回的值，确定需要显示的是状态管理中电影还是影院的历史记录
-        return this.$store.state.user.searchHistory[this.queryval.title]
+        return this.searchHistory[this.queryval.title]
       }
   },
   mounted(){
-  //  console.log(this.queryval,this.history,this.cityId)
+    // console.log(this.searchHistory,this.cityid,this.updateSearchHistory(1))
   },
   methods: {
-    // ...mapMutations[{'updateSearchHistory'}],
+    ...mapMutations('user',['updateSearchHistory']),
 
     handleSearchInfo() {
       //进来判断如果定时器编号有值则return
       // if(this.timer) return 
-      //通过定时器做下防抖
+     
       // 进来清除下之前的定时器
        clearTimeout(this.timer)
-      console.log(this.timer)
+      // console.log(this.timer)
+       //通过定时器做下防抖
        this.timer=setTimeout(()=>{
             //初始值都清空
             this.Movies_List={}
             this.Cinema_List={}
-            if(this.SearchMsg){
-              // 数组向前插入方法
+            //判断如果当用户输入空格时，不发起数据请求
+            if(this.SearchMsg.trim()!==''){
+              //通过正则去掉用户输入的所有空格
+              this.SearchMsg=this.SearchMsg.replace(/\s*/g,'')
+              // 历史记录数组向前插入方法
               this.history.data.unshift(this.SearchMsg)
-              console.log(this.history.data)
+              // console.log(this.history.data)
               // 进行数组去重操作
+              console.log( this.history.data)
               this.history.data= [...new Set(this.history.data)]
+              console.log( this.history.data)
               //进行历史数据更新
-              this.$store.commit('user/updateSearchHistory',this.history)
+              // this.$store.commit('user/updateSearchHistory',this.history)
+             //提交更新历史记录数据
+              this.updateSearchHistory(this.history)
               this.Searching=true
               let params={
                   kw:this.SearchMsg,
-                  cityId:this.cityId,
+                  cityId:parseInt(this.cityId),
                   stype:this.queryval.type
                 }
-                console.log(params)
               this.$api.getSearch(
                 {params}
               ).then(res=>{
                 console.log(res)
                 const {movies,cinemas}=res
-                // 判断用户搜索的类型是否为电影或者影院
-                if(this.queryval.type===-1) this.handleData(movies,"resultMovie")
-                this.handleData(cinemas,"resultCinema")
+                // 判断用户进来搜索的类型是电影还是影院
+                // if(this.queryval.type===-1) this.handleData(movies,"resultMovie")
+                //     this.handleData(cinemas,"resultCinema")
+                
+               this.queryval.type===-1?this.handleData(movies,"resultMovie") :this.handleData(cinemas,"resultCinema")
                 //关闭加载图标
                 this.Searching=false
               })
@@ -141,14 +157,14 @@ export default {
        this.handleSearchInfo()
     },
     //封装方法处理后台拿到的数据
-    handleData(data,title){
+    handleData(data,key){
         if(!data) return
         const {list ,total}=data
-        this[title]={
+        this[key]={
           list:total.max?list.slice(0,this.max):list,
           total
         }
-        console.log(this[title])
+
     }
   },
   components:{
