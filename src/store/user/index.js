@@ -6,13 +6,15 @@ const state = {
 }
 const mutations = {
     updateSearchHistory(state, history) {
-        console.log(state.searchHistory)
-        const { data, type } = history
-        console.log(data, type)
-        state.searchHistory[type].data.push(...data)
-        console.log(state.searchHistory)
-            // state.searchHistory = history
-            // window.localStorage.setItem('searchHistory', history)
+        console.log(history)
+        const list=[]
+        list[history.type]=history
+        state.searchHistory={
+            ...list
+        }
+        console.log( state.searchHistory)
+        //本地存储
+        window.localStorage.setItem('searchHistory', JSON.stringify(state.searchHistory))
     }
 }
 const actions = {}

@@ -11,13 +11,13 @@
           class="S_input"
           placeholder="搜索影院"
         />
-        <span v-if="SearchMsg" @touchstart="Text_empty" class="iconfont icon-sousuo msg"></span>
+        <span v-if="SearchMsg" @touchstart="Text_empty" class="iconfont icon-shanchu msg"></span>
       </div>
-      <div @touchstart='handleCancelTouch' class="cancel">
+      <div @click='handleCancelTouch' class="cancel">
        取消
       </div>
     </div>
-    <History :history="history" @Tosearch='handleTosearch' />
+    <History v-if="history" :history="history" @Tosearch='handleTosearch' />
     <infinite-loading v-if='Searching'>
         <div class="loading" slot='load'>
              Loading...
@@ -84,20 +84,29 @@ export default {
            return this.searchtype[params]
       },
       history(){
+        //对vuex中的值做判断，是否有本地储存
+        let History=window.localStorage.getItem('searchHistory');
+
+        console.log(History)
+        if(History) {
+          //  console.log(JSON.parse(JSON.parse(history)))
+          const result=JSON.parse(History)
+          return result[this.queryval.title]
+          //  return JSON.parse(JSON.parse(history))[this.queryval.title]
+          }
+
         //根据返回的值，确定需要显示的是状态管理中电影还是影院的历史记录
         return this.searchHistory[this.queryval.title]
       }
   },
   mounted(){
-    // console.log(this.searchHistory,this.cityid,this.updateSearchHistory(1))
+    // console.log(this.searchHistory)
   },
   methods: {
     ...mapMutations('user',['updateSearchHistory']),
 
     handleSearchInfo() {
       //进来判断如果定时器编号有值则return
-      // if(this.timer) return 
-     
       // 进来清除下之前的定时器
        clearTimeout(this.timer)
       // console.log(this.timer)
@@ -110,14 +119,15 @@ export default {
             if(this.SearchMsg.trim()!==''){
               //通过正则去掉用户输入的所有空格
               this.SearchMsg=this.SearchMsg.replace(/\s*/g,'')
+              console.log(this.history)
               // 历史记录数组向前插入方法
               this.history.data.unshift(this.SearchMsg)
-              // console.log(this.history.data)
-              // 进行数组去重操作
-              console.log( this.history.data)
+              // 进行历史记录数组去重操作
               this.history.data= [...new Set(this.history.data)]
-              console.log( this.history.data)
-              //进行历史数据更新
+
+              // 做本地储存
+              // window.localStorage.setItem('searchHistory',JSON.stringify(results))
+              // 进行历史数据更新
               // this.$store.commit('user/updateSearchHistory',this.history)
              //提交更新历史记录数据
               this.updateSearchHistory(this.history)
@@ -149,7 +159,7 @@ export default {
     },
     //退出搜索页，返回上一层
     handleCancelTouch(){
-      this.$router.back()
+      this.$router.push('/cinema')
     },
     //接受子传父发射的事件
     handleTosearch(result){

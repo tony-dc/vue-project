@@ -4,8 +4,8 @@
       <div class="iconfont icon-time"></div>
       <div class="msg" @touchstart="handleSearch(item)">{{item}}</div>
       <div
-       class="del" iconfont 
-       icon-delete
+       class="del iconfont 
+       icon-shanchu"
        @touchstart='handleDel(index)'
        ></div>
        <div
@@ -34,12 +34,48 @@ export default {
           return this.history.type==='movies'
       }
   },
+ created(){
+  console.log(this.history)
+  },
+  watch:{
+    history(val){
+      console.log(val)
+    }
+  },
   methods:{
       handleSearch(result){
          this.$emit('Tosearch',result)
+      },
+      handleDel(index){
+        console.log(index)
       }
   }
 };
 </script>
 <style lang="scss" scoped>
+.History-list{
+  padding-left:15px;
+  background: #fff;
+  .history-item{
+    display: flex;
+    justify-content: space-between;
+    border-bottom:1px solid #e5e5e5;
+    line-height: 44px;
+    align-items: center;
+    .msg{
+      padding: 0 10px;
+      color:#333;
+      font-size:15px;
+      flex:1 1 auto;
+      display: inline-block;
+    }
+    .iconfont{
+      width:40px;
+      height: 44px;
+      line-height: 44px;
+      text-align: center;
+      color:#888;
+    }
+  }
+}
 </style>
