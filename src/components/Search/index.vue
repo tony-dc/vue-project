@@ -13,11 +13,12 @@
         />
         <span v-if="SearchMsg" @touchstart="Text_empty" class="iconfont icon-shanchu msg"></span>
       </div>
-      <div @click='handleCancelTouch' class="cancel">
+      <div @touchstart='handleCancelTouch' class="cancel">
        取消
       </div>
     </div>
     <History v-if="history" :history="history" @Tosearch='handleTosearch' />
+    <cinemaSearchData :cinemaList="resultCinema"></cinemaSearchData>
     <infinite-loading v-if='Searching'>
         <div class="loading" slot='load'>
              Loading...
@@ -31,6 +32,7 @@
 // const { mapState,mapMutations} = createNamespacedHelpers('user')
 import {mapState,mapMutations} from 'vuex'
 import History from './history'
+import cinemaSearchData from './cinemaSearchData'
 export default {
   name: "SearchPage",
   data() {
@@ -49,7 +51,7 @@ export default {
           }
       },
       Movies_List:{},
-      Cinema_List:{},
+      resultCinema:{},
       max:3,
       Searching:false,
       timer:null
@@ -84,23 +86,26 @@ export default {
            return this.searchtype[params]
       },
       history(){
-        //对vuex中的值做判断，是否有本地储存
-        let History=window.localStorage.getItem('searchHistory');
-
-        console.log(History)
-        if(History) {
-          //  console.log(JSON.parse(JSON.parse(history)))
-          const result=JSON.parse(History)
-          return result[this.queryval.title]
-          //  return JSON.parse(JSON.parse(history))[this.queryval.title]
-          }
-
+        //对vuex中的值做判断，是否有本地储存，原生写法，无法完成数据变更，自动渲染
+        // let History=window.localStorage.getItem('searchHistory');
         //根据返回的值，确定需要显示的是状态管理中电影还是影院的历史记录
-        return this.searchHistory[this.queryval.title]
+        // let History=window.localStorage.getItem('searchHistory')
+        // console.log(History)
+        // if(History){
+        //   if(typeof(this.searchHistory)==='string')
+        //   {
+        //    //多了一步JSON.parse就无法数据实时更新
+        //     return JSON.parse(this.searchHistory)[this.queryval.title]
+        //   }
+        //   console.log(this.searchHistory[this.queryval.title])
+        //   return this.searchHistory[this.queryval.title]
+           
+        // }
+         return this.searchHistory[this.queryval.title]
       }
   },
   mounted(){
-    // console.log(this.searchHistory)
+    console.log(this.history)
   },
   methods: {
     ...mapMutations('user',['updateSearchHistory']),
@@ -119,7 +124,6 @@ export default {
             if(this.SearchMsg.trim()!==''){
               //通过正则去掉用户输入的所有空格
               this.SearchMsg=this.SearchMsg.replace(/\s*/g,'')
-              console.log(this.history)
               // 历史记录数组向前插入方法
               this.history.data.unshift(this.SearchMsg)
               // 进行历史记录数组去重操作
@@ -130,7 +134,7 @@ export default {
               // 进行历史数据更新
               // this.$store.commit('user/updateSearchHistory',this.history)
              //提交更新历史记录数据
-              this.updateSearchHistory(this.history)
+             this.updateSearchHistory(this.history)
               this.Searching=true
               let params={
                   kw:this.SearchMsg,
@@ -159,7 +163,8 @@ export default {
     },
     //退出搜索页，返回上一层
     handleCancelTouch(){
-      this.$router.push('/cinema')
+      // this.$router.push('/cinema')
+      this.$router.back()
     },
     //接受子传父发射的事件
     handleTosearch(result){
@@ -174,11 +179,13 @@ export default {
           list:total.max?list.slice(0,this.max):list,
           total
         }
+        console.log(this[key])
 
     }
   },
   components:{
-     History
+     History,
+     cinemaSearchData
   }
 
 };

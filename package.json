@@ -11,6 +11,7 @@
     "axios": "^0.21.0",
     "better-scroll": "^2.0.5",
     "core-js": "^3.6.5",
+    "store": "^2.0.12",
     "vue": "^2.6.11",
     "vue-infinite-loading": "^2.4.5",
     "vue-infinite-scroll": "^2.0.2",

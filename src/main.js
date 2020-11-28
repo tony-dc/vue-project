@@ -8,11 +8,12 @@ import VueLazyload from 'vue-lazyload'
 //引入无限加载插件
 import InfiniteLoading from 'vue-infinite-loading'
 import infiniteScroll from 'vue-infinite-scroll'
+import storage from 'store'
 import api from '@/api'
 //将api请求挂载到vue原型上，方便全局使用
 Vue.prototype.$api = api
-//公共组件挂载到全局中
-//定义一个全局的过滤器用来处理图片
+    //公共组件挂载到全局中
+    //定义一个全局的过滤器用来处理图片
 Vue.filter('setWH', (url, data) => {
     // 用字符串替换方法，正则匹配替换数据
     return url.replace(/w\.h/, data)
@@ -24,11 +25,13 @@ Vue.use(InfiniteLoading, {
 })
 Vue.use(VueLazyload)
 Vue.use(infiniteScroll)
-//让better-scroll成为全局组件，方便调用
+    //让better-scroll成为全局组件，方便调用
 import BScroll from '@/components/scroll/BScroll'
 Vue.component('BScroll', BScroll)
 Vue.component('Header', Header)
 Vue.component('TabBar', TabBar)
+
+Vue.prototype.$storage = storage
 Vue.config.productionTip = false
 new Vue({
     router,

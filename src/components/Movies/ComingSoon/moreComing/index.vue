@@ -1,99 +1,46 @@
 <template>
   <div class="MostComing-movie">
-    <div class="movies_items" v-for="(item,index) in  ComingMoviesData" :key="index">
-      <p class="playing-data">{{item.comingTitle}}</p>
+    <div class="movies_items" v-for="(item,index)in ComingData" :key="index">
+      <p class="playing-data"></p>
       <div>
         <common :List="item.data" />
       </div>
     </div>
     <infinite-loading @infinite="infiniteHandler">
-      <div slot="no-more" class="notice">哦！没有更多电影了...</div>
+      <div slot="no-more">我也是有底线的</div>
     </infinite-loading>
   </div>
 </template>
 <script>
-import common from "../../common";
 export default {
   name: "moreComing",
   data() {
     return {
-      ComingMoviesData: [],
-      //解决频繁调用数据集合，解决replace元素为undefined报错
-      Comingdata: [],
+      ComingData: [],
       Comingparams: {
         ci: this.$store.state.city.id,
         token: "",
         limit: 10,
         offset: 0,
         total: 0,
-        movieIds: []
-      }
+        movieIds: [],
+      },
     };
   },
-  components: {
-    common
+  created(){
+      const {total,movieIds,...params}=this.Comingparams
+      const params={params}
+      this.$api.getComingSoonList(params).then(res=>{
+          console.log(res)
+      })
+      
   },
   methods: {
-    infiniteHandler($state) {
-      let { total, offset, movieIds, limit, ...paramslist } = this.Comingparams;
-      movieIds = movieIds.slice(offset, offset + limit).join();
-      const params = { params: { movieIds, limit, ...paramslist } };
-      if (offset > total) return;
-      const result = offset
-        ? this.$api.getMoreComingList(params)
-        : this.$api.getComingSoonList(params);
-      result
-        .then(res => {
-          const { coming, movieIds } = res;
-          if (movieIds) {
-            //将二维数组扁平化变成一维数组
-            this.Comingparams.movieIds = movieIds.flat();
-            this.Comingparams.total = movieIds.length;
-          }
-          return coming;
-        })
-        .then(data => {
-          if (data.length) {
-            this.Comingparams.offset += data.length;
-            this.Comingdata.push(...data);
-            this.ComingMoviesData = this.handleData(this.Comingdata);
-            $state.loaded();
-          } else {
-            $state.complete();
-          }
-        });
+    infiniteHandler() {
+      // const { total, limit, offset, movieIds, ...params } = this.Comingparams;
+      // if (offset > total) return;
+      //   const result=this.$api.
     },
-    handleData(list) {
-      let cominglist = [];
-      list.forEach(item => {
-        if (item.comingTitle) {
-          cominglist.push({ comingTitle: item.comingTitle, data: [item] });
-        }
-      });
-      return cominglist;
-    }
-  }
+  },
 };
 </script>
-<style lang="scss">
-.MostComing-movie {
-  height: 100%;
-  .movies_items {
-    width: 100%;
-    .playing-data {
-      width: 100%;
-      box-sizing: border-box;
-      padding: 5px 4px;
-      height: 25px;
-      line-height: 25px;
-      color: #666;
-    }
-  }
-  .notice {
-    height: 30px;
-    line-height: 30px;
-    color: #888;
-    font-size: 13px;
-  }
-}
-</style>
