@@ -10,7 +10,7 @@
         <!-- <slot name="vedio" /> -->
       </div>
       <!-- 影片主要信息 -->
-      <div class="content">
+      <div class="Contents">
         <h2 class="C_title">{{detail.nm}}</h2>
         <p class="E_title">{{detail.enm}}</p>
         <div class="score_see">
@@ -50,7 +50,7 @@ export default {
   }
 };
 </script>
-<style lang="scss">
+<style lang="scss" >
 .detailList {
   position: relative;
   height: 199px;
@@ -91,7 +91,7 @@ export default {
               height:100%;
           }
       }
-      .content{
+      .Contents{
           flex:1;
           overflow-x:hidden;
           margin-left:12.5px;

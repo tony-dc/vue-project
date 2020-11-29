@@ -9,16 +9,17 @@
           v-model="SearchMsg"
           @input="handleSearchInfo"
           class="S_input"
-          placeholder="搜索影院"
+          :placeholder="SearchTitle"
         />
         <span v-if="SearchMsg" @touchstart="Text_empty" class="iconfont icon-shanchu msg"></span>
       </div>
-      <div @touchstart='handleCancelTouch' class="cancel">
+      <div @click='handleCancelTouch' class="cancel">
        取消
       </div>
     </div>
-    <History v-if="history" :history="history" @Tosearch='handleTosearch' />
-    <cinemaSearchData :cinemaList="resultCinema"></cinemaSearchData>
+    <History v-if="history" :history="history" @Tosearch='handleTosearch'/>
+    <cinemaSearchData v-if='resultCinema.list'  :cinemaList="resultCinema" :max="max"></cinemaSearchData> 
+    <movieSearchData  v-if='MoviesList.list' :MovieData='MoviesList' :max='max'></movieSearchData>
     <infinite-loading v-if='Searching'>
         <div class="loading" slot='load'>
              Loading...
@@ -33,24 +34,26 @@
 import {mapState,mapMutations} from 'vuex'
 import History from './history'
 import cinemaSearchData from './cinemaSearchData'
+import movieSearchData from './movieSearchData'
 export default {
   name: "SearchPage",
   data() {
     return {
       SearchMsg: "",
+      SearchTitle:'',
       searchtype:{
           movie:{
               type:-1,
-              name:"搜电影",
+              name:"搜索电影",
               title:'movies'
           },
           cinema:{
               type:2,
-              name:"搜影院",
+              name:"搜索影院",
               title:'cinemas'
           }
       },
-      Movies_List:{},
+      MoviesList:{},
       resultCinema:{},
       max:3,
       Searching:false,
@@ -61,8 +64,8 @@ export default {
     //监测输入值是否为空，为空则让请求数据为空
      SearchMsg(newVal){
          if(!newVal){
-             this.Movies_List={}
-             this.Cinema_List={}
+             this.MoviesList={}
+             this.resultCinema={}
          }
      } 
   },
@@ -80,6 +83,7 @@ export default {
       queryval(){
             //获取动态路由值
             const routetype=this.$route.params.searchtype
+            console.log(routetype)
             //对拿到的值做下完善处理
              const params=routetype||this.searchtype.movie
             //返回对应的用户是从哪个搜索页面进行访问
@@ -106,6 +110,7 @@ export default {
   },
   mounted(){
     console.log(this.history)
+   this.SearchTitle=this.queryval.name
   },
   methods: {
     ...mapMutations('user',['updateSearchHistory']),
@@ -117,9 +122,10 @@ export default {
       // console.log(this.timer)
        //通过定时器做下防抖
        this.timer=setTimeout(()=>{
+         console.log(this.history)
             //初始值都清空
-            this.Movies_List={}
-            this.Cinema_List={}
+            this.MoviesList={}
+            this.resultCinema={}
             //判断如果当用户输入空格时，不发起数据请求
             if(this.SearchMsg.trim()!==''){
               //通过正则去掉用户输入的所有空格
@@ -150,9 +156,10 @@ export default {
                 // if(this.queryval.type===-1) this.handleData(movies,"resultMovie")
                 //     this.handleData(cinemas,"resultCinema")
                 
-               this.queryval.type===-1?this.handleData(movies,"resultMovie") :this.handleData(cinemas,"resultCinema")
+               this.queryval.type===-1?this.handleData(movies,"MoviesList") :this.handleData(cinemas,"resultCinema")
                 //关闭加载图标
                 this.Searching=false
+                console.log(this.MoviesList)
               })
             }
        },1000)
@@ -185,7 +192,8 @@ export default {
   },
   components:{
      History,
-     cinemaSearchData
+     cinemaSearchData,
+     movieSearchData
   }
 
 };

@@ -26,7 +26,7 @@ const movie = {
             path: 'search',
             name: 'search',
             component: () =>
-                import ('@/components/Movies/Search')
+                import ('@/components/Movies/movieSearch')
         },
         {
             path:'detail/:movieid',

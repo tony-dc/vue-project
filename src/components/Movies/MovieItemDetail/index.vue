@@ -9,7 +9,7 @@
         <span v-if="detail.globalReleased" class="num">{{detail.sc}}</span>
       </div>
     </movieDetail>
-    <moreoffers :detail="detail"></moreoffers>
+    <moreoffers :detail="detail" v-if="isRead"></moreoffers>
     <div class="Medio_swrapper">
       <h2>媒体库</h2>
       <BScroll :scrolltype="scrollX"  :Passthrough="Passthrough" :data='detail.photos'>
@@ -66,6 +66,7 @@ export default {
     }
   },
   created() {
+   
     //获取用户点进来的影片id
     const movieId = this.$route.params.movieid;
     this.$api.getMovieDetail({ params: { movieId } }).then(res => {
@@ -73,6 +74,7 @@ export default {
       this.isRead = true;
       this.$refs.medio_list.style.width=this.detail.photos.length*95+37+'px'
     });
+    
   },
   components: {
     movieDetail,
@@ -91,13 +93,11 @@ export default {
   top: 0;
   width: 100%;
   height: 100%;
-  -webkit-overflow-scrolling:touch;
-  // overflow-y: auto;
+  overflow: auto;
+  background-color: #fff;
    &::-webkit-scrollbar {
         display: none;
       }
-  overflow-y: auto;
-  background-color: #fff;
   .back {
     position: absolute;
     top: 15px;

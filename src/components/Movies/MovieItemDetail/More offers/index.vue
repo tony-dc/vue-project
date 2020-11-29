@@ -1,6 +1,6 @@
 <template>
   <div class="moreOffers">
-    <div class="content">特惠购票</div>
+    <div class="Content">特惠购票</div>
     <div class="dec" :class="{showtext:show}">{{detail.dra}}</div>
     <div class="allow iconfont icon-shangjiantou" @touchstart="show=!show" :class="{down:!show}"></div>
   </div>
@@ -31,7 +31,7 @@ export default {
   border-top: 1px solid #e5e5e5;
   border-bottom: 1px solid #e5e5e5;
   box-sizing: border-box;
-  .content {
+  .Content {
     color: #fff;
     height: 40px;
     line-height: 40px;

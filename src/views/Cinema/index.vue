@@ -9,7 +9,7 @@
        slot='search'
        >
          <i class="iconfont icon-sousuo search"></i>
-        搜索影院
+         <span class="searchTitle">搜索影院</span> 
       </router-link>
     </topBar>
     <div id="content">
@@ -63,10 +63,13 @@ export default {
   border-radius:4px;
   background-color: #fff;
   color:#888;
+  // .searchTitle{
+  //   margin-left:6px;
+  // }
   .search{
     position: absolute;
-    top:1px;
-    left:98px
+    top:0;
+    left:90px
   }
 }
 #content .cinema_menu {
