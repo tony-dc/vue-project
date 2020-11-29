@@ -1,11 +1,11 @@
 <template>
   <div class="MostComing-movie">
-    <div class="movies_items" v-for="(item,index)in ComingData" :key="index">
+    <!-- <div class="movies_items" v-for="(item,index)in ComingData" :key="index">
       <p class="playing-data"></p>
       <div>
         <common :List="item.data" />
       </div>
-    </div>
+    </div> -->
     <infinite-loading @infinite="infiniteHandler">
       <div slot="no-more">我也是有底线的</div>
     </infinite-loading>
@@ -28,11 +28,11 @@ export default {
     };
   },
   created(){
-      const {total,movieIds,...params}=this.Comingparams
-      const params={params}
-      this.$api.getComingSoonList(params).then(res=>{
-          console.log(res)
-      })
+      // const {total,movieIds,...params}=this.Comingparams
+      // // const params={params}
+      // this.$api.getComingSoonList({params}).then(res=>{
+      //     console.log(res)
+      // })
       
   },
   methods: {
