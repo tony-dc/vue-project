@@ -94,7 +94,7 @@ export default {
       border-bottom: 1px solid #e5e5e5;
     }
     ul li {
-      border-bottom: 1px dashed #c9c9c9;
+      // border-bottom: 1px dashed #c9c9c9;
       padding: 10px 15px;
       box-sizing: border-box;
       display: flex;

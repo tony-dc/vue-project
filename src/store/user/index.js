@@ -16,7 +16,6 @@ const mutations = {
             ...state.searchHistory,
             ...list
         }
-        console.log(state.searchHistory)
             //本地存储
         storage.set('searchHistory', state.searchHistory)
 

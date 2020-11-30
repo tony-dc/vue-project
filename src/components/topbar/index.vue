@@ -24,9 +24,10 @@ export default {
     width:100%;
     height:$topbarHeight;
     line-height: $topbarHeight;
+    box-sizing: border-box;
     background-color: #fff;
     box-shadow: 0 1px 3px 0 rgba(37,47,57,.1);
-    border:1px solid #e6e6e6;
+    border-bottom:1px solid #e6e6e6;
     .citySearch{
         position: relative;
         padding:0 15px;
