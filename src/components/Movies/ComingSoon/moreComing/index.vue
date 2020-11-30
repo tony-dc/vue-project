@@ -1,5 +1,8 @@
 <template>
   <div class="MostComing-movie">
+     <Movielist :List='ComingData'>
+        
+     </Movielist>
     <!-- <div class="movies_items" v-for="(item,index)in ComingData" :key="index">
       <p class="playing-data"></p>
       <div>
@@ -12,6 +15,7 @@
   </div>
 </template>
 <script>
+import Movielist from '../../common'
 export default {
   name: "moreComing",
   data() {
@@ -28,19 +32,38 @@ export default {
     };
   },
   created(){
-      // const {total,movieIds,...params}=this.Comingparams
-      // // const params={params}
-      // this.$api.getComingSoonList({params}).then(res=>{
-      //     console.log(res)
-      // })
-      
+     
   },
   methods: {
-    infiniteHandler() {
-      // const { total, limit, offset, movieIds, ...params } = this.Comingparams;
-      // if (offset > total) return;
-      //   const result=this.$api.
+   infiniteHandler($state) {
+      let { total, limit, offset, movieIds, ...param } = this.Comingparams;
+      if (offset > total) return;
+        movieIds=movieIds.slice(offset,offset+limit).join()
+       let params={params:{limit,movieIds,...param}}
+       let result=offset?this.$api.getMoreComingList(params):this.$api.getComingSoonList(params)
+       result.then(res=>{
+          console.log(res)
+         const {coming,movieIds}=res
+         if(movieIds){
+             this.Comingparams.movieIds=movieIds
+             this.Comingparams.total=movieIds.length
+         }
+         return coming
+       }).then(data=>{
+         if(data.length){
+           console.log(data)
+             this.Comingparams.offset+=data.length
+             this.ComingData.push(...data)
+             $state.loaded()
+         }
+         else{
+            $state.complete()
+         }
+       })
     },
   },
+  components:{
+    Movielist
+  }
 };
 </script>

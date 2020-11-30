@@ -11,12 +11,12 @@ const mutations = {
         console.log(history)
         const list = []
         list[history.type] = history
-           //对面中在相同键名情况下，后面的会覆盖前面的
-            state.searchHistory = {
-                ...state.searchHistory,
-                ...list
-            }
-          console.log( state.searchHistory)
+            //对面中在相同键名情况下，后面的会覆盖前面的
+        state.searchHistory = {
+            ...state.searchHistory,
+            ...list
+        }
+        console.log(state.searchHistory)
             //本地存储
         storage.set('searchHistory', state.searchHistory)
 
