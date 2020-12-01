@@ -42,6 +42,9 @@ class API extends BaseData {
     getSearch(params) {
         return this.get('/ajax/search', params)
     }
+    getFilterCinemas(params){
+        return this.get('/ajax/filterCinemas',params)
+    }
 }
 //导出这个类的实例
 export default new API()

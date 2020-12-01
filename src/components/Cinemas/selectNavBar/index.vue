@@ -3,19 +3,30 @@
     <!-- 导航条 -->
     <div class="Tab">
       <!-- 遮罩层 -->
-      <div v-if="selected" class="select-shadow"></div>
+      <div v-if="false" class="select-shadow"></div>
       <div
         v-for="tab in tabs "
         :key="tab.text"
         class="tablist"
         :class="selected===tab.name?'active':''"
+        @touchstart="handleTocheck(tab)"
       >{{tab.text}}</div>
     </div>
     <!-- 显示导航内容区 -->
-    <div class="nav_content"></div>
+    <div class="nav_content" v-if="selected">
+      <!-- 地区组件 -->
+      <Region :regionData='regionData' />
+      <!-- 品牌组件 -->
+      <Brand :brandData='brandData'/>
+      <!-- 特殊服务组件 -->
+      <Special :specialData='specialData' />
+    </div>
   </div>
 </template>
 <script>
+import Brand from "./Brand";
+import Region from "./Region";
+import Special from "./Special";
 export default {
   name: "select_main",
   data() {
@@ -36,10 +47,51 @@ export default {
         }
       ]
     };
+  },
+  props: {
+    results: {
+      type: Object,
+      default() {
+        return {};
+      }
+    }
+  },
+  computed: {
+    regionData() {
+      const { district, subway } = this.results;
+      return {
+        district,
+        subway
+      };
+    },
+    brandData() {
+      const { brand } = this.results;
+      return {
+        ...brand
+      };
+    },
+    specialData() {
+      const { service, hallType } = this.results;
+      return [
+        { ...service, type: "serviced" },
+        { ...hallType, type: "hallType" }
+      ];
+    }
+  },
+  methods: {
+    handleTocheck(val) {
+      this.selected = val.name;
+    }
+  },
+  components: {
+    Brand,
+    Region,
+    Special
   }
 };
 </script>
 <style lang="scss" scoped>
+@import "../../../scss/color.scss";
 .select-container {
   flex: 1;
   width: 100%;
@@ -67,25 +119,29 @@ export default {
       flex: 1;
       white-space: nowrap;
       overflow: hidden;
-      font-size: 13px;
-       &:before {
-        content: '';
+      text-align: center;
+      font-size: 14px;
+      &:before {
+        content: "";
         display: block;
         position: absolute;
         top: 50%;
         left: 70%;
-        border: 4px solid transparent;
-        // border-top-color: $selectDefaultColor;
+        border: 5px solid transparent;
+        border-top-color: $contentColor;
       }
-    //   &::after {
-    //     content: "";
-    //     display: block;
-    //     position: absolute;
-    //     height: 20px;
-    //     top: 10px;
-    //     left: 0;
-    //     border-left: 1px solid #e8e8e8;
-    //   }
+      & + .tablist::after {
+        content: "";
+        display: block;
+        position: absolute;
+        height: 40px;
+        top: 0px;
+        left: 0;
+        border-left: 1px solid #e8e8e8;
+      }
+      &.active {
+        color: $contentColor;
+      }
     }
   }
 }

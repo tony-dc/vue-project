@@ -14,7 +14,8 @@
         <span class="searchTitle">搜索影院</span>
       </router-link>
     </topBar>
-    <selectNav></selectNav>
+    <!-- 导航主体内容 -->
+    <selectNav class="select-wrapper" :results="results" />
     <TabBar />
   </div>
 </template>
@@ -22,16 +23,26 @@
 <script>
 import topBar from "@/components/topbar";
 import selectNav from '@/components/Cinemas/selectNavBar'
-// import CityCinema from "@/components/Cinemas/CityCinema.vue";
+import {mapState} from 'vuex'
 export default {
   name: "cinema",
   data() {
     return {
-      logo: "酷喵影院"
+      logo: "酷喵影院",
+      results:{}
     };
   },
+  computed:{
+      ...mapState('city',['id'])
+  },
+  created(){
+    //根据城市id获取影院数据
+    this.$api.getFilterCinemas({params:{ci:this.id}}).then(res=>{
+      console.log(res)
+      this.results=res
+    })
+  },
   components: {
-    // CityCinema,
     topBar,
     selectNav
   }

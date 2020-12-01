@@ -50,7 +50,7 @@ export default {
         : this.$api.getMovieOnInfoList(params);
       result
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           //  解构
           let { movieList, movieIds, coming, total } = res;
           if (movieIds) {
@@ -64,6 +64,7 @@ export default {
           return coming;
         })
         .then((data) => {
+          console.log(data)
           //判断返回数据是否有length,
           if (data.length) {
             //通过每次的数据长度来改变pageNo的值来

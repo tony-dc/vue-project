@@ -30,6 +30,7 @@ export default {
   created() {},
   methods: {
     infiniteHandler($state) {
+      // console.log(1)
       let { total, limit, offset, movieIds, ...param } = this.Comingparams;
       if (offset > total) return;
       movieIds = movieIds.slice(offset, offset + limit).join();
@@ -39,6 +40,7 @@ export default {
         : this.$api.getComingSoonList(params);
       result
         .then(res => {
+          console.log(res);
           const { coming, movieIds } = res;
           if (movieIds) {
             this.Comingparams.movieIds = movieIds;
@@ -50,7 +52,7 @@ export default {
           if (data.length) {
             this.Comingparams.offset += data.length;
             this.Cominglist.push(...data);
-            this.ComingData = this.dataChange(this.Cominglist);
+            this.ComingData=this.dataChange(this.Cominglist);
             $state.loaded();
           } else {
             $state.complete();
@@ -60,7 +62,7 @@ export default {
     //处理即将上映的电影数据格式
     dataChange(result) {
       if (!result) return;
-      let list = [];
+       const list=[]
       result.map(item => {
         const data = [];
         if (item.comingTitle) {
@@ -83,21 +85,20 @@ export default {
 .MostComing-movie {
   overflow: auto;
   margin-top: 10px;
-  .comingTitle{
-      width:100%;
-      height: 33px;
-      line-height: 33px;
-      color:#666;
-      font-size:15px;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin-top:10px;
+  .comingTitle {
+    width: 100%;
+    height: 33px;
+    line-height: 33px;
+    color: #666;
+    font-size: 15px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    margin-top: 10px;
   }
-  .No_info{
-    height:33px;
-    line-height:33px;
-    font-size:13px;
-    color:#777;
-
+  .No_info {
+    height: 33px;
+    line-height: 33px;
+    font-size: 13px;
+    color: #777;
   }
 }
 </style>
