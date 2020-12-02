@@ -103,6 +103,7 @@ export default {
     z-index: 999;
     border-bottom: 1px solid #f3f3f3;
     display: flex;
+    color:#666;
     justify-content: space-between;
     align-items: center;
     .select-shadow {

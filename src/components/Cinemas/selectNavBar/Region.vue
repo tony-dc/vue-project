@@ -85,5 +85,35 @@ export default {
 };
 </script>
 <style lang="scss">
-
+.tab-main{
+  .region-nav{
+    height:44px;
+    .region-tab{
+      display: flex;
+      justify-content: space-evenly;
+      height:100%;
+      .region-item{
+        position: relative;
+         flex:1;
+        color:#666;
+         text-align:center;
+         padding:0 10px;
+         height:100%;
+         line-height: 44px;
+         &.active{
+           color:#f03d37;
+            &::after{
+             content:'';
+             position: absolute;
+             bottom:0;
+             left:0;
+             width:90%;
+             border-bottom:2px solid #f03d37
+           }
+         }
+          
+      }
+    }
+  }
+}
 </style>
