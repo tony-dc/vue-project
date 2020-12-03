@@ -13,7 +13,7 @@
       >{{tab.text}}</div>
     </div>
     <!-- 显示导航内容区 -->
-    <div class="nav_content" v-if="selected">
+    <div class="nav_content" v-if="isShow">
       <!-- 地区组件 -->
       <Region :regionData='regionData' />
       <!-- 品牌组件 -->
@@ -32,6 +32,7 @@ export default {
   data() {
     return {
       selected: "",
+      isShow:false,
       tabs: [
         {
           name: "region",
@@ -81,6 +82,7 @@ export default {
   methods: {
     handleTocheck(val) {
       this.selected = val.name;
+      this.isShow=!this.isShow
     }
   },
   components: {
