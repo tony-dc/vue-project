@@ -13,13 +13,13 @@
       >{{tab.text}}</div>
     </div>
     <!-- 显示导航内容区 -->
-    <div class="nav_content" v-if="isShow">
+    <div class="nav_content" v-if="selected">
       <!-- 地区组件 -->
-      <Region :regionData='regionData' />
+      <Region :regionData="regionData" v-if="selected==='region'" />
       <!-- 品牌组件 -->
-      <Brand :brandData='brandData'/>
+      <Brand :brandData="brandData" v-if="selected==='brand'" />
       <!-- 特殊服务组件 -->
-      <Special :specialData='specialData' />
+      <Special :specialData="specialData" v-if="selected==='special'" />
     </div>
   </div>
 </template>
@@ -32,7 +32,7 @@ export default {
   data() {
     return {
       selected: "",
-      isShow:false,
+      isShow: false,
       tabs: [
         {
           name: "region",
@@ -80,9 +80,10 @@ export default {
     }
   },
   methods: {
+    //完成点击显示与隐藏的切换
     handleTocheck(val) {
-      this.selected = val.name;
-      this.isShow=!this.isShow
+       this.selected = this.isShow?'': val.name;
+       this.isShow = !this.isShow;
     }
   },
   components: {
@@ -105,7 +106,7 @@ export default {
     z-index: 999;
     border-bottom: 1px solid #f3f3f3;
     display: flex;
-    color:#666;
+    color: #666;
     justify-content: space-between;
     align-items: center;
     .select-shadow {
