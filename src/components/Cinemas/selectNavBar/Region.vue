@@ -21,18 +21,15 @@
           >{{item.name}}({{item.count}})</div>
         </aside>
         <section class="region-list-content">
-          <ul>
-            <li
+            <div
               class="itemListInfo"
               v-for="item in currentItemlist"
               :key="item.id"
               @touchstart="handleChoose(item,currentIndex)"
               :class="{active:item.id===currentCate.subIndex}"
             >
-              <span>{{item.name}}</span>
-              <span>{{item.count}}</span>
-            </li>
-          </ul>
+            {{item.name}}{{item.count}}
+            </div>
         </section>
       </section>
     </div>
@@ -109,27 +106,24 @@ export default {
       this.currentCate.index = item.id;
       this.cate[currentIndex].index = item.id;
       this.currentItemlist = item.subItems;
-      console.log(index)
-      // if (index === 0) {
-      //   const cate = this.cate[currentIndex];
-      //   let params = {};
-      //   params[cate.type] = -1;
-      //   params[cate.subType] = -1;
-      //   this.changeFilter({ ...params, offset: 0 });
-      // }
+      if (index === 0) {
+        const cate = this.cate[currentIndex];
+        let params = {};
+        params[cate.type] = -1;
+        params[cate.subType] = -1;
+        this.changeFilter({ ...params, offset: 0 });
+      }
     },
     handleChoose(item, currentIndex) {
-      
       let params={}
       this.currentCate.subIndex=item.id
-      console.log(item.id, this.currentCate.subIndex)
       this.cate[currentIndex].subIndex = item.id;
        this.cate.forEach(item => {
         params[item.type] = item.index
         params[item.subType] = item.subIndex
       })
-
-      // console.log(item, currentIndex);
+      this.changeFilter({ ...params, offset: 0 })
+      this.$store.dispatch('city/getCinemaList')
     }
   },
   created() {
@@ -196,9 +190,9 @@ export default {
         flex: 1;
         overflow: hidden;
         overflow-y: scroll;
-        ul {
-          position: relative;
-          overflow-y: scroll;
+        // ul {
+        //   position: relative;
+        //   overflow-y: scroll;
           .itemListInfo {
             position: relative;
             height: 44px;
@@ -208,7 +202,7 @@ export default {
                color: #f03d37
             }
           }
-        }
+        // }
       }
     }
   }

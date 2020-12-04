@@ -32,7 +32,7 @@ class API extends BaseData {
         }
         //获取影院接口数据
     getCinameData(params) {
-            return this.get('/ajax/cinemaList?ci=' + params)
+            return this.get('/ajax/cinemaList' , params)
         }
         //获取影片详情api接口数据
     getMovieDetail(params) {
