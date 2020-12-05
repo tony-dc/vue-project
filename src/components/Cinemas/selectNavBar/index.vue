@@ -3,7 +3,7 @@
     <!-- 导航条 -->
     <div class="Tab">
       <!-- 遮罩层 -->
-      <div v-if="false" class="select-shadow"></div>
+      <div v-if="selected" class="select-shadow"></div>
       <div
         v-for="tab in tabs "
         :key="tab.text"
@@ -15,7 +15,7 @@
     <!-- 显示导航内容区 -->
     <div class="nav_content" v-if="selected">
       <!-- 地区组件 -->
-      <Region :regionData="regionData" v-if="selected==='region'" />
+      <Region :regionData="regionData" v-if="selected==='region'" @close='choseShow'/>
       <!-- 品牌组件 -->
       <Brand :brandData="brandData" v-if="selected==='brand'" />
       <!-- 特殊服务组件 -->
@@ -84,6 +84,10 @@ export default {
     handleTocheck(val) {
        this.selected = this.isShow?'': val.name;
        this.isShow = !this.isShow;
+    },
+    choseShow(){
+        this.selected =''
+        this.isShow=false
     }
   },
   components: {
@@ -98,6 +102,7 @@ export default {
 .select-container {
   flex: 1;
   width: 100%;
+  z-index:999;
   .Tab {
     width: 100%;
     height: 40px;
@@ -111,7 +116,7 @@ export default {
     align-items: center;
     .select-shadow {
       position: fixed;
-      top: 0;
+      top: 90px;
       left: 0;
       width: 100%;
       height: 100%;
@@ -123,6 +128,8 @@ export default {
       flex: 1;
       white-space: nowrap;
       overflow: hidden;
+      background-color: #fff;
+      z-index:100;
       text-align: center;
       font-size: 14px;
       &:before {
@@ -146,7 +153,15 @@ export default {
       &.active {
         color: $contentColor;
       }
+      &.active:before {
+        top: 40%;
+        border-top-color: transparent;
+        border-bottom-color:  $contentColor;
+      }
     }
+  }
+  .nav_content{
+    background-color: #fff;
   }
 }
 </style>

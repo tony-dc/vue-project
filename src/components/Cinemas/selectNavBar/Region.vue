@@ -21,15 +21,13 @@
           >{{item.name}}({{item.count}})</div>
         </aside>
         <section class="region-list-content">
-            <div
-              class="itemListInfo"
-              v-for="item in currentItemlist"
-              :key="item.id"
-              @touchstart="handleChoose(item,currentIndex)"
-              :class="{active:item.id===currentCate.subIndex}"
-            >
-            {{item.name}}{{item.count}}
-            </div>
+          <div
+            class="itemListInfo"
+            v-for="item in currentItemlist"
+            :key="item.id"
+            @touchstart="handleChoose(item,currentIndex)"
+            :class="{active:item.id===currentCate.subIndex}"
+          >{{item.name}}{{item.count}}</div>
         </section>
       </section>
     </div>
@@ -51,8 +49,8 @@ export default {
           title: "subway",
           name: "地铁站"
         }
-      ],
-      currentItemlist: []
+      ]
+      // currentItemlist: []
     };
   },
   props: {
@@ -64,7 +62,7 @@ export default {
     }
   },
   computed: {
-    ...mapState("user", ["filters"]),
+    ...mapState("city", ["filters", "currentItemlist"]),
     // 返回当前选中对应索引
     currentTab() {
       return this.tabs[this.currentIndex];
@@ -96,7 +94,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations("user", ["changeFilter"]),
+    ...mapMutations("city", ["changeFilter"]),
     //handleTochange方法是为了改变切换选中索引
     handleTochange(index) {
       this.currentIndex = index;
@@ -105,25 +103,43 @@ export default {
     handleChangeItem(item, currentIndex, index) {
       this.currentCate.index = item.id;
       this.cate[currentIndex].index = item.id;
-      this.currentItemlist = item.subItems;
-      if (index === 0) {
-        const cate = this.cate[currentIndex];
-        let params = {};
-        params[cate.type] = -1;
-        params[cate.subType] = -1;
-        this.changeFilter({ ...params, offset: 0 });
+      if (currentIndex === 0) {
+        this.$store.commit("city/updateAdd", item.subItems);
+        if (index === 0) {
+          const cate = this.cate[currentIndex];
+          let params = {};
+          params[cate.type] = -1;
+          params[cate.subType] = -1;
+          this.changeFilter({ ...params, offset: 0 });
+          this.$emit("close");
+          this.$store.dispatch("city/getCinemaList");
+        }
+      }else{
+         this.$store.commit("city/updateAdd", '');
+        if (index === 0) {
+          const cate = this.cate[currentIndex];
+          let params = {};
+          params[cate.type] = -1;
+          params[cate.subType] = -1;
+          this.changeFilter({ ...params, offset: 0 });
+          // this.$emit("close");
+          // this.$store.dispatch("city/getCinemaList");
+        }
       }
     },
     handleChoose(item, currentIndex) {
-      let params={}
-      this.currentCate.subIndex=item.id
-      this.cate[currentIndex].subIndex = item.id;
-       this.cate.forEach(item => {
-        params[item.type] = item.index
-        params[item.subType] = item.subIndex
-      })
-      this.changeFilter({ ...params, offset: 0 })
-      this.$store.dispatch('city/getCinemaList')
+      if (currentIndex === 0) {
+        let params = {};
+        this.currentCate.subIndex = item.id;
+        this.cate[currentIndex].subIndex = item.id;
+        this.cate.forEach(item => {
+          params[item.type] = item.index;
+          params[item.subType] = item.subIndex;
+        });
+        this.changeFilter({ ...params, offset: 0 });
+        this.$emit("close");
+        this.$store.dispatch("city/getCinemaList");
+      }
     }
   },
   created() {
@@ -135,6 +151,8 @@ export default {
 .tab-main {
   .region-nav {
     height: 44px;
+    background-color: #fff;
+    z-index: 999;
     .region-tab {
       display: flex;
       justify-content: space-evenly;
@@ -169,7 +187,10 @@ export default {
         height: 100%;
         background-color: #f5f5f5;
         overflow-x: hidden;
-        overflow-y: auto;
+        overflow-y: scroll;
+        &::-webkit-scrollbar {
+          display: none;
+        }
         .district-item {
           padding: 0px 15px;
           height: 44px;
@@ -190,18 +211,21 @@ export default {
         flex: 1;
         overflow: hidden;
         overflow-y: scroll;
+        &::-webkit-scrollbar {
+          display: none;
+        }
         // ul {
         //   position: relative;
         //   overflow-y: scroll;
-          .itemListInfo {
-            position: relative;
-            height: 44px;
-            line-height: 44px;
-            padding: 0 15px;
-            &.active{
-               color: #f03d37
-            }
+        .itemListInfo {
+          position: relative;
+          height: 44px;
+          line-height: 44px;
+          padding: 0 15px;
+          &.active {
+            color: #f03d37;
           }
+        }
         // }
       }
     }

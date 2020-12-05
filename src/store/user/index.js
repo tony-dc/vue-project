@@ -22,10 +22,12 @@ const mutations = {
         storage.set('searchHistory', state.searchHistory)
     },
     changeFilter(state,payload){
+       
         state.filters={
             ... state.filters,
             ...payload
         }
+        console.log(state.filters)
     }
 }
 const actions = {

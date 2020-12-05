@@ -19,6 +19,7 @@
             alt
           />
         </span>
+          {{cinemaList.promotion.cardPromotionTag}}
       </div>
     </div>
     <div class="distance">{{cinemaList.distance}}</div>
@@ -79,6 +80,23 @@ export default {
     .adr {
       color: #999;
       font-size: 13px;
+    }
+    .cinema_discount{
+      color:#999;
+      margin:4px 0;
+      font-size:12px;
+      .cinema-discount-label{
+        display: inline-block;
+        width:15px;
+        height:14px;
+        position: relative;
+        top:3px;
+        img{
+          width:100%;
+          height:100%;
+        }
+      }
+
     }
   }
 }

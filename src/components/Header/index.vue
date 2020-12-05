@@ -21,6 +21,8 @@ export default {
     width:100%;
     height: 50px;
     background-color: #e54847;
+    position: relative;
+    z-index:999;
     h2{
       width:100%;
       height:50px;
