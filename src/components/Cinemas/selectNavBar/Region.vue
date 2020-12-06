@@ -97,54 +97,54 @@ export default {
     ...mapMutations("city", ["changeFilter"]),
     //handleTochange方法是为了改变切换选中索引
     handleTochange(index) {
-      this.currentIndex = index;
-      // this.$emit('change')
+      if (this.currentIndex !== index) {
+        this.$store.commit("city/updateAdd", "");
+        this.currentIndex = index;
+      }
+      this.$emit('change',index)
     },
+    //点击第二次索引触发的函数
     handleChangeItem(item, currentIndex, index) {
       this.currentCate.index = item.id;
       this.cate[currentIndex].index = item.id;
-      if (currentIndex === 0) {
-        this.$store.commit("city/updateAdd", item.subItems);
-        if (index === 0) {
-          const cate = this.cate[currentIndex];
-          let params = {};
-          params[cate.type] = -1;
-          params[cate.subType] = -1;
-          this.changeFilter({ ...params, offset: 0 });
-          this.$emit("close");
-          this.$store.dispatch("city/getCinemaList");
-        }
-      }else{
-         this.$store.commit("city/updateAdd", '');
-        if (index === 0) {
-          const cate = this.cate[currentIndex];
-          let params = {};
-          params[cate.type] = -1;
-          params[cate.subType] = -1;
-          this.changeFilter({ ...params, offset: 0 });
-          // this.$emit("close");
-          // this.$store.dispatch("city/getCinemaList");
-        }
-      }
-    },
-    handleChoose(item, currentIndex) {
-      if (currentIndex === 0) {
+      //获得第三层数据并存入状态管理中
+      this.$store.commit("city/updateAdd", item.subItems);
+      //当用户点击的索引为0时，后台初始请求的数据
+      if (index === 0) {
+        const cate = this.cate[currentIndex];
         let params = {};
-        this.currentCate.subIndex = item.id;
-        this.cate[currentIndex].subIndex = item.id;
-        this.cate.forEach(item => {
-          params[item.type] = item.index;
-          params[item.subType] = item.subIndex;
-        });
+        params[cate.type] = -1;
+        params[cate.subType] = -1;
+        //改变状态管理中的filters值
         this.changeFilter({ ...params, offset: 0 });
+        //关闭遮罩层
         this.$emit("close");
+        //发送异步请求到状态管理中请求后台数据
         this.$store.dispatch("city/getCinemaList");
       }
+    },
+    //点击第三层索引时触发函数
+    handleChoose(item, currentIndex) {
+      let params = {};
+      this.currentCate.subIndex = item.id;
+      this.cate[currentIndex].subIndex = item.id;
+      
+      //根据后端请求接口数据类型处理
+      const cate = this.cate[currentIndex];
+      const cate2 =
+        currentIndex === 0
+          ? this.cate[currentIndex + 1]
+          : this.cate[currentIndex - 1];
+      params[cate2.type] = -1;
+      params[cate2.subType] = -1;
+      params[cate.type] = cate.index;
+      params[cate.subType] = cate.subIndex;
+      this.changeFilter({ ...params, offset: 0 });
+      this.$emit("close");
+      this.$store.dispatch("city/getCinemaList");
     }
   },
-  created() {
-    // console.log(this.regionData, this.sidenav);
-  }
+  created() {}
 };
 </script>
 <style lang="scss">

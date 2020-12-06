@@ -15,7 +15,7 @@
     <!-- 显示导航内容区 -->
     <div class="nav_content" v-if="selected">
       <!-- 地区组件 -->
-      <Region :regionData="regionData" v-if="selected==='region'" @close='choseShow'/>
+      <Region :regionData="regionData" v-if="selected==='region'" @close='choseShow' @change='changeTab'/>
       <!-- 品牌组件 -->
       <Brand :brandData="brandData" v-if="selected==='brand'" />
       <!-- 特殊服务组件 -->
@@ -60,6 +60,7 @@ export default {
   computed: {
     regionData() {
       const { district, subway } = this.results;
+      console.log( district, subway )
       return {
         district,
         subway
@@ -82,12 +83,16 @@ export default {
   methods: {
     //完成点击显示与隐藏的切换
     handleTocheck(val) {
+      console.log(val)
        this.selected = this.isShow?'': val.name;
        this.isShow = !this.isShow;
     },
     choseShow(){
         this.selected =''
         this.isShow=false
+    },
+    changeTab(index){
+        console.log(index)
     }
   },
   components: {

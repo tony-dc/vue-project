@@ -36,8 +36,6 @@ const mutations = {
     updateAdd(state,payload){
        
         state.currentItemlist=payload
-        console.log( state.currentItemlist)
-    //  console.log(payload)
     }
 }
 const actions = {
@@ -47,6 +45,7 @@ const actions = {
         if(filters.offset===0){
             storelist.commit('initCinemaList',{})
         }
+        console.log(filters)
         return api.getCinameData({params:{...filters,cityId:id}}).then(data=>{
             storelist.commit('initCinemaList',data)
             return data
