@@ -1,9 +1,12 @@
 import filters from '@/utils/filter.js'
 import api from '@/api'
+import storage from 'store'
 
 const state = {
-    nm: window.localStorage.getItem('nm') || '上海',
-    id: window.localStorage.getItem('id') || 10,
+    // nm: window.localStorage.getItem('nm') || '上海',
+    // id: window.localStorage.getItem('id') || 10,
+    nm:storage.get('nm')||'上海',
+    id:storage.get('id')||10,
     filters,
     cinemaList:[],
     cinemas:[],

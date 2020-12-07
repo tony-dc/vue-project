@@ -50,7 +50,6 @@ export default {
           name: "地铁站"
         }
       ]
-      // currentItemlist: []
     };
   },
   props: {
@@ -143,8 +142,7 @@ export default {
       this.$emit("close");
       this.$store.dispatch("city/getCinemaList");
     }
-  },
-  created() {}
+  }
 };
 </script>
 <style lang="scss">

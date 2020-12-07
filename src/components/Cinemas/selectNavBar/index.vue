@@ -15,11 +15,11 @@
     <!-- 显示导航内容区 -->
     <div class="nav_content" v-if="selected">
       <!-- 地区组件 -->
-      <Region :regionData="regionData" v-if="selected==='region'" @close='choseShow' @change='changeTab'/>
+      <Region :regionData="regionData" v-if="selected==='region'" @close='choseShow'/>
       <!-- 品牌组件 -->
-      <Brand :brandData="brandData" v-if="selected==='brand'" />
+      <Brand :brandData="brandData" v-if="selected==='brand'" @close='choseShow'/>
       <!-- 特殊服务组件 -->
-      <Special :specialData="specialData" v-if="selected==='special'" />
+      <Special :specialData="specialData" v-if="selected==='special'" @close='choseShow'/>
     </div>
   </div>
 </template>
@@ -33,6 +33,7 @@ export default {
     return {
       selected: "",
       isShow: false,
+      samenm:'',
       tabs: [
         {
           name: "region",
@@ -58,6 +59,7 @@ export default {
     }
   },
   computed: {
+    //全程数据
     regionData() {
       const { district, subway } = this.results;
       console.log( district, subway )
@@ -66,13 +68,17 @@ export default {
         subway
       };
     },
+    //品牌数据
     brandData() {
+      console.log(this.results)
       const { brand } = this.results;
       return {
         ...brand
       };
     },
+    //特殊服务数据
     specialData() {
+      //解构出对应的对象，并且处理成想要的数据格式
       const { service, hallType } = this.results;
       return [
         { ...service, type: "serviced" },
@@ -83,16 +89,19 @@ export default {
   methods: {
     //完成点击显示与隐藏的切换
     handleTocheck(val) {
-      console.log(val)
+      if( this.samenm===val.name){
        this.selected = this.isShow?'': val.name;
        this.isShow = !this.isShow;
+      }else{
+        this.selected =val.name
+         this.isShow =true
+      }
+       this.samenm=val.name
     },
     choseShow(){
+        console.log(1)
         this.selected =''
         this.isShow=false
-    },
-    changeTab(index){
-        console.log(index)
     }
   },
   components: {
@@ -126,7 +135,7 @@ export default {
       width: 100%;
       height: 100%;
       z-index: -1;
-      background-color: rgba(0, 0, 0, 0.3);
+      background-color: rgba(0, 0, 0, 0.1);
     }
     .tablist {
       position: relative;

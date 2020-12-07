@@ -1,6 +1,6 @@
 <template>
   <div class="moreOffers">
-    <div class="Content">特惠购票</div>
+    <div class="Content" >特惠购票</div>
     <div class="dec" :class="{showtext:show}">{{detail.dra}}</div>
     <div class="allow iconfont icon-shangjiantou" @touchstart="show=!show" :class="{down:!show}"></div>
   </div>

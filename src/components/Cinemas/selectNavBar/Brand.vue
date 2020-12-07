@@ -2,29 +2,24 @@
   <div class="brand_content">
     <div
       class="brand_list"
-      v-for="(item,index) in brandData.subItems"
+      v-for="item in brandData.subItems"
       :key="item.id"
       :class="{active:item.id===subItemsIndex}"
-      @touchstart='handleToShow(item,index)'
+      @touchstart='handleToShow(item)'
     >
-    <!-- {{subItemsIndex}} -->
     <span>{{item.name}}</span>
     <span class="count">{{item.count}}</span>
     </div>
   </div>
 </template>
 <script>
-import {mapState} from 'vuex'
+import {mapState,mapMutations} from 'vuex'
 export default {
   name: "Brand",
-  data(){
-    return {
-        currentIndex:0
-    }
-  },
   computed:{
       ...mapState('city',['filters']),
      subItemsIndex(){
+       //实时通过状态管理拿到数据
          const {brandId}=this.filters
          return brandId
      }
@@ -38,14 +33,17 @@ export default {
     },
   },
 methods:{
-  handleToShow(data,index){
-      this.currentIndex=index
-     console.log(data,index)
+  ...mapMutations('city',['changeFilter']),
+  handleToShow(data){
+      const brandId=data.id
+      //改变filters里面brandId的值
+      this.changeFilter({brandId})
+      //清除遮罩层
+      this.$emit('close')
+      //发起异步请求,刷新页面数据
+      this.$store.dispatch('city/getCinemaList')
   }
-},
-  created() {
-    console.log(this.brandData);
-  },
+}
 };
 </script>
 <style lang="scss">
@@ -54,6 +52,9 @@ methods:{
     padding-right: 20px;
     height:320px;
     overflow: scroll;
+     &::-webkit-scrollbar {
+          display: none;
+        }
   .brand_list{
       position: relative;
      display: flex;

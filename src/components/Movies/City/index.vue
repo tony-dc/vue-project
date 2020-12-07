@@ -10,18 +10,14 @@
                 v-for="(item, index) in hotList"
                 :key="index"
                 @touchstart="handlegetCityId(item.nm, item.id)"
-              >
-                {{ item.nm }}
-              </li>
+              >{{ item.nm }}</li>
             </ul>
           </div>
           <div class="city_sort" ref="city_sort">
             <div v-for="item in cityList" :key="item.index">
               <h2>{{ item.index }}</h2>
               <ul>
-                <li v-for="itemlist in item.list" :key="itemlist.id">
-                  {{ itemlist.nm }}
-                </li>
+                <li v-for="itemlist in item.list" :key="itemlist.id">{{ itemlist.nm }}</li>
               </ul>
             </div>
           </div>
@@ -34,9 +30,7 @@
           v-for="(item, index) in letterData"
           :key="index"
           @touchstart="handleToLetter(index)"
-        >
-          {{ item.index }}
-        </li>
+        >{{ item.index }}</li>
       </ul>
     </div>
   </div>
@@ -48,7 +42,7 @@ export default {
     return {
       cityList: [],
       hotList: [],
-      letterData: [],
+      letterData: []
     };
   },
   mounted() {
@@ -70,8 +64,8 @@ export default {
       //提交到状态管理中，实时更新
       this.$store.commit("city/CITYINFO", { nm, id });
       //存储到本地
-      window.localStorage.setItem("nm", nm);
-      window.localStorage.setItem("id", id);
+      this.$storage.set("nm", nm);
+      this.$storage.set("id", id);
       this.$router.push("/movie/nowplaying");
     },
     //封装获取渲染所需后台数据的方法
@@ -90,7 +84,7 @@ export default {
           //当字母不存在时，创建并添加对用的字母集合到城市数据中
           citydata.push({
             index: fristLetter,
-            list: [{ nm: result[i].nm, id: result[i].id }],
+            list: [{ nm: result[i].nm, id: result[i].id }]
           });
         } else {
           //当字母存在时，进行push操作，添加到对应字母的数组中
@@ -118,19 +112,19 @@ export default {
           return -1;
         }
       });
-      citydata.forEach((item) => letterdata.push({ index: item.index }));
+      citydata.forEach(item => letterdata.push({ index: item.index }));
       return { citydata, hotdata, letterdata };
     },
     //性能优化,做一下缓存,避免每次都需要去后台请求数据
     async getCityInfo() {
       //获取本地储存的数据，判断是否为空，提升代码性能
-      let citylist = window.localStorage.getItem("cityList"),
-        hotlist = window.localStorage.getItem("hotList"),
-        letterlist = window.localStorage.getItem("letterData");
+      let citylist = this.$storage.get("cityList"),
+        hotlist = this.$storage.get("hotList"),
+        letterlist = this.$storage.get("letterData");
       if (citylist && hotlist && letterlist) {
-        this.cityList = JSON.parse(citylist);
-        this.hotList = JSON.parse(hotlist);
-        this.letterData = JSON.parse(letterlist);
+        this.cityList = citylist;
+        this.hotList = hotlist;
+        this.letterData = letterlist;
       } else {
         //如果为假,则发送axios请求后台数据
         let citylist = await this.$api.getCityList(),
@@ -142,12 +136,12 @@ export default {
         this.hotList = hotdata;
         this.letterData = letterdata;
         //本地存储列表数据信息
-        window.localStorage.setItem("cityList", JSON.stringify(citydata));
-        window.localStorage.setItem("hotList", JSON.stringify(hotdata));
-        window.localStorage.setItem("letterData", JSON.stringify(letterdata));
+        this.$storage.set("cityList", citydata);
+        this.$storage.set("hotList", hotdata);
+        this.$storage.set("letterData", letterdata);
       }
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -179,7 +173,6 @@ export default {
       .clearfix {
         display: flex;
         width: 100%;
-        //   flex-direction: column;
         justify-content: flex-start;
         flex-wrap: wrap;
         li {
