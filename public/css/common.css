@@ -1,32 +1,40 @@
 /* 样式初始化操作 */
-*{
-    margin:0;
-    padding:0
+
+* {
+    margin: 0;
+    padding: 0
 }
-ul,li{
+
+ul,
+li {
     list-style: none
 }
-a{
+
+a {
     text-decoration: none
 }
-img{
+
+img {
     display: block
 }
-html,body{
+
+html,
+body {
     height: 100%;
 }
-#main{
-    width:100%;
-    height:100%;
+
+#main {
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
 }
-#container{
-     flex:1;
-     position: relative;
-     overflow: hidden;
-     margin-bottom:50px;
-     display: flex;
-     flex-direction: column;
 
+#container {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 50px;
+    display: flex;
+    flex-direction: column;
 }
