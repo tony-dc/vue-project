@@ -45,6 +45,12 @@ class API extends BaseData {
     getFilterCinemas(params){
         return this.get('/ajax/filterCinemas',params)
     }
+    getDetailMovie(params){
+        return this.get('/ajax/detailmovie',params)
+    }
+    getpostMovie(params){
+        return this.post('/ajax/movie',params)
+    }
 }
 //导出这个类的实例
 export default new API()

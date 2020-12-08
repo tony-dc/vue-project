@@ -4,7 +4,7 @@ import movie from './movie'
 import cinema from './cinema'
 import mine from './mine'
 import cinemaSearch from './search'
-
+import cinema_movie from './cinema_movie'
 Vue.use(VueRouter)
 
 const routes = [
@@ -12,6 +12,7 @@ const routes = [
   cinema,
   mine,
   cinemaSearch,
+  cinema_movie,
   //当url地址不对已经后面没有拼接地址时，直接访问/movie
   {
     path:'/*',

@@ -14,8 +14,8 @@
         <span class="searchTitle">搜索影院</span>
       </router-link>
     </topBar>
-    <!-- 导航主体内容 -->
-    <selectNav class="select-wrapper" :results="results" />
+    <!-- 导航主体内容 --> 
+       <selectNav class="select-wrapper" :results="results" />
      <div class="cinemalist">
          <cinemaItem 
          v-for='item in cinemas'

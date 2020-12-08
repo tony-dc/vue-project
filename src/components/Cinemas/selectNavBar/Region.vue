@@ -209,6 +209,7 @@ export default {
         flex: 1;
         overflow: hidden;
         overflow-y: scroll;
+        background-color: #fff;
         &::-webkit-scrollbar {
           display: none;
         }

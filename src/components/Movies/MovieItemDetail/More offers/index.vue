@@ -1,8 +1,10 @@
 <template>
   <div class="moreOffers">
-    <div class="Content" >特惠购票</div>
-    <div class="dec" :class="{showtext:show}">{{detail.dra}}</div>
-    <div class="allow iconfont icon-shangjiantou" @touchstart="show=!show" :class="{down:!show}"></div>
+    <router-link :to="{path:'/cimema/movie/'+detail.id}" class="Content" tag="div">特惠购票</router-link>
+    <div class="scroll">
+      <div class="dec" :class="{showtext:show}">{{detail.dra}}</div>
+      <div class="allow iconfont icon-shangjiantou" @touchstart="show=!show" :class="{down:!show}"></div>
+    </div>
   </div>
 </template>
 <script>
@@ -20,6 +22,9 @@ export default {
         return {};
       }
     }
+  },
+  created() {
+    console.log(this.detail);
   }
 };
 </script>
@@ -27,10 +32,18 @@ export default {
 .moreOffers {
   margin-top: 10px;
   width: 100%;
+
   padding: 0 12px;
   border-top: 1px solid #e5e5e5;
   border-bottom: 1px solid #e5e5e5;
   box-sizing: border-box;
+  .scroll {
+    height: 106px;
+    overflow-y: scroll;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
   .Content {
     color: #fff;
     height: 40px;

@@ -4,15 +4,20 @@
       <i class="iconfont icon-zuojiantou back" @touchstart="handleToBack"></i>
     </Header>
     <!-- 父子组件之前传值，如果传的值是需要异步请求得到的数据，需要在父组件通过v-if判断是否有值，在传递 -->
-    <movieDetail :detail="detail" v-if="isRead">
-      <div slot="score">
-        <span v-if="detail.globalReleased" class="num">{{detail.sc}}</span>
-      </div>
-    </movieDetail>
-    <moreoffers :detail="detail" v-if="isRead"></moreoffers>
+    <div class="moviedetail">
+      <movieDetail :detail="detail" v-if="isRead">
+        <div slot="score">
+          <span v-if="detail.globalReleased" class="num">{{detail.sc}}</span>
+        </div>
+      </movieDetail>
+    </div>
+    <!-- 处理抖屏的问题 -->
+    <div class="moreoffers">
+      <moreoffers :detail="detail" v-if="isRead"></moreoffers>
+    </div>
     <div class="Medio_swrapper">
       <h2>媒体库</h2>
-      <BScroll :scrolltype="scrollX"  :Passthrough="Passthrough" :data='detail.photos'>
+      <BScroll :scrolltype="scrollX" :Passthrough="Passthrough" :data="detail.photos">
         <ul class="medio_list" ref="medio_list">
           <li class="mediophoto medio_video" @click="handlePlay">
             <img v-lazy="detail.videoImg" alt />
@@ -25,10 +30,10 @@
       </BScroll>
     </div>
     <div class="Vd_play" v-if="play">
-        <div class="masker" @touchstart="handlePlay" v-if="play"></div>
-        <div class="play" v-if="play">
-           <video :src="detail.vd" autoplay cntrols></video>
-        </div>
+      <div class="masker" @touchstart="handlePlay" v-if="play"></div>
+      <div class="play" v-if="play">
+        <video :src="detail.vd" autoplay cntrols></video>
+      </div>
     </div>
     <Footer />
   </div>
@@ -36,7 +41,7 @@
 <script>
 import movieDetail from "./moviedetail";
 import moreoffers from "./More offers";
-import Footer from './detailFooter'
+import Footer from "./detailFooter";
 export default {
   name: "detail",
   data() {
@@ -45,7 +50,7 @@ export default {
       isRead: false,
       scrollX: true,
       Passthrough: "vertical",
-      play:false
+      play: false
     };
   },
   computed: {
@@ -61,20 +66,19 @@ export default {
     handleToBack() {
       this.$router.back(-1);
     },
-    handlePlay(){
-        this.play=!this.play
+    handlePlay() {
+      this.play = !this.play;
     }
   },
   created() {
-   
     //获取用户点进来的影片id
     const movieId = this.$route.params.movieid;
     this.$api.getMovieDetail({ params: { movieId } }).then(res => {
       this.detail = res.detailMovie;
       this.isRead = true;
-      this.$refs.medio_list.style.width=this.detail.photos.length*95+37+'px'
+      this.$refs.medio_list.style.width =
+        this.detail.photos.length * 95 + 37 + "px";
     });
-    
   },
   components: {
     movieDetail,
@@ -92,12 +96,22 @@ export default {
   left: 0;
   top: 0;
   width: 100%;
-  height: 100%;
-  overflow: auto;
+  min-height: 100%;
   background-color: #fff;
-   &::-webkit-scrollbar {
-        display: none;
-      }
+  overflow-y: hidden;
+  .moviedetail {
+    overflow: hidden;
+    width: 100%;
+    height: 0;
+    padding-bottom: 53%;
+  }
+  //解决页面初次加载抖屏问题
+  .moreoffers {
+    overflow: hidden;
+    width: 100%;
+    height: 0;
+    padding-bottom: 39%;
+  }
   .back {
     position: absolute;
     top: 15px;
@@ -156,35 +170,34 @@ export default {
       }
     }
   }
-  .Vd_play{
-      position: fixed;
-      left:0;
-      bottom:0;
-      right:0;
-      top:0;
-      z-index:9999;
-      .masker{
-          height:100%;
-          width:100%;
-          background-color: rgba(0,0,0,.8);
+  .Vd_play {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    top: 0;
+    z-index: 9999;
+    .masker {
+      height: 100%;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+    .play {
+      position: absolute;
+      top: 30%;
+      left: 0;
+      width: 100%;
+      padding-top: 56.25%;
+      height: 0;
+      z-index: 9999;
+      video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
       }
-      .play{
-          position: absolute;
-          top:30%;
-          left:0;
-          width:100%;
-          padding-top:56.25%;
-          height:0;
-          z-index:9999;
-          video{
-              position:absolute;
-              top:0;
-              left:0;
-              width:100%;
-              height:100%;
-          }
-      }
-      
+    }
   }
 }
 </style>

@@ -1,6 +1,7 @@
 import filters from '@/utils/filter.js'
 import api from '@/api'
 import storage from 'store'
+import qs from 'qs'
 
 const state = {
     // nm: window.localStorage.getItem('nm') || '上海',
@@ -48,11 +49,29 @@ const actions = {
         if(filters.offset===0){
             storelist.commit('initCinemaList',{})
         }
-        console.log(filters)
         return api.getCinameData({params:{...filters,cityId:id}}).then(data=>{
             storelist.commit('initCinemaList',data)
             return data
         })
+    },
+    postMovie(ctx,payload){
+        const {filters}=ctx.state
+      if(filters.offset===0){
+          ctx.commit('initCinemaList',{})
+      }
+      return  api.getpostMovie({
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        data: qs.stringify({
+          ...filters,
+          ...payload
+        })
+      }).then(data => {
+          console.log(data)
+        ctx.commit('initCinemaList', data)
+        return data
+      })
     }
 }
 export default {

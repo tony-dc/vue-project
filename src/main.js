@@ -23,10 +23,10 @@ Vue.use(InfiniteLoading, {
         noMore: '我也是有底线的'
     }
 })
-Vue.use(VueLazyload
-    //     {
-    //     loading:require('./assets/placeholder.png')
-    // }
+Vue.use(VueLazyload,
+        {
+        loading:require('./assets/placeholder.png')
+    }
 )
 Vue.use(infiniteScroll)
     //让better-scroll成为全局组件，方便调用
