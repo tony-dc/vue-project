@@ -23,16 +23,18 @@ Vue.use(InfiniteLoading, {
         noMore: '我也是有底线的'
     }
 })
-Vue.use(VueLazyload,{
-    loading:require('./assets/placeholder.png')
-})
+Vue.use(VueLazyload
+    //     {
+    //     loading:require('./assets/placeholder.png')
+    // }
+)
 Vue.use(infiniteScroll)
     //让better-scroll成为全局组件，方便调用
 import BScroll from '@/components/scroll/BScroll'
 Vue.component('BScroll', BScroll)
 Vue.component('Header', Header)
 Vue.component('TabBar', TabBar)
-//本地存储storage
+    //本地存储storage
 Vue.prototype.$storage = storage
 Vue.config.productionTip = false
 new Vue({

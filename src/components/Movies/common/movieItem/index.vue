@@ -6,8 +6,7 @@
     <div class="movieInfo">
       <!-- 图片名称与是否为3D影片 -->
       <h4 class="movieName">
-        {{ movie.nm }}
-        <span class="version" :class="movie.version"></span>
+        {{ movie.nm }} <img class='versionImg' src="@/assets/maxs.png" alt="Imax" v-if='movie.version'> 
       </h4>
       <!-- 内置一个有名插槽，方便插入不同内容 -->
       <slot name="movie_content" />
@@ -74,11 +73,19 @@ export default {
     overflow: hidden;
     .movieName {
       // margin-top: 2px;
+      position: relative;
       display: inline-block;
+      width:100%;
       max-height: 24px;
       color: #222;
       font-weight: 700;
       font-size: 17px;
+      .versionImg{
+        position: absolute;
+        right:15px;
+        top:0;
+        height:100%;
+      }
     }
   }
   .movie_sell {

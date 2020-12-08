@@ -24,12 +24,6 @@ export default {
       total: 0,
     };
   },
-  // activated() {
-  //   const cityId = this.$store.state.city.id;
-  //   console.log(this.beforeId==cityId)
-  //   if(this.beforeId==cityId) return 
-  //      this.getData()
-  // },
   methods: {
     // 无限滚动加载
     infiniteHandler($state) {
