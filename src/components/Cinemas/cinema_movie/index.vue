@@ -1,7 +1,7 @@
 <template>
   <div class="cinema-movie-container">
     <!-- topBar组件 -->
-    <Header :title="movie_detail.nm">
+    <Header :title="movie_detail.nm" v-show="movie_detail.nm">
       <i class="iconfont icon-zuojiantou back" @touchstart="handleToBack"></i>
     </Header>
     <!-- 影片详细信息组件 -->

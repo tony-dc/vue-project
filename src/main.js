@@ -18,6 +18,9 @@ Vue.filter('setWH', (url, data) => {
     // 用字符串替换方法，正则匹配替换数据
     return url.replace(/w\.h/, data)
 })
+// import VueAwesomeSwiper from 'vue-awesome-swiper'
+// // import 'swiper/dist/css/swiper.css'
+// Vue.use(VueAwesomeSwiper)
 Vue.use(InfiniteLoading, {
     slots: {
         noMore: '我也是有底线的'
