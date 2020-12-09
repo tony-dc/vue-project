@@ -13,14 +13,11 @@
       </movieDetail>
     </div>
     <!--selectpancel组件 -->
-    <div class="choose">
-      <Date :dates="dates" />
       <selectNavBar :results="results" />
-    </div>
     <div class="cinemaList">
       <cinemaItem v-for="item in cinemas" :key="item.id" :cinemaList="item"></cinemaItem>
     </div>
-     <infinite-loading @infinite="infiniteHandler"></infinite-loading>
+     
   </div>
 </template>
 <script>
@@ -47,6 +44,7 @@ export default {
   },
   created() {
     const movieId = +this.$route.params.id;
+    console.log(movieId)
     this.movieid=movieId
     this.$api.getDetailMovie({ params: { movieId } }).then(res => {
       this.movie_detail = res.detailMovie;
@@ -76,15 +74,23 @@ export default {
       this.$router.back();
     },
     infiniteHandler(){
-      this.loading&&this.postMovie({movieId:this.movieid,updateShowDay: !this.dates.length, cityId: this.id }).then(res=>{
-          console.log(res)
+      this.postMovie({movieId:this.movieid,updateShowDay:true, cityId: this.id }).then(res=>{
+        console.log(res)
+          const {paging}=res
+          this.loading=true
+          if(!this.dates.length){
+            this.dates=paging.showDays.dates
+          }
+          console.log(this.dates)
       })
     }
   }
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .cinema-movie-container {
+    display: flex;
+    flex-direction: column;
   .movieDetail{
      overflow: hidden;
      width:100%;
@@ -98,6 +104,18 @@ export default {
     font-size: 24px;
     color: #fff;
     font-weight: bold;
+  }
+  .cinemaList{
+    flex:1;
+    position: absolute;
+    top:278px;
+    left:0;
+    bottom:0;
+    width:100%;
+    overflow: scroll;
+    &::-webkit-scrollbar{
+      border:none
+    }
   }
 }
 </style>

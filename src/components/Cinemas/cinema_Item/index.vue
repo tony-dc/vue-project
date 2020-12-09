@@ -1,5 +1,5 @@
 <template>
-  <div class="cinema_item">
+  <router-link :to="{path:'/movies/cinema/'+cinemaList.id}" class="cinema_item">
     <div class="cinemaInfo">
       <p class="name-price">
         <span class="cinemaName">{{cinemaList.nm}}</span>
@@ -23,7 +23,7 @@
       </div>
     </div>
     <div class="distance">{{cinemaList.distance}}</div>
-  </div>
+  </router-link>
 </template>
 <script>
 import tags from "../../tag";
@@ -40,8 +40,12 @@ export default {
   computed: {
     tag() {
       return this.cinemaList.tag || this.cinemaList;
-    }
+    },
+    
   },
+  created() {
+      console.log(this.cinemaList.id)
+    },
   components: {
     tags
   }

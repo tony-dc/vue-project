@@ -6,12 +6,12 @@ import qs from 'qs'
 const state = {
     // nm: window.localStorage.getItem('nm') || '上海',
     // id: window.localStorage.getItem('id') || 10,
-    nm:storage.get('nm')||'上海',
-    id:storage.get('id')||10,
+    nm: storage.get('nm') || '上海',
+    id: storage.get('id') || 10,
     filters,
-    cinemaList:[],
-    cinemas:[],
-    currentItemlist:[]
+    cinemaList: [],
+    cinemas: [],
+    currentItemlist: []
 }
 const mutations = {
     CITYINFO(state, payload) {
@@ -19,59 +19,59 @@ const mutations = {
         state.id = payload.id
     },
     //异步请求函数执行
-    initCinemaList(state,data){
+    initCinemaList(state, data) {
         console.log(data)
-      const {filters}=state
-      if(filters.offset===0){
-          state.cinemaList=data
-          state.cinemas=data.cinemas
-      }else{
-          state.cinemas=[...state.cinemas,...data.cinemas]
-      }
+        const { filters } = state
+        if (filters.offset === 0) {
+            state.cinemaList = data
+            state.cinemas = data.cinemas
+        } else {
+            state.cinemas = [...state.cinemas, ...data.cinemas]
+        }
     },
-    changeFilter(state,payload){
-       
-        state.filters={
-            ... state.filters,
+    changeFilter(state, payload) {
+
+        state.filters = {
+            ...state.filters,
             ...payload
         }
         console.log(state.filters)
     },
-    updateAdd(state,payload){
-       
-        state.currentItemlist=payload
+    updateAdd(state, payload) {
+
+        state.currentItemlist = payload
     }
 }
 const actions = {
-     //异步处理函数
-     getCinemaList(storelist){
-        const {filters,id}=storelist.state
-        if(filters.offset===0){
-            storelist.commit('initCinemaList',{})
+    //异步处理函数
+    getCinemaList(storelist) {
+        const { filters, id } = storelist.state
+        if (filters.offset === 0) {
+            storelist.commit('initCinemaList', {})
         }
-        return api.getCinameData({params:{...filters,cityId:id}}).then(data=>{
-            storelist.commit('initCinemaList',data)
+        return api.getCinameData({ params: {...filters, cityId: id } }).then(data => {
+            storelist.commit('initCinemaList', data)
             return data
         })
     },
-    postMovie(ctx,payload){
-        const {filters}=ctx.state
-      if(filters.offset===0){
-          ctx.commit('initCinemaList',{})
-      }
-      return  api.getpostMovie({
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        data: qs.stringify({
-          ...filters,
-          ...payload
+    postMovie(ctx, payload) {
+        const { filters } = ctx.state
+        if (filters.offset === 0) {
+            ctx.commit('initCinemaList', {})
+        }
+        return api.getpostMovie({
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            data: qs.stringify({
+                ...filters,
+                ...payload
+            })
+        }).then(res => {
+            console.log(res)
+            ctx.commit('initCinemaList', res)
+            return res
         })
-      }).then(data => {
-          console.log(data)
-        ctx.commit('initCinemaList', data)
-        return data
-      })
     }
 }
 export default {

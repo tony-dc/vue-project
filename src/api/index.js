@@ -32,7 +32,7 @@ class API extends BaseData {
         }
         //获取影院接口数据
     getCinameData(params) {
-            return this.get('/ajax/cinemaList' , params)
+            return this.get('/ajax/cinemaList', params)
         }
         //获取影片详情api接口数据
     getMovieDetail(params) {
@@ -42,14 +42,17 @@ class API extends BaseData {
     getSearch(params) {
         return this.get('/ajax/search', params)
     }
-    getFilterCinemas(params){
-        return this.get('/ajax/filterCinemas',params)
+    getFilterCinemas(params) {
+        return this.get('/ajax/filterCinemas', params)
     }
-    getDetailMovie(params){
-        return this.get('/ajax/detailmovie',params)
+    getDetailMovie(params) {
+        return this.get('/ajax/detailmovie', params)
     }
-    getpostMovie(params){
-        return this.post('/ajax/movie',params)
+    getpostMovie(params) {
+        return this.post('/ajax/movie', params)
+    }
+    getcinemaDetail(params) {
+        return this.get('/ajax/cinemaDetail', params)
     }
 }
 //导出这个类的实例
