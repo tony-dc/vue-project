@@ -8,7 +8,6 @@
   </div>
 </template>
 <script>
-// import Header from "@/components/Header";
 import Info from './cinemaInfo';
 import Swrapper from './swrapper'
 export default {

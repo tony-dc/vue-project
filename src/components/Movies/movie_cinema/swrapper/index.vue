@@ -17,10 +17,15 @@
       </div>
       <p class="movie-desc">{{ info.desc }}</p>
     </div>
+    <movieSeat  :date="info" >
+        <discount slot='discount' :vipInfo="vip"></discount>
+    </movieSeat>
   </div>
 </template>
 <script>
 import { Swiper, SwiperSlide } from "vue-awesome-swiper";
+import movieSeat from "../movieSeat"
+import discount from '../discount'
 export default {
   name: "swrapper",
   data() {
@@ -70,11 +75,13 @@ export default {
     },
   },
   mounted() {
-    console.log(this.backgroundImg);
+    console.log(this.list,this.vip);
   },
   components: {
     Swiper,
     SwiperSlide,
+    movieSeat,
+    discount
   },
 };
 </script>
@@ -157,7 +164,7 @@ export default {
     }
   }
    .movie-desc{
-     margin-top:2px;
+     margin-top:5px;
      height:18px;
      line-height: 18px;
      color:#777;
