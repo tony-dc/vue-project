@@ -5,7 +5,7 @@
       <p class="address">{{cinemaInfo.addr}}</p>
     </div>
     <div class="location">
-      <i class="iconfont icon-play"></i>
+      <i class="iconfont icon-dizhi"></i>
     </div>
   </div>
 </template>
@@ -30,7 +30,7 @@ export default {
   height: 70px;
   display: flex;
   .info {
-    width: 65%;
+    width: 70%;
     padding: 10px 15px;
     p {
       height: 20px;
@@ -41,6 +41,9 @@ export default {
       font-size: 20px;
       font-weight: bold;
       margin-bottom: 10px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
     .address {
       font-size: 14px;
@@ -70,12 +73,5 @@ export default {
       bottom:15px;
       border-left: 1px solid #e5e5e5;
     }
-  //   .location::before{
-  //     position: absolute;
-  //     content:'';
-  //     top:10px;
-  //     bottom:10px;
-  //     border-left:1px solid red
-  //  }
 }
 </style>

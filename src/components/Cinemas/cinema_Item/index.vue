@@ -102,6 +102,10 @@ export default {
       }
 
     }
+   
   }
+   .distance{
+      color:#666
+    }
 }
 </style>

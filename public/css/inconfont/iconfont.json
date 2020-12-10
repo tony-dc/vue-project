@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "2966197",
+      "name": "地址",
+      "font_class": "dizhi",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "17204052",
+      "name": "对勾",
+      "font_class": "xianxingtubiaozhizuomoban-29",
+      "unicode": "e61d",
+      "unicode_decimal": 58909
+    },
+    {
       "icon_id": "1704669",
       "name": "time",
       "font_class": "time",
