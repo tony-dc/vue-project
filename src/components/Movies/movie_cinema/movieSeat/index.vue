@@ -15,8 +15,8 @@
     <!-- 这是折扣卡结构 -->
     <slot name="discount"></slot>
     <!-- 放映的详细信息 -->
-    <div class="showInfo">
-      <div class="showcontent" v-for="(item, index) in showInfo" :key="index">
+    <div class="showInfo"  v-if="showInfo.length">
+      <div class="showcontent" v-for="(item, index) in showInfo" :key="index" >
         <div class="show showtime">
           <p class="some tm">{{ item.tm }}</p>
           <p class="end">{{ item.end }}完</p>
@@ -35,9 +35,14 @@
           <p class="countInfo">{{ item.extraDesc }}</p>
         </div>
         <div class="buy">
-          <div class="but_btn">购票</div>
+          <router-link :to="{path:'/buyMovie/'+date.id}"  class="but_btn" tag="div">购票</router-link>
         </div>
       </div>
+    </div>
+    <div v-else class="notice">
+        <div class="ntext">
+            {{notice}}
+        </div>
     </div>
     </div>
 </template>
@@ -83,6 +88,9 @@ export default {
           })
         : [];
       return Infodata;
+    },
+    notice(){
+        return  this.date.globalReleased ? '今日场次已映完' : '影片未上映'
     },
   },
   filters: {
@@ -163,13 +171,11 @@ export default {
           height: 28px;
           line-height: 28px;
           margin-bottom: 5px;
-          //
         }
         .tm {
           font-size: 21px;
           font-weight: 600;
           color: rgba(0, 0, 0, 0.8);
-          //  margin-bottom: 10px;
         }
         .end {
           font-size: 14px;
@@ -180,8 +186,6 @@ export default {
           color: #222;
         }
         .place {
-          //   width:50px;
-          // padding: 5px 0;
           font-size: 13px;
           color: #777;
           overflow: hidden;
@@ -193,18 +197,17 @@ export default {
           .price {
             color: #ee3630;
             font-size: 22px;
-            float: left;
+            margin-right:5px;
           }
           .count {
-             float:right;
             font-size: 14px;
             color: #fff;
+            border-radius:2px;
             background-color: #fa9600;
           }
           .countprice {
-            float:right;
             border: 1px solid #fa9600;
-            font-size: 14px;
+            font-size: 12px;
             color: #fa9600;
           }
         }
@@ -215,10 +218,11 @@ export default {
         }
       }
       .showprice{
-        width:169px;
+        width:155px;
+        text-align:center;
       }
       .lang {
-        width: 53px;
+        width: 64px;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -240,6 +244,17 @@ export default {
           border-radius: 5px;
         }
       }
+    }
+  }
+  .notice{
+    width:100%;
+    height:40px;
+    line-height:40px;
+    text-align: center;
+    .ntext{
+        font-size:15px;
+        color:#666;
+        border-bottom:1px solid #eee;
     }
   }
    }

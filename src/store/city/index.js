@@ -10,7 +10,7 @@ const state = {
     id: storage.get('id') || 10,
     filters,
     cinemaList: [],
-    cinemas: [],
+    cinemas: storage.get('cinemas')||[],
     currentItemlist: []
 }
 const mutations = {
@@ -28,6 +28,7 @@ const mutations = {
         } else {
             state.cinemas = [...state.cinemas, ...data.cinemas]
         }
+        storage.set('cinemas',state.cinemas)
     },
     changeFilter(state, payload) {
 

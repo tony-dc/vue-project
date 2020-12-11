@@ -3,8 +3,8 @@
     <div class="cinemaInfo">
       <p class="name-price">
         <span class="cinemaName">{{cinemaList.nm}}</span>
-        <span class="sellPrice">{{cinemaList.sellPrice}}</span>
-        <span class="msg">元起</span>
+        <span class="sellPrice">{{cinemaList.sellPrice}}<i>元起</i></span>
+        <!-- <span class="msg">元起</span> -->
       </p>
       <p class="adr">{{cinemaList.addr}}</p>
       <!-- 处理票退改签及小吃折扣组件 -->
@@ -53,12 +53,15 @@ export default {
 </script>
 <style lang="scss" scoped>
 .cinema_item {
+  width:100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 15px 15px 0;
+  padding: 15px 0;
   border-bottom: 1px solid #f5f5f5;
   .cinemaInfo {
+    width:100%;
+    // width:260px;
     margin: 1px 0 0 15px;
     font-size: 16px;
     color: #000;
@@ -66,6 +69,8 @@ export default {
     overflow: hidden;
     .name-price {
       margin-bottom:7px;
+      display: flex;
+      justify-content: space-around;
       .cinemaName {
         display: inline-block;
         width:200px;
@@ -76,7 +81,15 @@ export default {
       }
       .sellPrice {
         color: #ef4238;
+        width:70px;
         font-size: 17px;
+        display: inline-block;
+        i{
+          font-style: normal;
+          margin-left:2px;
+          color:#333;
+          font-size:13px;
+        }
       }
     }
 
@@ -84,6 +97,9 @@ export default {
     .adr {
       color: #999;
       font-size: 13px;
+      overflow: hidden;
+      white-space:nowrap;
+      text-overflow: ellipsis;
     }
     .cinema_discount{
       color:#999;
@@ -105,7 +121,9 @@ export default {
    
   }
    .distance{
-      color:#666
+     margin-left:10px;
+      color:#666;
+      flex:1;
     }
 }
 </style>

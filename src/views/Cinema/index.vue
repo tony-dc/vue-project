@@ -54,6 +54,7 @@ export default {
       
     })
     this.$api.getCinameData({params:{ci:this.id}}).then(res=>{
+      console.log(res)
         //初次进去页面从状态管理中存取数据
         this.$store.commit('city/initCinemaList',res)
         this.loading=false

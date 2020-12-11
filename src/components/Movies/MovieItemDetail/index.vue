@@ -1,45 +1,45 @@
 <template>
   <div class="movieDetails">
-   <Loading v-if="loading" />
-  <div v-else>
-    <Header title="影片详情">
-      <i class="iconfont icon-zuojiantou back" @touchstart="handleToBack"></i>
-    </Header>
-    <!-- 父子组件之前传值，如果传的值是需要异步请求得到的数据，需要在父组件通过v-if判断是否有值，在传递 -->
-   
-    <div class="moviedetail">
-      <movieDetail :detail="detail" v-if="isRead">
-        <div slot="score">
-          <span v-if="detail.globalReleased" class="num">{{detail.sc}}</span>
-        </div>
-      </movieDetail>
-    </div>
-    <!-- 处理抖屏的问题 -->
-    <div class="moreoffers">
-      <moreoffers :detail="detail" v-if="isRead"></moreoffers>
-    </div>
-    <div class="Medio_swrapper">
-      <h2>媒体库</h2>
-      <BScroll :scrolltype="scrollX" :Passthrough="Passthrough" :data="detail.photos">
-        <ul class="medio_list" ref="medio_list">
-          <li class="mediophoto medio_video" @click="handlePlay">
-            <img v-lazy="detail.videoImg" alt />
-            <i class="iconfont icon-play"></i>
-          </li>
-          <li class="mediophoto" v-for="(item,index) in data.photos" :key="index">
-            <img v-lazy="item" class="img" alt />
-          </li>
-        </ul>
-      </BScroll>
-    </div>
-    <div class="Vd_play" v-if="play">
-      <div class="masker" @touchstart="handlePlay" v-if="play"></div>
-      <div class="play" v-if="play">
-        <video :src="detail.vd" autoplay cntrols></video>
+    <Loading v-if="loading" />
+    <div v-show="!loading">
+      <Header title="影片详情">
+        <i class="iconfont icon-zuojiantou back" @touchstart="handleToBack"></i>
+      </Header>
+      <!-- 父子组件之前传值，如果传的值是需要异步请求得到的数据，需要在父组件通过v-if判断是否有值，在传递 -->
+
+      <div class="moviedetail">
+        <movieDetail :detail="detail" v-if="isRead">
+          <div slot="score">
+            <span v-if="detail.globalReleased" class="num">{{detail.sc}}</span>
+          </div>
+        </movieDetail>
       </div>
+      <!-- 处理抖屏的问题 -->
+      <div class="moreoffers">
+        <moreoffers :detail="detail" v-if="isRead"></moreoffers>
+      </div>
+      <div class="Medio_swrapper">
+        <h2>媒体库</h2>
+        <BScroll :scrolltype="scrollX" :Passthrough="Passthrough" :data="detail.photos">
+          <ul class="medio_list" ref="medio_list">
+            <li class="mediophoto medio_video" @click="handlePlay">
+              <img :src="detail.videoImg" alt />
+              <i class="iconfont icon-play"></i>
+            </li>
+            <li class="mediophoto" v-for="(item,index) in data.photos" :key="index">
+              <img v-lazy="item" class="img" alt />
+            </li>
+          </ul>
+        </BScroll>
+      </div>
+      <div class="Vd_play" v-if="play">
+        <div class="masker" @touchstart="handlePlay" v-if="play"></div>
+        <div class="play" v-if="play">
+          <video :src="detail.vd" autoplay cntrols></video>
+        </div>
+      </div>
+      <Footer />
     </div>
-    <Footer />
-  </div>
   </div>
 </template>
 <script>
@@ -55,7 +55,7 @@ export default {
       scrollX: true,
       Passthrough: "vertical",
       play: false,
-      loading:false
+      loading: false
     };
   },
   computed: {
@@ -78,17 +78,16 @@ export default {
   mounted() {
     //获取用户点进来的影片id
     const movieId = this.$route.params.movieid;
-    this.loading=true
-    this.$api.getMovieDetail({ params: { movieId } }).then(res => {
-
-      this.detail = res.detailMovie;
-      this.isRead = true;
-      this.loading=false
-      this.$nextTick(()=>{
-         this.$refs.medio_list.style.width =
-        this.detail.photos.length * 95 + 37 + "px";
-      })
-     
+    this.loading = true;
+    
+      this.$api.getMovieDetail({ params: { movieId } }).then(res => {
+        this.detail = res.detailMovie;
+        this.isRead = true;
+        this.loading = false;
+        this.$nextTick(() => {
+        this.$refs.medio_list.style.width =
+          this.detail.photos.length * 95 + 37 + "px";
+      });
     });
   },
   components: {
@@ -125,7 +124,9 @@ export default {
   }
   .back {
     position: absolute;
-    top: 15px;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
     left: 20px;
     font-size: 24px;
     color: #fff;

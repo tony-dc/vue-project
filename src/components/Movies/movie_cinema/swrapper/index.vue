@@ -5,7 +5,7 @@
       <Swiper :options="swiperOption" ref="mySwiper">
         <Swiper-slide v-for="(item, index) in list" :key="index">
           <div class="poster" :class="{ active: currentIndex === index }">
-            <img :src="item.img.replace(/w\.h/, '92.92')" alt />
+            <img :src="item.img.replace(/w\.h/, '92.92')" alt  />
           </div>
         </Swiper-slide>
       </Swiper>
@@ -76,8 +76,15 @@ export default {
       };
     },
   },
-  mounted() {
-    console.log(this.list,this.vip);
+  created(){
+     this.$nextTick(()=>{
+       let This=this
+       console.log(This)
+       this.swiper.$on('slideChangeTransitionStart',function(){
+         console.log(this)
+        This.currentIndex=this.$swiper.activeIndex
+       })
+     })
   },
   components: {
     Swiper,

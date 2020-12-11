@@ -43,9 +43,7 @@ export default {
   created() {
       const cinemaId=this.$route.params.id
       this.loading=true
-      console.log(cinemaId)
       this.$api.getcinemaDetail({params:{cinemaId}}).then(res=>{
-        console.log(res)
          this.detail=res
          this.loading=false
       })
@@ -56,7 +54,6 @@ export default {
       }
   },
   components: {
-    // Header,
     Info,
     Swrapper
   },
@@ -70,7 +67,9 @@ export default {
   flex-direction: column;
    .back {
     position: absolute;
-    top: 12px;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform:translateY(-50%);
     left: 15px;
     font-size: 24px;
     color: #fff;

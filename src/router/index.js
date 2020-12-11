@@ -6,6 +6,7 @@ import mine from './mine'
 import cinemaSearch from './search'
 import cinema_movie from './cinema_movie'
 import movie_cinema from './movie_cinema'
+import buyMovie from "./buyMovie"
 Vue.use(VueRouter)
 
 const routes = [
@@ -15,6 +16,7 @@ const routes = [
     cinemaSearch,
     cinema_movie,
     movie_cinema,
+    buyMovie,
     //当url地址不对已经后面没有拼接地址时，直接访问/movie
     {
         path: '/*',

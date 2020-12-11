@@ -25,12 +25,16 @@ export default {
     position: relative;
     z-index:999;
     h2{
-      width:100%;
+      width:80%;
+      margin:0 auto;
       height:50px;
       line-height: 50px;
       text-align: center;
       font-size:22px;
        color:#fff;
+       overflow: hidden;
+       white-space: nowrap;
+       text-overflow: ellipsis
     }
   }
 </style>
