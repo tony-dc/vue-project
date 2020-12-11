@@ -43,6 +43,7 @@ export default {
   },
   mounted() {
     this.getList();
+   
   },
   methods: {
     async handleToscroll(pos) {
@@ -56,6 +57,7 @@ export default {
       const { ...data } = this.expectparams;
       const params = { params: data };
       const result = await this.$api.getMostExpected(params);
+      console.log(result)
       const { coming, paging } = result;
       if (coming) {
         this.total = paging.total;
@@ -65,6 +67,7 @@ export default {
         this.$refs.expectWrapper.style.width =
         this.expectMovies.length * 95 + "px";
       }
+      
     }
   }
 };

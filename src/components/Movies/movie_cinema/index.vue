@@ -1,10 +1,13 @@
 <template>
-  <div class="movie-cinema-container">
+  <div>
+   <Loading v-if="loading" />
+  <div class="movie-cinema-container" v-else>
     <Header :title="cinemaData.nm" v-show="cinemaData.nm">
       <i class="iconfont icon-zuojiantou back" @touchstart="handleToBack"></i>
     </Header>
      <Info :cinemaInfo='cinemaData' />
      <Swrapper :list="movieList" :vip="vipInfo" v-if="movieList.length" />
+  </div>
   </div>
 </template>
 <script>
@@ -15,7 +18,8 @@ export default {
   data(){
      return {
          detail:{},
-         isloading:false
+         isloading:false,
+         loading:false
      }
   },
   computed:{
@@ -38,10 +42,12 @@ export default {
   },
   created() {
       const cinemaId=this.$route.params.id
+      this.loading=true
       console.log(cinemaId)
       this.$api.getcinemaDetail({params:{cinemaId}}).then(res=>{
         console.log(res)
          this.detail=res
+         this.loading=false
       })
   },
   methods:{
@@ -58,6 +64,10 @@ export default {
 </script>
 <style lang="scss">
 .movie-cinema-container{
+  height:667px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
    .back {
     position: absolute;
     top: 12px;

@@ -1,5 +1,7 @@
 <template>
-  <div class="cinema-movie-container">
+  <div>  
+   <loading v-if="isloading" />
+  <div v-else class="cinema-movie-container">
     <!-- topBar组件 -->
     <Header :title="movie_detail.nm" v-show="movie_detail.nm">
       <i class="iconfont icon-zuojiantou back" @touchstart="handleToBack"></i>
@@ -19,6 +21,7 @@
     </div>
      
   </div>
+  </div>
 </template>
 <script>
 import Header from "@/components/Header";
@@ -31,6 +34,7 @@ export default {
   name: "cinema_movie",
   data() {
     return {
+      isloading:false,
       loading:false,
       movie_detail: {},
       results: {},
@@ -44,10 +48,12 @@ export default {
   },
   created() {
     const movieId = +this.$route.params.id;
+     this.isloading=true
     console.log(movieId)
     this.movieid=movieId
     this.$api.getDetailMovie({ params: { movieId } }).then(res => {
       this.movie_detail = res.detailMovie;
+      this.isloading=false
     });
     const day = getDay();
     this.$api
@@ -73,17 +79,17 @@ export default {
     handleToBack() {
       this.$router.back();
     },
-    infiniteHandler(){
-      this.postMovie({movieId:this.movieid,updateShowDay:true, cityId: this.id }).then(res=>{
-        console.log(res)
-          const {paging}=res
-          this.loading=true
-          if(!this.dates.length){
-            this.dates=paging.showDays.dates
-          }
-          console.log(this.dates)
-      })
-    }
+    // infiniteHandler(){
+    //   this.postMovie({movieId:this.movieid,updateShowDay:true, cityId: this.id }).then(res=>{
+    //     console.log(res)
+    //       const {paging}=res
+    //       this.loading=true
+    //       if(!this.dates.length){
+    //         this.dates=paging.showDays.dates
+    //       }
+    //       console.log(this.dates)
+    //   })
+    // }
   }
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="{path:'/movies/cinema/'+cinemaList.id}" class="cinema_item">
+  <router-link :to="{path:'/movies/cinema/'+cinemaList.id}" class="cinema_item" tag='div'>
     <div class="cinemaInfo">
       <p class="name-price">
         <span class="cinemaName">{{cinemaList.nm}}</span>

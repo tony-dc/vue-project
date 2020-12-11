@@ -1,9 +1,12 @@
 <template>
   <div class="movieDetails">
+   <Loading v-if="loading" />
+  <div v-else>
     <Header title="影片详情">
       <i class="iconfont icon-zuojiantou back" @touchstart="handleToBack"></i>
     </Header>
     <!-- 父子组件之前传值，如果传的值是需要异步请求得到的数据，需要在父组件通过v-if判断是否有值，在传递 -->
+   
     <div class="moviedetail">
       <movieDetail :detail="detail" v-if="isRead">
         <div slot="score">
@@ -37,6 +40,7 @@
     </div>
     <Footer />
   </div>
+  </div>
 </template>
 <script>
 import movieDetail from "./moviedetail";
@@ -50,7 +54,8 @@ export default {
       isRead: false,
       scrollX: true,
       Passthrough: "vertical",
-      play: false
+      play: false,
+      loading:false
     };
   },
   computed: {
@@ -70,14 +75,20 @@ export default {
       this.play = !this.play;
     }
   },
-  created() {
+  mounted() {
     //获取用户点进来的影片id
     const movieId = this.$route.params.movieid;
+    this.loading=true
     this.$api.getMovieDetail({ params: { movieId } }).then(res => {
+
       this.detail = res.detailMovie;
       this.isRead = true;
-      this.$refs.medio_list.style.width =
+      this.loading=false
+      this.$nextTick(()=>{
+         this.$refs.medio_list.style.width =
         this.detail.photos.length * 95 + 37 + "px";
+      })
+     
     });
   },
   components: {

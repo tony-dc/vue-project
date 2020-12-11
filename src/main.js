@@ -8,6 +8,8 @@ import VueLazyload from 'vue-lazyload'
 //引入无限加载插件
 import InfiniteLoading from 'vue-infinite-loading'
 import infiniteScroll from 'vue-infinite-scroll'
+import loading from '@/components/loading'
+Vue.component('Loading', loading)
 import storage from 'store'
 import api from '@/api'
 //将api请求挂载到vue原型上，方便全局使用
@@ -15,22 +17,20 @@ Vue.prototype.$api = api
     //公共组件挂载到全局中
     //定义一个全局的过滤器用来处理图片
 Vue.filter('setWH', (url, data) => {
-    // 用字符串替换方法，正则匹配替换数据
-    return url.replace(/w\.h/, data)
-})
-// import VueAwesomeSwiper from 'vue-awesome-swiper'
-// // import 'swiper/dist/css/swiper.css'
-// Vue.use(VueAwesomeSwiper)
+        // 用字符串替换方法，正则匹配替换数据
+        return url.replace(/w\.h/, data)
+    })
+    // import VueAwesomeSwiper from 'vue-awesome-swiper'
+    // // import 'swiper/dist/css/swiper.css'
+    // Vue.use(VueAwesomeSwiper)
 Vue.use(InfiniteLoading, {
     slots: {
         noMore: '我也是有底线的'
     }
 })
-Vue.use(VueLazyload,
-        {
-        loading:require('./assets/placeholder.png')
-    }
-)
+Vue.use(VueLazyload, {
+    loading: require('./assets/placeholder.png')
+})
 Vue.use(infiniteScroll)
     //让better-scroll成为全局组件，方便调用
 import BScroll from '@/components/scroll/BScroll'

@@ -1,6 +1,6 @@
 <template>
   <div class="movie_body">
-    <movelist :List="movieList" />
+    <movelist :List="movieList"/>
     <!-- 无限加载功能 -->
     <infinite-loading @infinite="infiniteHandler">
       <div slot="no-more" class="notice">已经到底啦</div>
@@ -13,6 +13,7 @@ export default {
   name: "hotpage",
   data() {
     return {
+      loading:false,
       movieList: [],
       movieIds: [],
       beforeId: -1,

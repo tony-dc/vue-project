@@ -16,7 +16,8 @@
     </topBar>
     <!-- 导航主体内容 --> 
        <selectNav class="select-wrapper" :results="results" />
-     <div class="cinemalist">
+      <Loading v-if="loading" />
+     <div class="cinemalist" v-else>
          <cinemaItem 
          v-for='item in cinemas'
          :key="item.id"
@@ -39,7 +40,8 @@ export default {
     return {
       logo: "酷喵影院",
       results:{},
-      cinemadata:[]
+      cinemadata:[],
+      loading:true
     };
   },
   computed:{
@@ -49,10 +51,12 @@ export default {
     //根据城市id获取影院数据
     this.$api.getFilterCinemas({params:{ci:this.id}}).then(res=>{
       this.results=res
+      
     })
     this.$api.getCinameData({params:{ci:this.id}}).then(res=>{
         //初次进去页面从状态管理中存取数据
         this.$store.commit('city/initCinemaList',res)
+        this.loading=false
     })
   },
   components: {

@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <Header />
+    <Header title="酷喵电影" />
     <Topbar>
       <div class="Hot_movie">
         <router-link tag="div" to="/movie/nowplaying" class="hot_item">正在热映</router-link>

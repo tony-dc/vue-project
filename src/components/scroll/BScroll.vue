@@ -37,11 +37,35 @@ export default {
     }
   },
   mounted() {
+    setTimeout(() => {
+        this.initScroll()
+    }, 20);
     //因为axios是异步请求，所以需要让数据先请求加载完，在执行better-scroll代码，根据同步和异步的先后顺序，
     // this.timer = setTimeout(() => {
-    this.$nextTick(() => {
+    // this.$nextTick(() => {
         //在nextTick里面执行，确保数据加载渲染已经完成
-        this.scroll = new BScroll(this.$refs.swrpper, {
+        // this.scroll = new BScroll(this.$refs.swrpper, {
+        //    tap: true,
+        //   scrollX: this.scrolltype,
+        //   eventPassthrough: this.Passthrough,
+        //   probeType: 1,
+        // });
+        // console.log(this.scroll)
+        // //监听位置并将参数传递给父组件
+        // this.scroll.on("scroll", position => {
+        //   this.handledownload(position);
+        // });
+        // //监听点击结束时的位置,传递y轴参数
+        // this.scroll.on("touchEnd", position => {
+        //   this.handleToend(position.y);
+        // });
+      // })
+    // }, 500);
+  },
+  methods:{
+    //当dom结构发生改变时，重新计算dom元素值进行渲染
+    initScroll(){
+       this.scroll = new BScroll(this.$refs.swrpper, {
            tap: true,
           scrollX: this.scrolltype,
           eventPassthrough: this.Passthrough,
@@ -56,19 +80,15 @@ export default {
         this.scroll.on("touchEnd", position => {
           this.handleToend(position.y);
         });
-      })
-    // }, 500);
-  },
-  methods:{
-    //当dom结构发生改变时，重新计算dom元素值进行渲染
-    refresh(){
+    },
+     refresh(){
        this.scroll && this.scroll.refresh()
-    }
+    },
   },
   watch:{
     data(){
             setTimeout(() => {
-                this.refresh();
+                 this.scroll.refresh();
             },500);
         }
   }

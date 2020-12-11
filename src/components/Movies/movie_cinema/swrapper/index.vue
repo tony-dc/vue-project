@@ -33,6 +33,8 @@ export default {
       currentIndex: 0,
       swiperOption: {
         delay: 2500,
+        // freeMode:true,
+        // freeModeSticky:true,
         pagination: {
           el: ".swiper-pagination",
           clickable: true,
