@@ -35,7 +35,7 @@
           <p class="countInfo">{{ item.extraDesc }}</p>
         </div>
         <div class="buy">
-          <router-link :to="{path:'/buyMovie/'+date.id}"  class="but_btn" tag="div">购票</router-link>
+            <router-link :to="{name:'buyMovie',params:{movieId:date.id,shows:showInfo[index],cinemaId}}"  class="but_btn" tag="div">购票</router-link>
         </div>
       </div>
     </div>
@@ -63,6 +63,9 @@ export default {
     },
   },
   computed: {
+    cinemaId(){
+      return this.$root.$route.params.id
+    },
     showData() {
       return this.date.shows || [];
     },
@@ -107,7 +110,7 @@ export default {
     },
   },
   created() {
-    console.log(this.date);
+    console.log(this.date,);
   },
 };
 </script>
