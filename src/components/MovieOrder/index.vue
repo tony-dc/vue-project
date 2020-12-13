@@ -1,40 +1,58 @@
 <template>
   <div class="Order_container">
-    <Header title="确认订单" class="Header">
-      <i class="iconfont icon-zuojiantou back" @touchstart="handleToBack"></i>
-    </Header>
-    <div class="moviedetail">
-      <div class="movieInfo">
-        <div class="posterImg">
-          <img :src="movieItem.img|movieData" alt v-if="movieItem.img" />
-        </div>
-        <div class="movieItem">
-          <p class="movieNm">{{movieItem.nm}}</p>
-          <p class="same showtime">{{movieShowTime.dt.slice(2)}} {{showtime}} ({{tp}})</p>
-          <p class="same cinema">{{cinemaTitle}}</p>
-          <p class="same place">{{movieShowTime.th}}</p>
-          <div class="price">
-            <span class="ItemPrice">
-              <i>￥</i>
-              {{movieShowTime.vipPrice}}
-            </span>
-            <div class="changenum">
-              <span class="reduce">-</span>
-              <input type="Number" v-model="mount" class="num" />
-              <span class="add">+</span>
+    <Loading v-if="loading" />
+    <div v-else>
+      <Header title="确认订单" class="Header">
+        <i class="iconfont icon-zuojiantou back" @touchstart="handleToBack"></i>
+      </Header>
+      <div class="moviedetail">
+        <div class="movieInfo">
+          <div class="posterImg">
+            <img :src="movieItem.img|movieData" alt v-if="movieItem.img" />
+          </div>
+          <div class="movieItem">
+            <p class="movieNm">{{movieItem.nm}}</p>
+            <p class="same showtime">{{movieShowTime.dt.slice(2)}} {{showtime}} ({{tp}})</p>
+            <p class="same cinema">{{cinemaTitle}}</p>
+            <p class="same place">{{movieShowTime.th}}</p>
+            <div class="price">
+              <span class="ItemPrice">
+                <i>￥</i>
+                {{movieShowTime.vipPrice}}
+              </span>
+              <div class="changenum">
+                <span class="reduce" @click="numReduce">-</span>
+                <input type="Number" v-model="mount" class="num" />
+                <span class="add" @click="numAdd">+</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="mount">
-      <div class="many">
-        <span>票价：</span>
+      <div class="payShow">
+        <div class="many">
+          <div class="allPrice">
+            <span class="title">票价合计：</span>
+            <span class="price">
+              <i>￥</i>
+              {{totalPrice}}
+            </span>
+          </div>
+          <div class="payment">
+            <span>结算({{mount}})</span>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="cot"> -->
+      <div id="qrcode" ref="qrcode">
+      <!-- </div> -->
       </div>
     </div>
   </div>
 </template>
 <script>
+import QRCode from "qrcodejs2";
+const qrcode=document.getElementById('qrcode')
 export default {
   name: "movieOrder",
   data() {
@@ -42,7 +60,8 @@ export default {
       movieDetail: {},
       cinemaTitle: "",
       movieShowTime: {},
-      mount: 1
+      mount: 1,
+      loading: true
     };
   },
   computed: {
@@ -54,6 +73,12 @@ export default {
     },
     showtime() {
       return this.movieShowTime.tm + "-" + this.movieShowTime.end;
+    },
+    totalPrice() {
+      // console.log( this.movieDetail.vipPrice )
+      const price = this.movieShowTime.vipPrice || 0,
+        total = (this.mount * price).toFixed(1);
+      return total;
     }
   },
   filters: {
@@ -71,13 +96,52 @@ export default {
     });
     this.$api.getMovieDetail({ params: { movieId } }).then(res => {
       this.movieDetail = res.detailMovie;
+      this.loading = false;
     });
   },
   methods: {
     handleToBack() {
       this.$router.back();
+    },
+    numReduce() {
+      if (this.mount <= 1) return;
+      this.mount--;
+    },
+    numAdd() {
+      if (this.mount > 4) return;
+      this.mount++;
+    },
+    qrcodeScan() {
+      // QRCode.toCanvas(canvas,this.totalPrice,(err)=>{
+      //  if(err)console.log(err)
+      //  console.log('sucess')
+      // })
+     const qrcodes= new QRCode(qrcode, {
+        width: 200,
+        height: 200,
+        text: this.totalPrice,
+        colorDark:"#3333",
+        colorLight:'#fff',
+        correctLevel : QRCode.CorrectLevel.H
+        // background: "#000",
+        // foreground: "#ff0"
+      });
+      console.log(qrcodes);
     }
-  }
+  },
+  mounted() {
+   this.$nextTick(function(){
+       this.qrcodeScan();
+   })
+    // console.log(this.movieItem)
+    // this.$nextTick(() => {
+    //    console.log(this.$refs)
+    //   this.qrcodeScan();
+    // });
+  },
+  // components:{
+  //   QRCode
+  // }
 };
 </script>
 <style lang="scss">
@@ -140,7 +204,7 @@ export default {
         width: 100%;
         height: 30px;
         .ItemPrice {
-          font-size: 21px;
+          font-size: 24px;
           font-weight: bold;
           color: red;
           float: left;
@@ -158,33 +222,85 @@ export default {
             height: 30px;
             width: 30px;
             text-align: center;
-            line-height: 30px;
             float: left;
             border: 1px solid #444;
-           
           }
           .num {
             width: 40px;
-            // font-size:16px;
-            // text-align: center;
             border-left: none;
             border-right: none;
             outline: none;
-             vertical-align: middle;
+          }
+          span.show {
+            color: #888;
           }
           .reduce {
             border-radius: 7px 0 0 7px;
             font-size: 20px;
-             vertical-align: middle;
           }
           .add {
             border-radius: 0 7px 7px 0;
             font-size: 20px;
-             vertical-align: middle;
           }
         }
       }
     }
   }
+  .payShow {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 64px;
+    border-top: 1px solid rgb(219, 199, 199);
+
+    .many {
+      // width:100%;
+      height: 44px;
+      // box-sizing: border-box;
+      line-height: 44px;
+      padding: 10px;
+      background-color: #fff;
+      display: flex;
+      .allPrice {
+        flex: 1;
+        font-size: 18px;
+        color: red;
+        .title {
+          font-size: 20px;
+          color: rgba(0, 0, 0, 0.8);
+        }
+        .price {
+          i {
+            font-style: normal;
+            font-size: 12px;
+          }
+        }
+      }
+      .payment {
+        width: 130px;
+        height: 44px;
+        position: relative;
+        background: linear-gradient(
+          to right,
+          #ef4238 50%,
+          rgb(199, 20, 20) 100%
+        );
+        border-radius: 44px;
+        span {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          color: #fff;
+          font-size: 19px;
+        }
+      }
+    }
+  }
+  // .cot{
+  //   width:200px;
+  //   height:200px;
+  // }
 }
 </style>
