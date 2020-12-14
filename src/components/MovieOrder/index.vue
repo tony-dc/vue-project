@@ -8,17 +8,19 @@
       <div class="moviedetail">
         <div class="movieInfo">
           <div class="posterImg">
-            <img :src="movieItem.img|movieData" alt v-if="movieItem.img" />
+            <img :src="movieItem.img | movieData" alt v-if="movieItem.img" />
           </div>
           <div class="movieItem">
-            <p class="movieNm">{{movieItem.nm}}</p>
-            <p class="same showtime">{{movieShowTime.dt.slice(2)}} {{showtime}} ({{tp}})</p>
-            <p class="same cinema">{{cinemaTitle}}</p>
-            <p class="same place">{{movieShowTime.th}}</p>
+            <p class="movieNm">{{ movieItem.nm }}</p>
+            <p class="same showtime">
+              {{ movieShowTime.dt.slice(2) }} {{ showtime }} ({{ tp }})
+            </p>
+            <p class="same cinema">{{ cinemaTitle }}</p>
+            <p class="same place">{{ movieShowTime.th }}</p>
             <div class="price">
               <span class="ItemPrice">
                 <i>￥</i>
-                {{movieShowTime.vipPrice}}
+                {{ movieShowTime.vipPrice }}
               </span>
               <div class="changenum">
                 <span class="reduce" @click="numReduce">-</span>
@@ -35,24 +37,23 @@
             <span class="title">票价合计：</span>
             <span class="price">
               <i>￥</i>
-              {{totalPrice}}
+              {{ totalPrice }}
             </span>
           </div>
           <div class="payment">
-            <span>结算({{mount}})</span>
+            <span>结算({{ mount }})</span>
           </div>
         </div>
       </div>
-      <!-- <div class="cot"> -->
-      <div id="qrcode" ref="qrcode">
-      <!-- </div> -->
+      <div class="paycode">
+        <div id="qrcode" ref="qrcode"></div>
       </div>
     </div>
   </div>
 </template>
 <script>
 import QRCode from "qrcodejs2";
-const qrcode=document.getElementById('qrcode')
+// const qrcode=document.getElementById('qrcode')
 export default {
   name: "movieOrder",
   data() {
@@ -61,7 +62,7 @@ export default {
       cinemaTitle: "",
       movieShowTime: {},
       mount: 1,
-      loading: true
+      loading: true,
     };
   },
   computed: {
@@ -79,22 +80,21 @@ export default {
       const price = this.movieShowTime.vipPrice || 0,
         total = (this.mount * price).toFixed(1);
       return total;
-    }
+    },
   },
   filters: {
     movieData(val) {
       return val.replace(/w\.h/, "128.168");
-    }
+    },
   },
   created() {
     const { movieId, shows, cinemaId } = this.$route.params;
     console.log(shows);
     this.movieShowTime = shows;
-    this.$api.getcinemaDetail({ params: { cinemaId } }).then(res => {
-      console.log(res);
+    this.$api.getcinemaDetail({ params: { cinemaId } }).then((res) => {
       this.cinemaTitle = res.cinemaData.nm;
     });
-    this.$api.getMovieDetail({ params: { movieId } }).then(res => {
+    this.$api.getMovieDetail({ params: { movieId } }).then((res) => {
       this.movieDetail = res.detailMovie;
       this.loading = false;
     });
@@ -111,33 +111,24 @@ export default {
       if (this.mount > 4) return;
       this.mount++;
     },
+    //二维码函数
     qrcodeScan() {
-      // QRCode.toCanvas(canvas,this.totalPrice,(err)=>{
-      //  if(err)console.log(err)
-      //  console.log('sucess')
-      // })
-     const qrcodes= new QRCode(qrcode, {
+      const qrcodes = new QRCode("qrcode", {
         width: 200,
         height: 200,
         text: this.totalPrice,
-        colorDark:"#3333",
-        colorLight:'#fff',
-        correctLevel : QRCode.CorrectLevel.H
-        // background: "#000",
-        // foreground: "#ff0"
+        colorDark: "#3333",
+        colorLight: "#fff",
+        correctLevel: QRCode.CorrectLevel.H,
+        render: "canvas",
       });
       console.log(qrcodes);
-    }
+    },
   },
   mounted() {
-   this.$nextTick(function(){
-       this.qrcodeScan();
-   })
-    // console.log(this.movieItem)
-    // this.$nextTick(() => {
-    //    console.log(this.$refs)
-    //   this.qrcodeScan();
-    // });
+    this.$nextTick(function () {
+      this.qrcodeScan();
+    });
   },
   // components:{
   //   QRCode
