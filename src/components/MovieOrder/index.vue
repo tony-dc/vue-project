@@ -12,9 +12,7 @@
           </div>
           <div class="movieItem">
             <p class="movieNm">{{ movieItem.nm }}</p>
-            <p class="same showtime">
-              {{ movieShowTime.dt.slice(2) }} {{ showtime }} ({{ tp }})
-            </p>
+            <p class="same showtime">{{ movieShowTime.dt.slice(2) }} {{ showtime }} ({{ tp }})</p>
             <p class="same cinema">{{ cinemaTitle }}</p>
             <p class="same place">{{ movieShowTime.th }}</p>
             <div class="price">
@@ -40,20 +38,23 @@
               {{ totalPrice }}
             </span>
           </div>
-          <div class="payment">
+          <div class="payment" @click="qrcodeScan()">
             <span>结算({{ mount }})</span>
           </div>
         </div>
       </div>
-      <div class="paycode">
-        <div id="qrcode" ref="qrcode"></div>
+      <div class="paycode_cover" v-show="qrcodeshow">
+        <div class="qrcodes">
+          <p>请用支付宝扫码支付</p>
+          <div id="qrcode" ref="qrcode"></div>
+          <div class="paydown" @touchstart="closed">完成支付</div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script>
 import QRCode from "qrcodejs2";
-// const qrcode=document.getElementById('qrcode')
 export default {
   name: "movieOrder",
   data() {
@@ -63,6 +64,7 @@ export default {
       movieShowTime: {},
       mount: 1,
       loading: true,
+      qrcodeshow: false
     };
   },
   computed: {
@@ -76,25 +78,24 @@ export default {
       return this.movieShowTime.tm + "-" + this.movieShowTime.end;
     },
     totalPrice() {
-      // console.log( this.movieDetail.vipPrice )
       const price = this.movieShowTime.vipPrice || 0,
         total = (this.mount * price).toFixed(1);
       return total;
-    },
+    }
   },
   filters: {
     movieData(val) {
       return val.replace(/w\.h/, "128.168");
-    },
+    }
   },
   created() {
     const { movieId, shows, cinemaId } = this.$route.params;
     console.log(shows);
     this.movieShowTime = shows;
-    this.$api.getcinemaDetail({ params: { cinemaId } }).then((res) => {
+    this.$api.getcinemaDetail({ params: { cinemaId } }).then(res => {
       this.cinemaTitle = res.cinemaData.nm;
     });
-    this.$api.getMovieDetail({ params: { movieId } }).then((res) => {
+    this.$api.getMovieDetail({ params: { movieId } }).then(res => {
       this.movieDetail = res.detailMovie;
       this.loading = false;
     });
@@ -113,26 +114,24 @@ export default {
     },
     //二维码函数
     qrcodeScan() {
+      this.qrcodeshow = true;
       const qrcodes = new QRCode("qrcode", {
         width: 200,
         height: 200,
         text: this.totalPrice,
-        colorDark: "#3333",
+        colorDark: "rgba(0,0,0,.9)",
         colorLight: "#fff",
         correctLevel: QRCode.CorrectLevel.H,
-        render: "canvas",
+        render: "canvas"
       });
       console.log(qrcodes);
     },
+    closed(){
+       this.$refs.qrcode.innerHTML = ''
+       this.qrcodeshow=false;
+    }
   },
-  mounted() {
-    this.$nextTick(function () {
-      this.qrcodeScan();
-    });
-  },
-  // components:{
-  //   QRCode
-  // }
+  mounted() {}
 };
 </script>
 <style lang="scss">
@@ -140,6 +139,7 @@ export default {
   background-color: #f0f0f0;
   width: 100%;
   height: 100vh;
+  position: relative;
   .Header {
     background-color: #fff !important;
     h2 {
@@ -289,9 +289,42 @@ export default {
       }
     }
   }
-  // .cot{
-  //   width:200px;
-  //   height:200px;
-  // }
+  .paycode_cover {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1111;
+    background-color: rgba(0, 0, 0, 0.5);
+    .qrcodes{
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width:220px;
+      border-radius:5px;
+      transform: translate(-50%, -50%);
+      z-index: 9999;
+      background-color:#eee;
+      p{
+        height:30px;
+        line-height:30px;
+        text-align:center;
+      }
+      #qrcode{
+        border: 3px solid #fff;
+      }
+      .paydown{
+        height:32px;
+        width:100%;
+        margin:0 auto;
+        line-height: 32px;
+        background-color: rgb(241, 225, 228);
+        text-align:center;
+        color:#333;
+      }
+
+    }
+  }
 }
 </style>
