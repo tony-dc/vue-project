@@ -9,7 +9,7 @@
         :key="tab.text"
         class="tablist"
         :class="selected===tab.name?'active':''"
-        @touchstart="handleTocheck(tab)"
+        @click="handleTocheck(tab)"
       >{{tab.text}}</div>
     </div>
     <!-- 显示导航内容区 -->
@@ -70,7 +70,6 @@ export default {
     },
     //品牌数据
     brandData() {
-      console.log(this.results)
       const { brand } = this.results;
       return {
         ...brand

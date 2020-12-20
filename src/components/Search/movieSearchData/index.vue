@@ -49,8 +49,8 @@ export default {
     },
     max: Number
   },
-  created(){
-      console.log(this.MovieData)
+  created() {
+    console.log(this.MovieData);
   },
   computed: {
     tips() {
@@ -88,8 +88,16 @@ export default {
 <style lang="scss" scoped>
 .movie_list {
   margin-top: 10px;
+
   .MovieItem {
-    padding: 0 15px;
+   
+    overflow-x: hidden;
+    overflow-y: scroll;
+    position: absolute;
+    top: 215px;
+    left: 0;
+    bottom: 0;
+     padding: 0 15px;
     .ellipsis {
       font-size: 13px;
       color: #666;

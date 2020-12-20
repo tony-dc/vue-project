@@ -135,7 +135,7 @@ export default {
 };
 </script>
 <style lang="scss">
-.Order_container {
+.Order_container {                                                    
   background-color: #f0f0f0;
   width: 100%;
   height: 100vh;
@@ -244,11 +244,8 @@ export default {
     width: 100%;
     height: 64px;
     border-top: 1px solid rgb(219, 199, 199);
-
     .many {
-      // width:100%;
       height: 44px;
-      // box-sizing: border-box;
       line-height: 44px;
       padding: 10px;
       background-color: #fff;

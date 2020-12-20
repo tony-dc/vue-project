@@ -4,7 +4,6 @@
       <p class="name-price">
         <span class="cinemaName">{{cinemaList.nm}}</span>
         <span class="sellPrice">{{cinemaList.sellPrice}}<i>元起</i></span>
-        <!-- <span class="msg">元起</span> -->
       </p>
       <p class="adr">{{cinemaList.addr}}</p>
       <!-- 处理票退改签及小吃折扣组件 -->
@@ -43,9 +42,9 @@ export default {
     },
     
   },
-  created() {
-      console.log(this.cinemaList.id)
-    },
+  // created() {
+  //     console.log(this.cinemaList.id)
+  //   },
   components: {
     tags
   }

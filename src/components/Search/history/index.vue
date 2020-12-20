@@ -49,7 +49,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .History-list {
-  // padding-left: 15px;
   background: #fff5f0;
   .histort-title {
     margin: 4px 0;

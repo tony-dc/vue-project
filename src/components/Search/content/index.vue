@@ -24,7 +24,6 @@ export default {
     methods:{
         handleShowALl(){
             this.$emit('handleShow',this.isShow)
-            // this.$refs.container.removeChild(this.$refs.moreContent)
         }
     }
 }
@@ -45,7 +44,10 @@ export default {
         text-align: center;
         line-height: 44px;
         font-size:15px;
-
+        position: absolute;
+        bottom:30px;
+        left:50%;
+        transform:translateX(-50%)
     }
 }
 </style>

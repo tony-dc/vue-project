@@ -98,6 +98,7 @@ export default {
   },
   filters: {
     sellprice(value) {
+      if(!value) value="暂无"
       return "￥" + value;
     },
   },
@@ -197,13 +198,14 @@ export default {
         }
         .sellprice {
           padding: 0 6px;
+          text-align: left;
           .price {
             color: #ee3630;
-            font-size: 22px;
+            font-size: 20px;
             margin-right:5px;
           }
           .count {
-            font-size: 14px;
+            font-size: 12px;
             color: #fff;
             border-radius:2px;
             background-color: #fa9600;

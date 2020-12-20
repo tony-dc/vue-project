@@ -186,8 +186,6 @@ export default {
           list:total.max?list.slice(0,this.max):list,
           total
         }
-        console.log(this[key])
-
     }
   },
   components:{
@@ -195,13 +193,14 @@ export default {
      cinemaSearchData,
      movieSearchData
   }
-
 };
 </script>
 <style lang="scss">
 .content{
     min-height:100vh;
     background-color: #f5f5f5;
+    display: flex;
+     flex-direction: column;
     .search-header{
         position: relative;
         display: flex;
