@@ -45,7 +45,6 @@ export default {
         : this.$api.getMovieOnInfoList(params);
       result
         .then((res) => {
-          // console.log(res);
           //  解构
           let { movieList, movieIds, coming, total } = res;
           if (movieIds) {
@@ -74,26 +73,6 @@ export default {
           }
         });
     },
-    // async getData() {
-    //   const cityId = this.$store.state.city.id;
-    //   const movieIds = this.movieIds.join();
-    //   const params = { params: { cityId, ...this.params, movieIds } };
-    //   if (this.beforeId === cityId) return;
-    //   const result = await this.$api.getMovieOnInfoList(params);
-    //   if (result.movieList) {
-    //     let { movieList, movieIds, total } = result;
-    //     console.log(cityId)
-    //     this.movieList = movieList;
-    //     this.beforeId = cityId;
-    //     this.total = total;
-    //     this.movieIds = movieIds;
-    //     this.total = total;
-    //     if(result.movieList.length){
-    //        this.pageNo += result.movieList.length;
-    //     }
-    //   }
-    //   console.log(this.beforeId)
-    // },
   },
   components: {
     movelist,

@@ -8,7 +8,7 @@ class API extends BaseData {
         }
         //获取正在热映更多电影列表接口
     getMoreMovieList(params) {
-            return this.get('/ajax//moreComingList', params)
+            return this.get('/ajax/moreComingList', params)
         }
         //获取即将上映接口数据
     getComingSoonList(params) {

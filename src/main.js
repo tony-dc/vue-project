@@ -4,6 +4,7 @@ import router from './router'
 import store from './store'
 import Header from '@/components/Header'
 import TabBar from "@/components/TabBar"
+import 'lib-flexible/flexible'
 import VueLazyload from 'vue-lazyload'
 //引入无限加载插件
 import InfiniteLoading from 'vue-infinite-loading'

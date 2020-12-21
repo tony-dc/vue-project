@@ -88,9 +88,9 @@ export default {
 <style lang="scss" scoped>
 .movie_list {
   margin-top: 10px;
-
   .MovieItem {
-   
+   width:100%;
+   box-sizing: border-box;
     overflow-x: hidden;
     overflow-y: scroll;
     position: absolute;

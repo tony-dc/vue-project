@@ -19,5 +19,17 @@ module.exports = {
             maskIcon: 'favicon.ico',
             msTileImage: 'favicon.ico'
         }
+    },
+    chainWebpack: config => {
+        config.module
+            .rule('css')
+            .test(/\.css$/)
+            .oneOf('vue')
+            .resourceQuery(/\?vue/)
+            .use('px2rem')
+            .loader('px2rem-loader')
+            .options({
+                remUnit: 75
+            })
     }
 }
