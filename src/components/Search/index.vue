@@ -119,7 +119,6 @@ export default {
       //进来判断如果定时器编号有值则return
       // 进来清除下之前的定时器
        clearTimeout(this.timer)
-      // console.log(this.timer)
        //通过定时器做下防抖
        this.timer=setTimeout(()=>{
          console.log(this.history)
