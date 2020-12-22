@@ -98,7 +98,6 @@ export default {
        this.samenm=val.name
     },
     choseShow(){
-        console.log(1)
         this.selected =''
         this.isShow=false
     }

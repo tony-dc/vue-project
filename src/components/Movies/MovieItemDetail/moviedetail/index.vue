@@ -24,9 +24,6 @@
           <p class="ptext">{{detail.pubDesc}}</p>
         </div>
         <slot name="link" />
-        <!-- <router-link v-if="link" :to="'/movie/'+detail.id" class="arrow-right">
-        <i class="iconfont icon-iconfontjiantou3 right"></i>
-        </router-link>-->
       </div>
     </div>
   </div>
@@ -44,9 +41,6 @@ export default {
      num(){
          return parseInt(this.detail.snum / 10000)
      }
-  },
-  mounted(){
-    console.log(this.detail)
   }
 };
 </script>

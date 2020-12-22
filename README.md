@@ -9,11 +9,13 @@
 - [x] 热门电影
 - [x] 即将上映
 - [x] 城市列表
-- [x] 搜索页面
+- [x] 电影搜索
 - [x] 影院页面
 - [x] 电影详情
 - [x] 个人中心
 - [x] 影院搜索
+- [x] 影院电影
+- [x] 电影票结算
 
 ##  2.静态效果图
 
@@ -88,7 +90,7 @@ module.exports = {
 
 ​            1.在components存放公共组件的文件夹中创建Movies文件夹，并给新建 Nowplaying，CommingSoon，City,Search四个.vue子组件，
 
-#####  **city组件：**
+#####  1.**city组件：**
 
 ​           1. 在模板中创建HTML结构，以及通过css预处理器scss书写样式，在vue实例中methods中，封装异步请求函数getCityInfo，并请求后台对应城市数据接口获取数据，在mounted生命周期函数初始化页面时调用该函数执行，并且在该函数中通过Storage将后台请求的城市数据做了本地缓存操作，当页面渲染时读取本地Stroage，如果里面有则不向后台发送数据请求，直接渲染，如果没有则发送数据请求，减少请求次数，提升性能。
 
@@ -165,7 +167,7 @@ methods: {
 
 ​    3.给对应的城市元素绑定点击事件，获取该城市的id值，并且通过本地存储保存，在状态管理city模块中，state里面的city属性值设置为从本地存储中读取该字段，默认值设定为10，
 
-**NowPlaying组件**：
+**2.NowPlaying组件**：
 
 ​      1.在模板中创建HTML结构,封装movielist公共组件,在Nowplay组件中引入movielist组件,在components中注册并且在tempalte模板中使用.
 
@@ -243,7 +245,7 @@ methods: {
 
 ​     4.将获取的 data中的movieList绑定到common这个子组件上通过属性绑定的方法，将值传递给common组件。完成数据绑定与渲染。common组件中又拆分出一个movieItem公共组件，功能是渲染单个电影信息组件。在movieItem内部也做了插槽，并根据common传入的对象，来判断哪些显示还是隐藏。
 
-   **CommingSoon组件**：
+3. **CommingSoon组件**：
 
 ​            拆分成2个子组件：expect和moreComing，并在CommingSoon组件中引入这2个子组件，注册到components中，并且在template中使用。
 
@@ -264,7 +266,7 @@ methods: {
         >
 ```
 
-**Search组件**：该组件主要实现电影搜索和影院搜索功能，在路由中配置的是动态路由，有可能从2个入口进入，一个影院搜索页，一个电影搜索页，故需要配置成动态的路由，以及历史记录储存显示和搜索结果的数据获取和渲染。该组件内部又抽离出了四个组件，
+**4.Search组件**：该组件主要实现电影搜索和影院搜索功能，在路由中配置的是动态路由，有可能从2个入口进入，一个影院搜索页，一个电影搜索页，故需要配置成动态的路由，以及历史记录储存显示和搜索结果的数据获取和渲染。该组件内部又抽离出了四个组件，
 
 ​         **在Search主组件中：**引入（cinemaSearchData， history，movieSearchData）三个组件并挂载到主组件中。通过v-model对input的SearchMsg变量值进行双向数据绑定，在data数据中定义了一些参数如下：
 
@@ -307,15 +309,138 @@ data(){
 
 ​                  接收父组件传过来的cinemaList对象，然后在计算属性中处理所需数据，在结构中通过循环绑定渲染影院列表数据。其中如果数据大于3条，则用截取的方法，截取0-max数据，重点：通过watch监听传过来的值是否变化。变化了则将有些定义的状态初始化。接收子组件传过来的参数，是true还是false。来决定全部显示还是部分显示。
 
-​         **movieSearchData组件**：实现电影查询结果数据渲染组件
+​           **movieSearchData组件**：实现电影查询结果数据渲染组件
 
 ​                  内部实现具体过程和cinemaSearchData组件类似
 
-​          **content组件**：它是抽离的一个公共组件，方便多次复用，
+​            **content组件**：它是抽离的一个公共组件，方便多次复用，
 
 ​           具体步诹：在组件内部，定义一个插槽，方便在不同的组件中复用，接收由cinemaSearchData或者movieSearchData组件传来的数据，进行渲染显示。结构分为标题部分，内容部分和点击查看更多三块，标题根据父组件传过来的值title来动态渲染，点击查看部分根据父组件传过来的tips属性，如果传的有值则渲染，如果没有通过v-if控制显示与隐藏。然后给点击查看更多元素添加绑定点击事件。通过控制一个bool值发送一个事件给到父组件，从而来决定是全部显示，还是只显示部分。
 
-​               
+####   5. movieDetail电影详情页组件:
+
+​               功能：该组件主要是实现用户点击影片，跳转到对应电影详情信息展示页
+
+​               在movieDetail中主要由主组件加上三个子组件构成（moviedetail，More offers,detailFooter）
+
+​      具体实现步骤：
+
+​           1.**movieDetail主组件**：引入并注册三个子组件（moviedetail，More offers,detailFooter），将电影详情页路径设置为动态路由，从而根据用户点击不同的电影，通果$route.params获取对应的影片id值，并根据影片id值，通过请求后台数据接口获取对应影片的详细信息，并且通过data中的detail变量保存，通过better-scroll注册到全局的公共组件，讲detail数据中的photos数组渲染到页面中，实现左右滚动效果，（注意：当异步请求后台数据之后想要实现滚动，第一需要将数组元素排在一列，不换行，并且display：inline-block，overflow-x:scroll，第二需要计算ul的宽度随着数组的长度动态变化），并且将第一个图片定位到一个play图标，并添加点击事件，点击触发事件函数执行，播放后台请求影片video，
+
+​      2.**moviedetail子组件**：接受父组件绑定动态属性通过props接收，并把获取的对象动态渲染到视图中。（注意：1.因为请求后台数据是异步过程，故在接受父组件传值时，replace图片尺寸会报错，此时需要在父组件中给子组件上添加添加v-show属性判断后台请求数据是否执行完并将数据赋值到变量中，避免报错。2. 在给元素以点电影图片添加为模糊背景图片时，这时用filter不太好，需要把替换代码写到行内样式中，故需要使用模板字符串。）
+
+​      3.**More offers子组件**：同样接受父组件传来的detail对象，并通过计算属性获得所需的数据格式，进行页面数据渲染，其中有影片详情介绍，需要绑定点击事件来控制是显示部分还是全部显示。（注意：自适应布局，仅显示三行文字），将特惠购票标签替换成router-link 通过组件路由导航的to属性绑定path以及通过params携带传递的detail.id.方便后面组件使用.
+
+​     4.**detailFooter子组件**:这里主要是渲染页面底部的一些footer信息.
+
+```js
+ .showtext {
+    //自适应布局
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+  }
+```
+
+
+
+####   6.**影院页面开发：**
+
+​             功能：  主要实现当前城市的影院信息渲染，以及根据用户选择的查询条件动态显示对应的影院信息。
+
+​             构成：主要通过三个子组件构成（topBar，selectNav，cinemaItem）
+
+​             具体实现步骤：在cinema主组件中引入（topBar，selectNav，cinemaItem）三个子组件，
+
+​             **topBar子组件**：主要是用来实现用户点击查询影院信息功能，通过命名式路由导航携带参数的方式跳转到对应的搜索页面。
+
+​              **selectNav子组件**：主要是用来实现用户根据全城，品牌和特殊这三块来动态选择渲染对用的影院信息，
+
+​              具体实现步骤：
+
+​                  1.在selectNav组件中通过props获取主组件传过来的results数据。并通过computed计算属性将获取到的results数据处理得到Region，Brand，Specila三个所需的数据结构。并各自绑定到对应的组件上面。传递给对应子组件。并给外层元素绑定点击事件，处理点击显示与隐藏功能。
+
+​               抽离出了3个子组件：（Region,Brand,Specila）
+
+​               **Region子组件**:在这个组件中，在data数据中定义了一些初始化变量和对象如下：
+
+```js
+ data() {
+    return {
+      currentIndex: 0,
+      tabs: [
+        {
+          title: "district",
+          name: "商圈"
+        },
+        {
+          title: "subway",
+          name: "地铁站"
+        }
+      ]
+    };
+  },
+```
+
+   接受从父组件传来的值regionData，并在计算属性中，通过状态管理的辅助函数拿到对应state中存储的["filters", "currentItemlist"]值，filters是从外部文件中引入到状态管理的并存储的对象，在计算属性中，需要处理获得的数据如下：
+
+```js
+computed: {
+    ...mapState("city", ["filters", "currentItemlist"]),
+    // 返回当前选中对应索引
+    currentTab() {
+      return this.tabs[this.currentIndex];
+    },
+    //通过计算属性获得点击的元素对应数据
+    sidenav() {
+      const { currentTab, regionData } = this;
+      return regionData[currentTab.title];
+    },
+     //拿到filters中的对应数据
+    cate() {
+      const { districtId, areaId, lineId, stationId } = this.filters;
+      return [
+        {
+          type: "districtId",
+          subType: "areaId",
+          index: districtId,
+          subIndex: areaId
+        },
+        {
+          type: "lineId",
+          subType: "stationId",
+          index: lineId,
+          subIndex: stationId
+        }
+      ];
+    },
+    //获取目前用户选择的是商圈还是地铁线
+    currentCate() {
+      return this.cate[this.currentIndex];
+    }
+  },
+```
+
+在方法中,通过给dom元素绑定的点击事件,一共绑定了三个方法,
+
+​       handleTochange(index)这个是当点击的index值和当前的currentIndex不等时,提交city中的mutation中updateAdd方法,情况数据.并且将index赋值给currentIndex
+
+​       handleChangeItem(item, currentIndex, index)这个是将item的id值赋值给计算属性中定义的 this.currentCate.index和 this.cate[currentIndex].index ,并且提交更新数据方法,跟新数据,如果index===0,则需要重新初始化数据并且调用辅助函数changeFilter重置,发送关闭遮罩层方法,然后异步请求获取初始影院数据,
+
+​        handleChoose(item, currentIndex) :点击第三层索引时触发函数,也同样将item.id值赋给this.currentCate.subIndex 以及 this.cate[currentIndex].subIndex ,定义cate和cate2两个变量.用来表示商圈和地铁,根据客户选择,决定初始化哪一个,然后在将cate.index和cate.subIndex赋值给params对应属性上,改变filter数据,然后发送异步请求后台数据
+
+​     **Brand子组件**:主要实现根据选择影院品牌渲染对应城市id的该品牌影院列表,也是通过props属性接受父组件传过来的数据,在计算属性computed中,通过辅助函数获取到状态管理city模块中state存储的filters,然后拿到对应的brandId,给元素绑定点击事件,并将点击的影院作为参数传递进来,通过辅助函数changeFilter变更里面储存的brandId值，然后关闭遮罩层，异步请求后台数据渲染
+
+​     **Special子组件** ：主要实现影院各类特殊服务 用户根据需求选择，页面渲染具有相应特殊服务的影院列表渲染 。
+
+​            具体实现步骤：接受父元素传递过来的数据，并且在计算属性computed中做处理，同样通过辅助函数获取city模块中的filters对象，并且解构出hallType, serviceId，在元素上绑定点击事件传递item.type和item.id,在函数中，定义一个变量，并且把id值赋给这个变量，执行辅助函数更改filters中的数据。通过点击确定按钮，提交异步请求函数，关闭遮罩层。重新渲染得到的数据。
+
+​            
+
+
+
+
 
 ​         
 

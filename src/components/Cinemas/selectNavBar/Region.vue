@@ -100,7 +100,7 @@ export default {
         this.$store.commit("city/updateAdd", "");
         this.currentIndex = index;
       }
-      this.$emit('change',index)
+      // this.$emit('change',index)
     },
     //点击第二次索引触发的函数
     handleChangeItem(item, currentIndex, index) {
