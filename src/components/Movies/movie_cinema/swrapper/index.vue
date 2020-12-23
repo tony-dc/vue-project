@@ -63,7 +63,7 @@ export default {
       return this.list[this.currentIndex] || {};
     },
     tips() {
-      const info = this.info;
+      const info = this.info||{};
       if (info.sc === "0.0") {
         return {
           num: info.wish,
