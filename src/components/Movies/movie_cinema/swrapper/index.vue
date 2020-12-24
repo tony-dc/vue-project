@@ -18,7 +18,7 @@
       <p class="movie-desc">{{ info.desc }}</p>
     </div>
     <movieSeat  :date="info" >
-        <discount slot='discount' :vipInfo="vip"></discount>
+        <discount slot='discount' :vipInfo="vip" ></discount>
     </movieSeat>
   </div>
 </template>

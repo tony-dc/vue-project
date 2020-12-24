@@ -25,7 +25,6 @@
           <p class="some watch">{{ item.lang }}{{ item.tp }}</p>
           <p class="place">{{ item.th }}</p>
         </div>
-        <!-- <div class="price"> -->
         <div class="show showprice">
           <p class="some sellprice">
             <span class="price">{{ item.vipPrice | sellprice }}</span>
@@ -74,7 +73,6 @@ export default {
       const dur = this.date.dur;
       const Infodata = data
         ? data.map((item) => {
-            console.log(item);
             const start = item.dt.replace(/-/g, "/") + " " + item.tm;
             const times = new Date(start).getTime() + dur * 60 * 1000;
             //对时间做处理
@@ -109,10 +107,7 @@ export default {
     Twotimes(data) {
       return data < 10 ? "0" + data : data;
     },
-  },
-  created() {
-    console.log(this.date,);
-  },
+  }
 };
 </script>
 <style lang="scss" scoped>

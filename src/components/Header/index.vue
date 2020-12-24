@@ -10,10 +10,6 @@ export default {
   name: 'Header',
   props:{
     title:String
-    // {
-    //   type:String,
-    //   default:'酷喵电影'
-    // }
   }
 }
 </script>

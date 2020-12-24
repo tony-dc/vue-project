@@ -90,7 +90,6 @@ export default {
   },
   created() {
     const { movieId, shows, cinemaId } = this.$route.params;
-    console.log(shows);
     this.movieShowTime = shows;
     this.$api.getcinemaDetail({ params: { cinemaId } }).then(res => {
       this.cinemaTitle = res.cinemaData.nm;
@@ -130,8 +129,7 @@ export default {
        this.$refs.qrcode.innerHTML = ''
        this.qrcodeshow=false;
     }
-  },
-  mounted() {}
+  }
 };
 </script>
 <style lang="scss">

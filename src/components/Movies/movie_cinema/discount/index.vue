@@ -1,11 +1,10 @@
 <template>
     <div  class="discount_container">
         <div class="discount_content">
-           <p class="tag">{{vipInfo.tag}}</p>
-           <p class="title">{{vipInfo.title}}</p>
+           <p class="tag">{{Info.tag}}</p>
+           <p class="title">{{Info.title}}</p>
            <p class="process">
-               {{vipInfo.process}}
-            <!-- <i class="iconfont icon-IOTtubiao_huabanfuben"></i> -->
+               {{Info.process}}
            </p>
         </div>
     </div>
@@ -14,7 +13,15 @@
     export default{
         name:'discount',
         props:{
-            vipInfo:Object
+            vipInfo:Object,
+            default(){
+                return {}
+            }
+        },
+        computed:{
+           Info(){
+               return this.vipInfo||{}
+           } 
         }
     }
 </script>
